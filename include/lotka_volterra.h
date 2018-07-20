@@ -1,4 +1,0 @@
-#ifndef LOTKA_VOLTERRA_H
-#define LOTKA_VOLTERRA_H
-
-#endif // LOTKA_VOLTERRA_H
