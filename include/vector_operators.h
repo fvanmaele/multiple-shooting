@@ -1,0 +1,4 @@
+#ifndef VECTOR_OPERATORS_H
+#define VECTOR_OPERATORS_H
+
+#endif // VECTOR_OPERATORS_H

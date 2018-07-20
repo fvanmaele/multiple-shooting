@@ -1,0 +1,4 @@
+#ifndef BLACKBOX_TEST_H
+#define BLACKBOX_TEST_H
+
+#endif // BLACKBOX_TEST_H

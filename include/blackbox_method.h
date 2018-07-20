@@ -1,0 +1,4 @@
+#ifndef BLACKBOX_METHOD_H
+#define BLACKBOX_METHOD_H
+
+#endif // BLACKBOX_METHOD_H
