@@ -1,12 +1,8 @@
-#include <iostream>
+#ifndef TEST_FORWARD_AD_H
+#define TEST_FORWARD_AD_H
+#include <cmath>
 
-#include <deal.II/lac/lapack_full_matrix.h>
-
-#include "base/forward_ad.h"
-#include "base/types.h"
-#include "ivp/runge_kutta.h"
-#include "test/sheet1.h"
-#include "test/sheet2.h"
+#include "../base/forward_ad.h"
 
 typedef std::vector<FAD_Number> FAD_Vector;
 
@@ -26,11 +22,8 @@ struct FAD_Test : public FAD_Functor
   }
 };
 
-int main(int argc, char* argv[])
+void Test_FAD()
 {
-//  run_sheet1();
-//  run_sheet2();
-
   dealii::Vector<FP_Type> x(3);
   x[0] = 1;
   x[1] = 2;
@@ -42,5 +35,6 @@ int main(int argc, char* argv[])
 
   std::cout << F.value() << std::endl;
   F.jacobian().print_formatted(std::cout, 3, true, 0, "0");
-  return 0;
 }
+
+#endif // TEST_FORWARD_AD_H

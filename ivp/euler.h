@@ -1,8 +1,9 @@
 #ifndef EXPLICIT_EULER_H
 #define EXPLICIT_EULER_H
 #include <iostream>
+
 #include "base_method.h"
-#include "../base/number_type.h"
+#include "../base/types.h"
 
 class Explicit_Euler : public IVP_Method
 {
@@ -10,7 +11,7 @@ class Explicit_Euler : public IVP_Method
   // base class constructors will be inherited.
   using IVP_Method::IVP_Method;
 
-  virtual void iteration_step(dealii::Vector<NumberType> &u, NumberType &t, const NumberType &h) override
+  virtual void iteration_step(dealii::Vector<FP_Type> &u, FP_Type &t, const FP_Type &h) override
   {
     u += h * f(t,u);
     t += h;

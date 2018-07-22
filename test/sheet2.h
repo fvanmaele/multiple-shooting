@@ -1,13 +1,23 @@
 #ifndef SHEET2_H
 #define SHEET2_H
 
-void Problem_P21(NumberType h, std::ostream &output)
+#include <cassert>
+
+#include <deal.II/lac/vector.h>
+
+#include "../base/functor.h"
+#include "../base/types.h"
+#include "../ivp/euler.h"
+#include "../ivp/runge_kutta.h"
+#include "../lac/matrix_operators.h"
+
+void Problem_P21(FP_Type h, std::ostream &output)
 {
   RHS_P21 rhs(5, 2, 2, 1);
-  NumberType t0 = 0.0;
-  NumberType t1 = 10.0;
+  FP_Type t0 = 0.0;
+  FP_Type t1 = 10.0;
 
-  dealii::Vector<NumberType> u0(2);
+  dealii::Vector<FP_Type> u0(2);
   u0[0] = 1.0;
   u0[1] = 1.0;
 
@@ -17,23 +27,24 @@ void Problem_P21(NumberType h, std::ostream &output)
   Method1.print(output);
 }
 
-void Problem_P22(NumberType h, std::ostream &output)
+void Problem_P22(FP_Type h, std::ostream &output)
 {
   RHS_P21 rhs(5, 2, 2, 1);
-  NumberType t0 = 0.0;
-  NumberType t1 = 10.0;
+  FP_Type t0 = 0.0;
+  FP_Type t1 = 10.0;
 
-  dealii::Vector<NumberType> u0(2);
+  dealii::Vector<FP_Type> u0(2);
   u0[0] = 1.0;
   u0[1] = 1.0;
 
   // Solve the equations with the classic Runge-Kutta method
   ERK_04 Tableau;
-  dealii::FullMatrix<NumberType> A(4, 4, Tableau.entries);
+  dealii::LAPACKFullMatrix<FP_Type>
+      A = LAPACK_from_Array(4, 4, Tableau.entries);
 
   // Use Vector(const InputIterator...) ?
-  dealii::Vector<NumberType> b = std_to_Vector(Tableau.b);
-  dealii::Vector<NumberType> c = std_to_Vector(Tableau.c);
+  dealii::Vector<FP_Type> b = std_to_Vector(Tableau.b);
+  dealii::Vector<FP_Type> c = std_to_Vector(Tableau.c);
 
   ERK Method2(rhs, t0, u0, A, b, c, h);
   Method2.iterate_up_to(t1);

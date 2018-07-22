@@ -3,9 +3,11 @@
 #include <cassert>
 #include <vector>
 #include <iostream>
+
 #include <deal.II/base/data_out_base.h>
-#include "../base/number_type.h"
+
 #include "../base/functor.h"
+#include "../base/types.h"
 
 /* This class solves an IVP of shape
  *     u'(t) = f(t, u(t));  u(t_0) = u_0
@@ -14,10 +16,10 @@
  *
  * Constructor:
  *    f       (functor) Right hand side of ODE in standard form.
- *    t0      (NumberType)  Initial time value. Default is 0.
+ *    t0      (FP_Type)  Initial time value. Default is 0.
  *    y0      (vector)  Initial value. Default is 1.
- *    nsteps  (int)     NumberType of integration steps. Default is 100.
- *    h       (NumberType)  Step length. Default is 1e-2.
+ *    nsteps  (int)     FP_Type of integration steps. Default is 100.
+ *    h       (FP_Type)  Step length. Default is 1e-2.
  *
  * The common wrapped functionality includes collecting of intermediary
  * computation results.
@@ -32,18 +34,18 @@ public:
   friend class ERK_Test_O4;
 
   // Result vectors
-  std::vector<NumberType> timepoints;
+  std::vector<FP_Type> timepoints;
 
   // Use dealii vector for numerical operations
-  std::vector<dealii::Vector<NumberType> > uapprox;
+  std::vector<dealii::Vector<FP_Type> > uapprox;
 
   // Constructor with initial value arguments
-  IVP_Method(Functor &_f, NumberType _t0, dealii::Vector<NumberType> _u0, NumberType _h = 1.0e-2) :
+  IVP_Method(RHS &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0, FP_Type _h = 1.0e-2) :
     f(_f), t0(_t0), u0(_u0), h(_h)
   {}
 
   // Constructor with default initial values (t0 = 0, u0 = [1])
-  IVP_Method(Functor &_f, NumberType _h = 1.0e-2) :
+  IVP_Method(RHS &_f, FP_Type _h = 1.0e-2) :
     f(_f), t0(0.0), h(_h)
   {
     u0.reinit(1);
@@ -66,19 +68,19 @@ public:
       }
   }
 
-  virtual void iteration_step(dealii::Vector<NumberType> &u, NumberType &t, const NumberType &h)
+  virtual void iteration_step(dealii::Vector<FP_Type> &u, FP_Type &t, const FP_Type &h)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
 
   // Execute the iteration over the given time interval [t0, t1], where t0
   // is set in the constructor, and t1 (t_limit) as argument to this function.
-  void iterate_up_to(NumberType t_limit, bool adaptive_length = false)
+  void iterate_up_to(FP_Type t_limit, bool adaptive_length = false)
   {
     // init iteration variables
-    NumberType t = t0;
-    NumberType steps_quotient = (t_limit - t0) / h;
-    dealii::Vector<NumberType> u = u0;
+    FP_Type t = t0;
+    FP_Type steps_quotient = (t_limit - t0) / h;
+    dealii::Vector<FP_Type> u = u0;
 
     // Use unsigned int to allow for higher amount of steps; for safe use,
     // add a check that the quotient I/h is not < 0.
@@ -103,7 +105,7 @@ public:
       }
 
     // guarantee to exactly hit the right interval end
-    NumberType remainder = t_limit - t;
+    FP_Type remainder = t_limit - t;
     if (remainder > 0)
       {
         nsteps++;
@@ -115,10 +117,11 @@ public:
   }
 
 private:
-  Functor &f;
-  NumberType t0;
-  dealii::Vector<NumberType> u0;
-  NumberType h;
+  RHS &f;
+  FP_Type t0;
+  dealii::Vector<FP_Type> u0;
+
+  FP_Type h;
   size_t nsteps;
 };
 
