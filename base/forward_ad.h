@@ -53,7 +53,7 @@ public:
     FAD_initialized = true;
   }
 
-  // Evaluate function value
+  // Evaluate function
   dealii::Vector<FP_Type> value() const
   {
     if (!FAD_initialized)

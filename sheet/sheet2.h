@@ -3,13 +3,10 @@
 
 #include <cassert>
 
-#include <deal.II/lac/vector.h>
-
 #include "../base/functor.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
 #include "../ivp/runge_kutta.h"
-#include "../lac/matrix_operators.h"
 
 void Problem_P21(FP_Type h, std::ostream &output)
 {
@@ -39,19 +36,17 @@ void Problem_P22(FP_Type h, std::ostream &output)
 
   // Solve the equations with the classic Runge-Kutta method
   ERK_04 Tableau;
-  dealii::LAPACKFullMatrix<FP_Type>
-      A = LAPACK_from_Array(4, 4, Tableau.entries);
+  dealii::LAPACKFullMatrix<FP_Type> A = MFA<16>(4, 4, Tableau.A);
 
-  // Use Vector(const InputIterator...) ?
-  dealii::Vector<FP_Type> b = std_to_Vector(Tableau.b);
-  dealii::Vector<FP_Type> c = std_to_Vector(Tableau.c);
+  dealii::Vector<FP_Type> b(Tableau.b.begin(), Tableau.b.end());
+  dealii::Vector<FP_Type> c(Tableau.c.begin(), Tableau.c.end());
 
   ERK Method2(rhs, t0, u0, A, b, c, h);
   Method2.iterate_up_to(t1);
   Method2.print(output);
 }
 
-void run_sheet2()
+void Test_Sheet2()
 {
   std::cout << std::endl
             << "Lotka-Volterra equations (P21), h = 0.1" << std::endl;

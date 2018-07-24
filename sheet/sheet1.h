@@ -42,7 +42,7 @@ void Problem_P13(FP_Type h)
   evaluate_with_eoc<Explicit_Euler>(rhs, t0, t1, h, u0, u1);
 }
 
-void run_sheet1()
+void Test_Sheet1()
 {
   std::cout << "Blackbox method (P11), h = 1e-2" << std::endl;
   Problem_P11(1e-2);

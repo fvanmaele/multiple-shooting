@@ -1,11 +1,14 @@
 #ifndef RUNGE_KUTTA_H
 #define RUNGE_KUTTA_H
 
-#include "../lac/vector_operators.h"
-#include "base_method.h"
-#include "butcher_tableau.h"
+#include <cmath>
 
-class ERK : public IVP_Method
+#include "../lac/matrix_operators.h"
+#include "../lac/vector_operators.h"
+#include "butcher_tableau.h"
+#include "eos_method.h"
+
+class ERK : public EOS_Method
 {
 public:
   // In addition to the usual arguments, the Range_Kuuta method
@@ -16,105 +19,153 @@ public:
       dealii::Vector<FP_Type> _b,
       dealii::Vector<FP_Type> _c,
       FP_Type h = 1.0e-2) :
-    IVP_Method(f, t0, u0, h), A(_A), b(_b), c(_c)
-  {}
+    EOS_Method(f, t0, u0, h), A(_A), b1(_b), c(_c)
+  {
+    assert(c.size() == b1.size());
+    embedded_method = false;
+  }
 
   // Constructor for embedded methods
   ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
       dealii::LAPACKFullMatrix<FP_Type> _A,
-      dealii::Vector<FP_Type> _b,
+      dealii::Vector<FP_Type> _b1,
       dealii::Vector<FP_Type> _b2,
       dealii::Vector<FP_Type> _c,
       FP_Type h = 1.0e-2) :
-    IVP_Method(f, t0, u0, h), A(_A), b(_b), b2(_b2), c(_c)
-  {}
-
-  // Overload for embedded methods
-  void iteration_step(dealii::Vector<FP_Type> &u1,
-                      dealii::Vector<FP_Type> &u2,
-                      FP_Type &t, const FP_Type &h)
+    EOS_Method(f, t0, u0, h), A(_A), b1(_b1), b2(_b2), c(_c)
   {
-    ;
+    assert(c.size() == b1.size());
+    assert(c.size() == b2.size());
+    embedded_method = true;
   }
 
-  virtual void
-  iteration_step(dealii::Vector<FP_Type> &u,
-                 FP_Type &t, const FP_Type &h) override
+  std::vector<dealii::Vector<FP_Type> >
+  k_stage(const FP_Type &t, const dealii::Vector<FP_Type> &u,
+          const FP_Type &h)
   {
-    // See lecture notes, p.29
-    assert(c.size() == b.size());
-    size_t s = c.size();
-
-    // Store values k_i for evaluation of u
-    std::vector<dealii::Vector<FP_Type> > k;
-
     // Optional, see Remark 2.3.4
-    std::vector<dealii::Vector<FP_Type> > g;
+    std::vector<dealii::Vector<FP_Type> > g(c.size());
+    // Keep values k per step for computation of y-hat
+    std::vector<dealii::Vector<FP_Type> > k(c.size());
 
-    // Compute k_1 ... k_s
-    for (size_t i = 0; i < s; i++)
+    // Compute: k_1 ... k_s
+    for (size_t i = 0; i < c.size(); i++)
       {
-        // Compute sum(a_ij * k_j)
         dealii::Vector<FP_Type> g_sum(u.size());
 
-        // Compute k_1 ... k_{i-1}
-        // If i = 0, this loop is not executed, i.e. g_sum remains 0.
+        // Compute: k_1 ... k_{i-1}
+        // When i = 0, this loop is not executed, i.e. g_sum remains 0.
         for (size_t j = 0; j < i; j++)
           {
-            // While the upper half of the matrix A is already ignored,
-            // entries in the lower half may still be zero.
             FP_Type a_ij = A(i, j);
+
+            // While the upper half of the matrix A is ignored,
+            // entries in the lower half may still be zero.
             if (a_ij > 0)
               g_sum += a_ij * k.at(j);
           }
 
-        g.push_back(u + h*g_sum);
-        k.push_back(f(t + h*c(i), g.at(i)));
+        g.at(i) = u + h*g_sum;
+        k.at(i) = f(t + h*c(i), g.at(i));
       }
-
-    // Compute new step
-    dealii::Vector<FP_Type> k_sum(u.size());
-    for (size_t i = 0; i < s; i++)
-      {
-        k_sum += b(i) * k.at(i);
-      }
-    u += h * k_sum;
-    t += h;
+    return k;
   }
 
-private:
-  // IVP_Method::f;
-  // IVP_Method::t0;
-  // IVP_Method::u0;
-  // IVP_Method::h;
-  // IVP_Method::nsteps;
-
-  dealii::LAPACKFullMatrix<FP_Type> A;
-  dealii::Vector<FP_Type> b, b2, c;
-};
-
-class ERK_Test_O4 : public IVP_Method
-{
-public:
-  using IVP_Method::IVP_Method;
-
-  virtual void iteration_step(dealii::Vector<FP_Type> &u, FP_Type &t, const FP_Type &h) override
+  dealii::Vector<FP_Type>
+  k_increment(const FP_Type &t, const dealii::Vector<FP_Type> &u,
+              const FP_Type &h, const dealii::Vector<FP_Type> &b)
   {
-    dealii::Vector<FP_Type> k1 = f(t, u);
-    dealii::Vector<FP_Type> k2 = f(t + 0.5*h, u + 0.5*h*k1);
-    dealii::Vector<FP_Type> k3 = f(t + 0.5*h, u + 0.5*h*k2);
-    dealii::Vector<FP_Type> k4 = f(t + h, u + h*k3);
+    // Compute stages k_1,..,k_s
+    std::vector<dealii::Vector<FP_Type> > k = k_stage(t, u, h);
+    // Initialize sum vector
+    dealii::Vector<FP_Type> result(u.size());
 
-    u += h * (1./6*k1 + 2./6*k2 + 2./6*k3 + 1./6*k4);
-    t += h;
+    for (size_t i = 0; i < c.size(); i++)
+      result += b(i) * k.at(i);
+    return result;
+  }
+
+  virtual dealii::Vector<FP_Type>
+  increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
+                     const FP_Type &h) override
+  {
+    // Explicit method of higher order
+    return k_increment(t, u, h, b1);
+  }
+
+  size_t n_misfires() const
+  {
+    return misfires;
+  }
+
+  void iterate_with_ssc(FP_Type t_lim, FP_Type TOL, size_t order = 5)
+  {
+    assert(embedded_method);
+    FP_Type t = t0;     // start time
+    FP_Type h_var = h;  // initial step size
+
+    // Dynamic allocation, declare outside loop
+    dealii::Vector<FP_Type> u = u0;
+    dealii::Vector<FP_Type> inc_u(u.size());
+    dealii::Vector<FP_Type> inc_v(u.size());
+
+    // Init output variables
+    EOS_Method::reset();
+    steps = 0;
+    misfires = 0;
+
+    // Algorithm 2.4.2
+    while (t_lim - t > 0)
+      { // (1) Candidates for u_k, v_k with time step h_k
+        inc_u = k_increment(t, u, h_var, b1);
+        inc_v = k_increment(t, u, h_var, b2);
+        steps++;
+
+        // (2) Compute optimal step size.
+        // Use norm properties to save operations.
+        FP_Type local_error = std::abs(h_var) * (inc_u - inc_v).l2_norm();
+        FP_Type h_opt = h_var * std::pow(TOL/local_error, 1./(order+1));
+
+        if (h_opt < h_var)
+          { // (3) Time step is rejected; repeat step with optimal value.
+            h_var = h_opt;
+            misfires++;
+            continue;
+          }
+        else
+          { // (4) Time step was accepted.
+            t += h_var;
+            u += h_var * inc_u;
+
+            EOS_Method::save_step(t, u);
+
+            // Set time step for next iteration.
+            h_var = h_opt;
+
+            // (a) Check interval bounds.
+            if (t + h_var > t_lim)
+              h_var = t_lim - t;
+          }
+      }
   }
 
 private:
-  // IVP_Method::f;
-  // IVP_Method::t0;
-  // IVP_Method::u0;
-  // IVP_Method::h;
-  // IVP_Method::nsteps;
+  // EOS_Method::f;
+  // EOS_Method::t0;
+  // EOS_Method::u0;
+  // EOS_Method::timepoints;
+  // EOS_Method::uapprox;
+  // EOS_Method::h;
+  // EOS_Method::nsteps;
+
+  // Butcher tableau
+  dealii::LAPACKFullMatrix<FP_Type> A;
+  dealii::Vector<FP_Type> b1, b2, c;
+  bool embedded_method;
+
+  // Diagnostics (TODO)
+  size_t misfires;
+  dealii::Vector<FP_Type> step_points;
 };
 
 #endif // RUNGE_KUTTA_H

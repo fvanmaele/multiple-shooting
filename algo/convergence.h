@@ -7,7 +7,7 @@
 
 template <typename M>
 FP_Type eoc(RHS &rhs, FP_Type t0, FP_Type t1, FP_Type h,
-           dealii::Vector<FP_Type> u0)
+            dealii::Vector<FP_Type> u0)
 {
   M Method1(rhs, t0, u0, h);
   M Method2(rhs, t0, u0, h/2);

@@ -1,7 +1,8 @@
 #ifndef RHS_H
 #define RHS_H
-#include "types.h"
+
 #include "../lac/vector_operators.h"
+#include "types.h"
 
 // Note that there is no distinction between scalar and vector
 // functions; both are represented as a dealii vector (of size 1
