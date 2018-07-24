@@ -3,7 +3,8 @@
 
 #include "../ivp/runge_kutta.h"
 
-void Problem_P32(std::ostream &output1, std::ostream &output2)
+void Problem_P32(std::ostream &output1, std::ostream &output2,
+                 std::ostream &output3)
 {
   RHS_P21 rhs(5, 2, 2, 1);
   FP_Type t0 = 0.0;
@@ -31,23 +32,37 @@ void Problem_P32(std::ostream &output1, std::ostream &output2)
   ERK Adaptive(rhs, t0, u0, A, b1, b2, c, 1e-1);
   Adaptive.iterate_with_ssc(t1, 1e-4, 5);
   Adaptive.print(output2);
-  std::cout << "Amount of steps: " << Adaptive.n_steps() << std::endl;
-  std::cout << "Amount of misfires: " << Adaptive.n_misfires() << std::endl;
+
+  size_t steps = Adaptive.n_steps();
+  size_t misfires = Adaptive.n_misfires();
+  std::cout << "Amount of steps: "
+            << steps << std::endl
+            << "Amount of misfires: "
+            << misfires << std::endl
+            << "Amount of accepted steps: "
+            << steps - misfires << std::endl;
+
+  // Plot the adaptive step size on the interval I
+  Adaptive.print_step_size(output3);
 }
 
 void Test_Sheet3()
 {
-  std::ofstream output_file1, output_file2;
+  std::ofstream output_file1, output_file2, output_file3;
   output_file1.open("volterra_dopri_eq.dat");
   assert(output_file1.is_open());
   output_file2.open("volterra_dopri_ad.dat");
   assert(output_file2.is_open());
+  output_file3.open("volterra_dopri_steps.dat");
+  assert(output_file3.is_open());
 
-  Problem_P32(output_file1, output_file2);
+  Problem_P32(output_file1, output_file2, output_file3);
   std::system("gnuplot -p -e \"plot 'volterra_dopri_eq.dat' using 1:2 with lines, "
               "'volterra_dopri_eq.dat' using 1:3 with lines\"");
   std::system("gnuplot -p -e \"plot 'volterra_dopri_ad.dat' using 1:2 with lines, "
               "'volterra_dopri_ad.dat' using 1:3 with lines\"");
+  std::system("gnuplot -p -e \"plot 'volterra_dopri_steps.dat' using 1:2 with lines, "
+              "'volterra_dopri_steps.dat' using 1:3 with lines\"");
 }
 
 #endif // SHEET3_H

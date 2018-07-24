@@ -138,6 +138,7 @@ public:
             u += h_var * inc_u;
 
             EOS_Method::save_step(t, u);
+            step_sizes.emplace_back(h_var);
 
             // Set time step for next iteration.
             h_var = h_opt;
@@ -149,6 +150,14 @@ public:
       }
   }
 
+  void print_step_size(std::ostream &out)
+  {
+    for (size_t i = 0; i < step_sizes.size(); i++)
+      {
+        out << i << "\t" << step_sizes[i] << std::endl;
+      }
+  }
+
 private:
   // EOS_Method::f;
   // EOS_Method::t0;
@@ -156,16 +165,18 @@ private:
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
   // EOS_Method::h;
-  // EOS_Method::nsteps;
+  // EOS_Method::steps;
 
   // Butcher tableau
   dealii::LAPACKFullMatrix<FP_Type> A;
   dealii::Vector<FP_Type> b1, b2, c;
-  bool embedded_method;
 
-  // Diagnostics (TODO)
+  // Adaptive step-size plot
+  std::vector<FP_Type> step_sizes;
+
+  // Markers
+  bool embedded_method;
   size_t misfires;
-  dealii::Vector<FP_Type> step_points;
 };
 
 #endif // RUNGE_KUTTA_H

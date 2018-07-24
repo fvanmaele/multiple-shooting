@@ -93,6 +93,7 @@ public:
 
     // init output variables
     reset();
+    steps = 0;
 
     while (t_lim - t > 0)
       { // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
@@ -103,7 +104,7 @@ public:
         // Add u_k, t_k to result vectors
         save_step(t, u);
         steps++;
-#
+
         // Guarantee to exactly hit the right interval end
         if (t + h > t_lim)
           {

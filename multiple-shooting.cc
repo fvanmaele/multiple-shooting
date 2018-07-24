@@ -13,11 +13,11 @@
 
 int main(int argc, char* argv[])
 {
-//  Test_Sheet1();
+  Test_Sheet1();
 //  Test_Sheet2();
 //  Test_FAD();
 //  std::cout << std::endl;
-  Test_Newton();
+//  Test_Newton();
 //  Test_Sheet3();
   return 0;
 }

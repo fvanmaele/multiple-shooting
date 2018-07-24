@@ -55,7 +55,7 @@ private:
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
   // EOS_Method::h;
-  // EOS_Method::nsteps;
+  // EOS_Method::steps;
 };
 
 #endif // BLACKBOX_METHOD_H

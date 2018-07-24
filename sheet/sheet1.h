@@ -1,10 +1,10 @@
 #ifndef SHEET1_H
 #define SHEET1_H
+#include "../algo/convergence.h"
 #include "../base/functor.h"
 #include "../base/types.h"
 #include "../ivp/blackbox.h"
 #include "../ivp/euler.h"
-#include "../ivp/eoc.h"
 
 void Problem_P11(FP_Type h)
 {
@@ -44,19 +44,19 @@ void Problem_P13(FP_Type h)
 
 void Test_Sheet1()
 {
-  std::cout << "Blackbox method (P11), h = 1e-2" << std::endl;
+  std::cout << "Blackbox method (P11), h = 1e-1" << std::endl;
+  Problem_P11(1e-1);
+  std::cout << std::endl << "Blackbox method (P11), h = 1e-2" << std::endl;
   Problem_P11(1e-2);
   std::cout << std::endl << "Blackbox method (P11), h = 1e-3" << std::endl;
   Problem_P11(1e-3);
-  std::cout << std::endl << "Blackbox method (P11), h = 1e-4" << std::endl;
-  Problem_P11(1e-4);
 
+  std::cout << std::endl << "Euler method (P13), h = 1e-1" << std::endl;
+  Problem_P13(1e-1);
   std::cout << std::endl << "Euler method (P13), h = 1e-2" << std::endl;
   Problem_P13(1e-2);
   std::cout << std::endl << "Euler method (P13), h = 1e-3" << std::endl;
   Problem_P13(1e-3);
-  std::cout << std::endl << "Euler method (P13), h = 1e-4" << std::endl;
-  Problem_P13(1e-4);
 }
 
 #endif // SHEET1_H
