@@ -3,6 +3,7 @@
 
 #include <cassert>
 
+#include "../algo/convergence.h"
 #include "../base/functor.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
@@ -19,8 +20,8 @@ void Problem_P21(FP_Type h, std::ostream &output)
   u0[1] = 1.0;
 
   // Solve the equations with the explicit Euler method
-  Explicit_Euler Method1(rhs, t0, u0, h);
-  Method1.iterate_up_to(t1);
+  Euler Method1(rhs, t0, u0);
+  Method1.iterate_up_to(t1, h);
   Method1.print(output);
 }
 
@@ -41,9 +42,14 @@ void Problem_P22(FP_Type h, std::ostream &output)
   dealii::Vector<FP_Type> b(Tableau.b.begin(), Tableau.b.end());
   dealii::Vector<FP_Type> c(Tableau.c.begin(), Tableau.c.end());
 
-  ERK Method2(rhs, t0, u0, A, b, c, h);
-  Method2.iterate_up_to(t1);
+  ERK Method2(rhs, t0, u0, A, b, c);
+  Method2.iterate_up_to(t1, h);
   Method2.print(output);
+
+  // The classical Range-Kutta method has order of convergence 4.
+  FP_Type EOC = eoc_1step(Method2, t1, 1e-2, 2);
+  std::cout << "EOC: (Range-Kutta, h = " << 1e-2 << ") "
+            << EOC << std::endl;
 }
 
 void Test_Sheet2()

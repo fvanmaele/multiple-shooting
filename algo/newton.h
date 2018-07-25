@@ -50,15 +50,13 @@ public:
         x = x_cand;
       }
     else
-      {
-        x -= d; // x_{k+1}
+      { // x_{k+1}
+        x -= d;
       }
   }
 
-  void iterate(size_t steps = 1000,
-               bool step_size_control = true,
-               size_t ssc_limit = 20,
-               bool rank1_updates = false)
+  void iterate(size_t steps = 1000, bool step_size_control = true,
+               size_t ssc_limit = 20, bool rank1_updates = false)
   {
     if (rank1_updates)
       {

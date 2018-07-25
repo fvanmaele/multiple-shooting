@@ -29,21 +29,25 @@ class EOS_Method
 public:
   // Implementations with fixed step length (template method pattern)
   friend class Blackbox;
-  friend class Explicit_Euler;
+  friend class Euler;
   friend class ERK;
   friend class ERK_Test_O4;
 
   // The intial values could be stored solely in the timepoints
   // resp. uapprox vector, but this is left out for simplicity.
-  EOS_Method(RHS &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0,
-             FP_Type _h = 1.0e-2) :
-    f(_f), t0(_t0), u0(_u0), timepoints(1, _t0), uapprox(1, _u0), h(_h)
+  EOS_Method(RHS &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0) :
+    f(_f), t0(_t0), u0(_u0), timepoints(1, _t0), uapprox(1, _u0)
   {}
 
   // Access functions
   dealii::Vector<FP_Type> approx() const
   {
     return uapprox.back();
+  }
+
+  FP_Type endpoint() const
+  {
+    return timepoints.back();
   }
 
   size_t n_steps() const
@@ -83,9 +87,7 @@ public:
   }
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  // This function is virtual for embedded Range-Kutta methods.
-  virtual void
-  iterate_up_to(FP_Type t_lim)
+  void iterate_up_to(FP_Type t_lim, FP_Type h = 1e-2)
   {
     // init input variables
     FP_Type t = t0;
@@ -96,40 +98,33 @@ public:
     steps = 0;
 
     while (t_lim - t > 0)
-      { // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
-        u += h * increment_function(t, u, h);
+      {
+        // Guarantee to hit right interval end
+        if (t + 1.1*h >= t_lim)
+            h = t_lim - t;
+
+        // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
         // t_k = t_{k-1} + h
+        u += h * increment_function(t, u, h);
         t += h;
 
         // Add u_k, t_k to result vectors
         save_step(t, u);
         steps++;
-
-        // Guarantee to exactly hit the right interval end
-        if (t + h > t_lim)
-          {
-            FP_Type h_new = t_lim - t;
-            u += h_new * increment_function(t, u, h_new);
-            t += h_new;
-
-            save_step(t,u);
-            steps++;
-          }
       }
+    assert(timepoints.back() == t_lim);
+    assert(steps = (size_t)(t_lim - t0) / h);
   }
 
 private:
   RHS &f;
   FP_Type t0;
   dealii::Vector<FP_Type> u0;
+  size_t steps;
 
   // Result vectors
   std::vector<FP_Type> timepoints;
   std::vector<dealii::Vector<FP_Type> > uapprox;
-
-  // Time steps
-  FP_Type h;
-  size_t steps;
 };
 
 #endif // IVP_METHOD_H

@@ -5,7 +5,7 @@
 #include "eos_method.h"
 #include "../base/types.h"
 
-class Explicit_Euler : public EOS_Method
+class Euler : public EOS_Method
 {
   // For base-class constructors, C++11 allows a class to specify that
   // base class constructors will be inherited.
@@ -22,10 +22,9 @@ private:
   // EOS_Method::f;
   // EOS_Method::t0;
   // EOS_Method::u0;
+  // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
-  // EOS_Method::h;
-  // EOS_Method::steps;
 };
 
 #endif // EXPLICIT_EULER_H

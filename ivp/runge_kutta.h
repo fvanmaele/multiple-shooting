@@ -17,9 +17,8 @@ public:
   ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
       dealii::LAPACKFullMatrix<FP_Type> _A,
       dealii::Vector<FP_Type> _b,
-      dealii::Vector<FP_Type> _c,
-      FP_Type h = 1.0e-2) :
-    EOS_Method(f, t0, u0, h), A(_A), b1(_b), c(_c)
+      dealii::Vector<FP_Type> _c) :
+    EOS_Method(f, t0, u0), A(_A), b1(_b), c(_c)
   {
     assert(c.size() == b1.size());
     embedded_method = false;
@@ -30,9 +29,8 @@ public:
       dealii::LAPACKFullMatrix<FP_Type> _A,
       dealii::Vector<FP_Type> _b1,
       dealii::Vector<FP_Type> _b2,
-      dealii::Vector<FP_Type> _c,
-      FP_Type h = 1.0e-2) :
-    EOS_Method(f, t0, u0, h), A(_A), b1(_b1), b2(_b2), c(_c)
+      dealii::Vector<FP_Type> _c) :
+    EOS_Method(f, t0, u0), A(_A), b1(_b1), b2(_b2), c(_c)
   {
     assert(c.size() == b1.size());
     assert(c.size() == b2.size());
@@ -98,11 +96,12 @@ public:
     return misfires;
   }
 
-  void iterate_with_ssc(FP_Type t_lim, FP_Type TOL, size_t order = 5)
+  void iterate_with_ssc(FP_Type t_lim, FP_Type h0 = 1e-1,
+                        FP_Type TOL = 1e-4, size_t order = 5)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
-    FP_Type h_var = h;  // initial step size
+    FP_Type h_var = h0; // initial step size
 
     // Dynamic allocation, declare outside loop
     dealii::Vector<FP_Type> u = u0;
@@ -143,8 +142,8 @@ public:
             // Set time step for next iteration.
             h_var = h_opt;
 
-            // (a) Check interval bounds.
-            if (t + h_var > t_lim)
+            // Avoid rounding errors (Remark 2.4.3)
+            if (t + 1.1*h_var >= t_lim)
               h_var = t_lim - t;
           }
       }
@@ -162,10 +161,9 @@ private:
   // EOS_Method::f;
   // EOS_Method::t0;
   // EOS_Method::u0;
+  // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
-  // EOS_Method::h;
-  // EOS_Method::steps;
 
   // Butcher tableau
   dealii::LAPACKFullMatrix<FP_Type> A;

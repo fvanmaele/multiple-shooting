@@ -23,14 +23,19 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
   dealii::Vector<FP_Type> c(Tableau.c.begin(), Tableau.c.end());
 
   // Equidistant method
-  ERK Equidistant(rhs, t0, u0, A, b1, c, 1e-3);
-  Equidistant.iterate_up_to(t1);
+  ERK Equidistant(rhs, t0, u0, A, b1, c);
+  Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
   std::cout << "Amount of steps: " << Equidistant.n_steps() << std::endl;
 
+  // The Dormand-Prince method has order of convergence 5.
+  FP_Type EOC1 = eoc_1step(Equidistant, t1, 1e-3);
+  std::cout << "EOC: (Dormand-Prince, h = " << 1e-3 << ") "
+            << EOC1 << std::endl;
+
   // Adaptive method of order 5(4)
-  ERK Adaptive(rhs, t0, u0, A, b1, b2, c, 1e-1);
-  Adaptive.iterate_with_ssc(t1, 1e-4, 5);
+  ERK Adaptive(rhs, t0, u0, A, b1, b2, c);
+  Adaptive.iterate_with_ssc(t1, 1e-1, 1e-4, 5);
   Adaptive.print(output2);
 
   size_t steps = Adaptive.n_steps();

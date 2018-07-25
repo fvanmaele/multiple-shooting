@@ -6,22 +6,29 @@
 #include "../ivp/blackbox.h"
 #include "../ivp/euler.h"
 
-void Problem_P11(FP_Type h)
+void Problem_P12(FP_Type h)
 {
   // IVP y'(t) = c*y(t) on the interval [0, 2]
   FP_Type t0 = 0.0;
   FP_Type t1 = 2.0;
-  RHS_P11 rhs;
+  RHS_P11 f;
 
   // initial value u(0) = 1
   dealii::Vector<FP_Type> u0(1);
   u0[0] = 1.0;
 
   // exact solution of the IVP at t = 2
-  dealii::Vector<FP_Type> u1(1);
-  u1[0] = std::exp(2);
+  dealii::Vector<FP_Type> u(1);
+  u[0] = std::exp(2);
 
-  evaluate_with_eoc<Blackbox>(rhs, t0, t1, h, u0, u1);
+  Blackbox Method(f, t0, u0);
+  FP_Type EOC = eoc_1step(Method, t1, h);
+  FP_Type OOC = ooc_1step(Method, t1, h, u);
+
+  std::cout << "EOC: (Blackbox, h = " << h << ") "
+            << EOC << std::endl
+            << "OOC: (Blackbox, h = " << h << ") "
+            << OOC << std::endl;
 }
 
 void Problem_P13(FP_Type h)
@@ -29,34 +36,46 @@ void Problem_P13(FP_Type h)
   // IVP u'(t) = t * u(t) on the interval [0, 1]
   FP_Type t0 = 0.0;
   FP_Type t1 = 1.0;
-  RHS_P13 rhs;
+  RHS_P13 f;
 
-  // initial value u(0) = pi
+  // Initial value u(0) = PI
   dealii::Vector<FP_Type> u0(1);
   u0[0] = M_PI;
 
-  // exact solution of the IVP at t = 1
-  dealii::Vector<FP_Type> u1(1);
-  u1[0] = M_PI * std::sqrt(std::exp(1));
+  // Exact solution of the IVP at t = 1
+  dealii::Vector<FP_Type> u(1);
+  u[0] = M_PI * std::sqrt(std::exp(1));
 
-  evaluate_with_eoc<Explicit_Euler>(rhs, t0, t1, h, u0, u1);
+  Euler Method(f, t0, u0);
+  Method.iterate_up_to(t1, h);
+  size_t steps = Method.n_steps();
+
+  // Accuracy of computed approximation
+  dealii::Vector<FP_Type> y = Method.approx();
+  FP_Type diff = (y - u).l2_norm();
+
+  std::cout << "Evaluations: (Euler, h = " << h << ") "
+            << steps << std::endl
+            << "Norm: |y - u| = "
+            << diff << std::endl;
 }
 
 void Test_Sheet1()
 {
-  std::cout << "Blackbox method (P11), h = 1e-1" << std::endl;
-  Problem_P11(1e-1);
-  std::cout << std::endl << "Blackbox method (P11), h = 1e-2" << std::endl;
-  Problem_P11(1e-2);
-  std::cout << std::endl << "Blackbox method (P11), h = 1e-3" << std::endl;
-  Problem_P11(1e-3);
+  Problem_P12(1e-1);
+  std::cout << std::endl;
+  Problem_P12(1e-2);
+  std::cout << std::endl;
+  Problem_P12(1e-3);
+  std::cout << std::endl;
 
-  std::cout << std::endl << "Euler method (P13), h = 1e-1" << std::endl;
   Problem_P13(1e-1);
-  std::cout << std::endl << "Euler method (P13), h = 1e-2" << std::endl;
+  std::cout << std::endl;
   Problem_P13(1e-2);
-  std::cout << std::endl << "Euler method (P13), h = 1e-3" << std::endl;
+  std::cout << std::endl;
   Problem_P13(1e-3);
+  std::cout << std::endl;
+  Problem_P13(1e-4);
 }
 
 #endif // SHEET1_H

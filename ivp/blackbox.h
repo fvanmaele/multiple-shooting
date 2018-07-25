@@ -52,10 +52,9 @@ private:
   // EOS_Method::f;
   // EOS_Method::t0;
   // EOS_Method::u0;
+  // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
-  // EOS_Method::h;
-  // EOS_Method::steps;
 };
 
 #endif // BLACKBOX_METHOD_H
