@@ -87,7 +87,7 @@ public:
   }
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h = 1e-2)
+  void iterate_up_to(FP_Type t_lim, FP_Type h)
   {
     // init input variables
     FP_Type t = t0;

@@ -36,20 +36,13 @@ void Problem_P22(FP_Type h, std::ostream &output)
   u0[1] = 1.0;
 
   // Solve the equations with the classic Runge-Kutta method
-  ERK_04 Tableau;
-  dealii::LAPACKFullMatrix<FP_Type> A = MFA<16>(4, 4, Tableau.A);
+  ERK_04 T;
+  ButcherTableau<4> Tab(T.A, T.b, T.c);
 
-  dealii::Vector<FP_Type> b(Tableau.b.begin(), Tableau.b.end());
-  dealii::Vector<FP_Type> c(Tableau.c.begin(), Tableau.c.end());
-
-  ERK Method2(rhs, t0, u0, A, b, c);
+  ERK Method2(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.nodes);
+  //ERK_Test_O4 Method2(rhs, t0, u0);
   Method2.iterate_up_to(t1, h);
   Method2.print(output);
-
-  // The classical Range-Kutta method has order of convergence 4.
-  FP_Type EOC = eoc_1step(Method2, t1, 1e-2, 2);
-  std::cout << "EOC: (Range-Kutta, h = " << 1e-2 << ") "
-            << EOC << std::endl;
 }
 
 void Test_Sheet2()

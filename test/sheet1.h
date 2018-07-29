@@ -3,8 +3,8 @@
 #include "../algo/convergence.h"
 #include "../base/functor.h"
 #include "../base/types.h"
-#include "../ivp/blackbox.h"
 #include "../ivp/euler.h"
+#include "test_runge_kutta.h"
 
 void Problem_P12(FP_Type h)
 {
@@ -29,6 +29,18 @@ void Problem_P12(FP_Type h)
             << EOC << std::endl
             << "OOC: (Blackbox, h = " << h << ") "
             << OOC << std::endl;
+
+  DOPRI T;
+  ButcherTableau<7> Tab(T.A, T.b1, T.b2, T.c);
+
+  ERK Method2(f, t0, u0, Tab.matrix, Tab.weights, Tab.weights_low, Tab.nodes);
+  FP_Type EOC2 = eoc_1step(Method2, t1, h);
+  FP_Type OOC2 = ooc_1step(Method2, t1, h, u);
+
+  std::cout << "EOC: (DOPRI, h = " << h << ") "
+            << EOC2 << std::endl
+            << "OOC: (DOPRI, h = " << h << ") "
+            << OOC2 << std::endl;
 }
 
 void Problem_P13(FP_Type h)
@@ -62,20 +74,13 @@ void Problem_P13(FP_Type h)
 
 void Test_Sheet1()
 {
+  // Too numerically unstable for smaller values of h.
   Problem_P12(1e-1);
-  std::cout << std::endl;
-  Problem_P12(1e-2);
-  std::cout << std::endl;
-  Problem_P12(1e-3);
   std::cout << std::endl;
 
   Problem_P13(1e-1);
-  std::cout << std::endl;
   Problem_P13(1e-2);
-  std::cout << std::endl;
   Problem_P13(1e-3);
-  std::cout << std::endl;
-  Problem_P13(1e-4);
 }
 
 #endif // SHEET1_H

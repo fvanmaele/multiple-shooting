@@ -7,7 +7,7 @@ SET(TARGET "multiple-shooting")
 
 FILE(GLOB_RECURSE TARGET_INC
     "base/*.h" "lac/*.h" "ivp/*.h" "algo/*.h"
-    "sheet/*.h" "test/*.h")
+    "test/*.h" "bvp/*.h")
 SET(TARGET_SRC ${TARGET}.cc ${TARGET_INC})
 
 # Declare all source files the target consists of. Here, this is only

@@ -4,8 +4,7 @@
 #include <cmath>
 #include <vector>
 
-// This should be extended to handle generic numerical methods,
-// such as Newton method, implicit one-step methods, LMM, ...
+#include "../algo/newton.h"
 #include "../ivp/eos_method.h"
 #include "../base/types.h"
 
@@ -23,7 +22,7 @@ FP_Type diameter(const std::vector<FP_Type> &v)
 }
 
 void check_region(const std::vector<FP_Type> &v,
-                  const size_t max, const FP_Type TOL,
+                  const size_t ROA, const FP_Type TOL,
                   const char* str)
 {
   // Check if computed values are approximately equal by looking at the longest
@@ -34,14 +33,14 @@ void check_region(const std::vector<FP_Type> &v,
     std::cerr << "warning: method not in asymptotic region of accuracy"
               << std::endl;
   else
-    std::cout << str << " steps: " << max
+    std::cout << str << " steps: " << ROA
               << std::endl
               << str << " diameter: " << diam
               << std::endl;
 }
 
 FP_Type eoc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
-                  const size_t ROA_Max = 2, const FP_Type TOL = 1e-1)
+                  const size_t ROA_Max = 3, const FP_Type TOL = 1e-1)
 {
   std::vector<FP_Type> v;
 
@@ -73,13 +72,13 @@ FP_Type eoc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
       v.push_back(alpha);
     }
 
-  check_region(v, TOL, ROA_Max, "EOC");
+  check_region(v, ROA_Max, TOL, "EOC");
   return v.back();
 }
 
 FP_Type ooc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
                   const dealii::Vector<FP_Type> &u,
-                  const size_t ROA_Max = 2, const FP_Type TOL = 1e-1)
+                  const size_t ROA_Max = 3, const FP_Type TOL = 1e-1)
 {
   std::vector<FP_Type> v;
 
@@ -103,7 +102,7 @@ FP_Type ooc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
       v.push_back(alpha);
     }
 
-  check_region(v, TOL, ROA_Max, "EOC");
+  check_region(v, ROA_Max, TOL, "OOC");
   return v.back();
 }
 

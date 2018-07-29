@@ -8,34 +8,25 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
 {
   RHS_P21 rhs(5, 2, 2, 1);
   FP_Type t0 = 0.0;
-  FP_Type t1 = 10.0;
+  FP_Type t1 = 50.0;
 
   dealii::Vector<FP_Type> u0(2);
   u0[0] = 1.0;
   u0[1] = 1.0;
 
   // Solve the equations with the Dormand-Prince 45 method
-  DOPRI Tableau;
-  dealii::LAPACKFullMatrix<FP_Type> A = MFA<49>(7, 7, Tableau.A);
-
-  dealii::Vector<FP_Type> b1(Tableau.b1.begin(), Tableau.b1.end());
-  dealii::Vector<FP_Type> b2(Tableau.b2.begin(), Tableau.b2.end());
-  dealii::Vector<FP_Type> c(Tableau.c.begin(), Tableau.c.end());
+  DOPRI T;
+  ButcherTableau<7> Tab(T.A, T.b1, T.b2, T.c);
 
   // Equidistant method
-  ERK Equidistant(rhs, t0, u0, A, b1, c);
+  ERK Equidistant(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.nodes);
   Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
   std::cout << "Amount of steps: " << Equidistant.n_steps() << std::endl;
 
-  // The Dormand-Prince method has order of convergence 5.
-  FP_Type EOC1 = eoc_1step(Equidistant, t1, 1e-3);
-  std::cout << "EOC: (Dormand-Prince, h = " << 1e-3 << ") "
-            << EOC1 << std::endl;
-
   // Adaptive method of order 5(4)
-  ERK Adaptive(rhs, t0, u0, A, b1, b2, c);
-  Adaptive.iterate_with_ssc(t1, 1e-1, 1e-4, 5);
+  ERK Adaptive(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.weights_low, Tab.nodes);
+  Adaptive.iterate_with_ssc(t1, 1e-1, 1e-8, 4);
   Adaptive.print(output2);
 
   size_t steps = Adaptive.n_steps();

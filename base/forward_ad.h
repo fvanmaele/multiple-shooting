@@ -9,11 +9,11 @@
 #include <cassert>
 #include <vector>
 
+#include <deal.II/lac/full_matrix.h>
 #include <Sacado.hpp>
 
 #include "../base/functor.h"
 #include "../base/types.h"
-#include "../lac/matrix_operators.h"
 #include "../lac/vector_operators.h"
 
 // Forward AD class (dynamic allocation)
@@ -70,13 +70,13 @@ public:
   }
 
   // Evaluate Jacobian
-  dealii::LAPACKFullMatrix<FP_Type> jacobian()
+  dealii::FullMatrix<FP_Type> jacobian()
   {
     if (!FAD_initialized)
       {
         throw std::invalid_argument("FAD must be initialized");
       }
-    dealii::LAPACKFullMatrix<FP_Type> J(m, n);
+    dealii::FullMatrix<FP_Type> J(m, n);
 
     for (size_t i = 0; i < n; i++)
       {

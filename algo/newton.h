@@ -1,5 +1,8 @@
 #ifndef NEWTON_H
 #define NEWTON_H
+
+#include <deal.II/lac/lapack_full_matrix.h>
+
 #include "../base/types.h"
 #include "../base/forward_ad.h"
 
@@ -15,7 +18,7 @@ public:
     assert(y.size() == m);
 
     // Not optimized for systems of large dimension
-    assert(x.size() <= 1000);
+    assert(x.size() <= 100000);
   }
 
   // Take the solution of the linear system Jd = y, and use it
@@ -42,7 +45,7 @@ public:
             F.init(x_cand);
 
             if (F.value().norm_sqr() < y_norm)
-                break;
+              break;
           }
 
         // j ist not guaranteed to be bounded; in practice, the step-size
