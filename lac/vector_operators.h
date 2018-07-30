@@ -31,21 +31,23 @@ operator/(dealii::Vector<FP_Type> lhs, const FP_Type a)
 }
 
 dealii::Vector<FP_Type>
-operator+(dealii::Vector<FP_Type> lhs, const dealii::Vector<FP_Type> &rhs)
+operator+(dealii::Vector<FP_Type> lhs,
+          const dealii::Vector<FP_Type> &rhs)
 {
   lhs += rhs;
   return lhs;
 }
 
 dealii::Vector<FP_Type>
-operator-(dealii::Vector<FP_Type> lhs, const dealii::Vector<FP_Type> &rhs)
+operator-(dealii::Vector<FP_Type> lhs,
+          const dealii::Vector<FP_Type> &rhs)
 {
   lhs -= rhs;
   return lhs;
 }
 
 dealii::Vector<FP_Type>
-STV(const std::vector<FP_Type> &v)
+std_to_Vector(const std::vector<FP_Type> &v)
 {
   const size_t n = v.size();
   // create a dealii vector of size n and values set to 0

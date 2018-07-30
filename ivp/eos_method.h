@@ -1,13 +1,13 @@
-#ifndef IVP_METHOD_H
-#define IVP_METHOD_H
+#ifndef EOS_METHOD_H
+#define EOS_METHOD_H
 #include <cassert>
 #include <vector>
 #include <iostream>
 
 #include <deal.II/base/data_out_base.h>
 
-#include "../base/functor.h"
 #include "../base/types.h"
+#include "../ivp/rhs.h"
 
 /* This class solves an IVP of shape
  *     u'(t) = f(t, u(t));  u(t_0) = u_0
@@ -30,8 +30,10 @@ public:
   // Implementations with fixed step length (template method pattern)
   friend class Blackbox;
   friend class Euler;
-  friend class ERK;
   friend class ERK_Test_O4;
+
+  template <size_t N>
+  friend class ERK;
 
   // The intial values could be stored solely in the timepoints
   // resp. uapprox vector, but this is left out for simplicity.
@@ -127,4 +129,4 @@ private:
   std::vector<dealii::Vector<FP_Type> > uapprox;
 };
 
-#endif // IVP_METHOD_H
+#endif // EOS_METHOD_H

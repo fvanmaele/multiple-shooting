@@ -1,5 +1,5 @@
-#ifndef BUTCHER_TABLEAU_H
-#define BUTCHER_TABLEAU_H
+#ifndef TABLEAU_H
+#define TABLEAU_H
 
 #include <array>
 
@@ -7,34 +7,6 @@
 #include <deal.II/lac/full_matrix.h>
 
 #include "../base/types.h"
-
-// Adapter for dealii::array/FullMatrix
-template <size_t N>
-struct ButcherTableau
-{
-  // Constructor for explicit methods
-  ButcherTableau(std::array<FP_Type, N*N> A,
-                 std::array<FP_Type, N> b,
-                 std::array<FP_Type, N> c) :
-    matrix(N, N, A.data()), nodes(c.begin(), c.end()),
-    weights(b.begin(), b.end())
-  {}
-
-  // Constructor for embedded methods
-  ButcherTableau(std::array<FP_Type, N*N> A,
-                 std::array<FP_Type, N> b1,
-                 std::array<FP_Type, N> b2,
-                 std::array<FP_Type, N> c) :
-    matrix(N, N, A.data()), nodes(c.begin(), c.end()),
-    weights(b1.begin(), b1.end()),
-    weights_low(b2.begin(), b2.end())
-  {}
-
-  const dealii::FullMatrix<FP_Type> matrix;   // A
-  const dealii::Vector<FP_Type> nodes;        // c
-  const dealii::Vector<FP_Type> weights;      // b
-  const dealii::Vector<FP_Type> weights_low;  // b*
-};
 
 // Classic Range-Kutta method
 struct ERK_04
@@ -98,4 +70,4 @@ struct DOPRI
   };
 };
 
-#endif // BUTCHER_TABLEAU_H
+#endif // TABLEAU_H

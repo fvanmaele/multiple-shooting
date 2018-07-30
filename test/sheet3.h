@@ -15,17 +15,16 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
   u0[1] = 1.0;
 
   // Solve the equations with the Dormand-Prince 45 method
-  DOPRI T;
-  ButcherTableau<7> Tab(T.A, T.b1, T.b2, T.c);
+  DOPRI Tab;
 
   // Equidistant method
-  ERK Equidistant(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.nodes);
+  ERK<7> Equidistant(rhs, t0, u0, Tab.A, Tab.b1, Tab.c);
   Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
   std::cout << "Amount of steps: " << Equidistant.n_steps() << std::endl;
 
   // Adaptive method of order 5(4)
-  ERK Adaptive(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.weights_low, Tab.nodes);
+  ERK<7> Adaptive(rhs, t0, u0, Tab.A, Tab.b1, Tab.b2, Tab.c);
   Adaptive.iterate_with_ssc(t1, 1e-1, 1e-8, 4);
   Adaptive.print(output2);
 

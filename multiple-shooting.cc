@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "algo/newton.h"
-#include "base/functor.h"
 #include "base/forward_ad.h"
 #include "base/types.h"
+#include "ivp/rhs.h"
 #include "ivp/runge_kutta.h"
 
 #include "test/sheet1.h"
@@ -12,6 +12,7 @@
 #include "test/test_forward_ad.h"
 #include "test/test_newton.h"
 #include "test/test_runge_kutta.h"
+#include "test/test_bvp.h"
 
 class ThomasFermi : public RHS
 {
@@ -35,5 +36,6 @@ int main(int argc, char* argv[])
   Test_FAD();
   std::cout << std::endl;
   Test_Newton();
+  Test_ED();
   return 0;
 }

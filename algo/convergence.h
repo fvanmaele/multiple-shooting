@@ -1,5 +1,5 @@
-#ifndef EOC_H
-#define EOC_H
+#ifndef CONVERGENCE_H
+#define CONVERGENCE_H
 #include <algorithm>
 #include <cmath>
 #include <vector>
@@ -106,4 +106,4 @@ FP_Type ooc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
   return v.back();
 }
 
-#endif // EOC_H
+#endif // CONVERGENCE_H

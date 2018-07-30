@@ -9,17 +9,22 @@
 #include "tableau.h"
 #include "eos_method.h"
 
+template <size_t N>
 class ERK : public EOS_Method
 {
 public:
   // In addition to the usual arguments, the Range_Kuuta method
-  // requires a matrix A and two vectors b, c. The matrix A is stored
-  // as a dense matrix, for simplicity and due to its small dimension.
+  // requires a matrix A and two vectors b, c.
+
+  // Constructor for explicit methods
   ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      dealii::FullMatrix<FP_Type> _A,
-      dealii::Vector<FP_Type> _b1,
-      dealii::Vector<FP_Type> _c) :
-    EOS_Method(f, t0, u0), A(_A), b1(_b1), c(_c)
+      std::array<FP_Type, N*N> matrix,
+      std::array<FP_Type, N> weights,
+      std::array<FP_Type, N> nodes)
+    :
+      EOS_Method(f, t0, u0), A(N, N, matrix.data()),
+      b1(weights.begin(), weights.end()),
+      c(nodes.begin(), nodes.end())
   {
     assert(c.size() == b1.size());
     embedded_method = false;
@@ -27,11 +32,15 @@ public:
 
   // Constructor for embedded methods
   ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      dealii::FullMatrix<FP_Type> _A,
-      dealii::Vector<FP_Type> _b1,
-      dealii::Vector<FP_Type> _b2,
-      dealii::Vector<FP_Type> _c) :
-    EOS_Method(f, t0, u0), A(_A), b1(_b1), b2(_b2), c(_c)
+      std::array<FP_Type, N*N> matrix,
+      std::array<FP_Type, N> weights,
+      std::array<FP_Type, N> weights_low,
+      std::array<FP_Type, N> nodes)
+    :
+      EOS_Method(f, t0, u0), A(N, N, matrix.data()),
+      b1(weights.begin(), weights.end()),
+      b2(weights_low.begin(), weights_low.end()),
+      c(nodes.begin(), nodes.end())
   {
     assert(c.size() == b1.size());
     assert(c.size() == b2.size());
@@ -147,8 +156,8 @@ private:
   // EOS_Method::uapprox;
 
   // Butcher tableau
-  dealii::FullMatrix<FP_Type> A;
-  dealii::Vector<FP_Type> b1, b2, c;
+  const dealii::FullMatrix<FP_Type> A;
+  const dealii::Vector<FP_Type> b1, b2, c;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

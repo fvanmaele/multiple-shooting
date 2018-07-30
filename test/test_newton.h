@@ -1,9 +1,10 @@
 #ifndef TEST_NEWTON_H
 #define TEST_NEWTON_H
+#include <cmath>
+#include <vector>
 
 #include "../algo/newton.h"
 #include "../base/forward_ad.h"
-#include "../lac/vector_operators.h"
 
 struct FAD_Nonlinear : public FAD_Functor
 {
@@ -18,13 +19,30 @@ struct FAD_Nonlinear : public FAD_Functor
   }
 };
 
+// Ortega, Scientific Computing, Tab. 4.3.2
 void Test_Newton()
 {
   FAD_Nonlinear f;
-  Newton<2,2> F(f, STV({0.5, 0.5}));
+  Function_AD F(f, 2, 2);
+  Newton N(F, 2);
 
-  F.iterate(20);
-  F.print(std::cout);
+  // Starting value
+  dealii::Vector<FP_Type> s(2);
+  s[0] = 0.5;
+  s[1] = 0.5;
+
+  size_t steps = 0;
+  for (size_t k = 0; k < 20; k++)
+    {
+      s = N.step(F.jacobian(s), s, true);
+      steps++;
+
+      if (N.stopping_criterion(1e-8))
+        {
+          std::cout << "Solution of F: (" << steps << " steps) " << s;
+          break;
+        }
+    }
 }
 
 #endif // TEST_NEWTON_H

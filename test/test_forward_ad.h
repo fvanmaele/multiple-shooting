@@ -1,6 +1,7 @@
 #ifndef TEST_FORWARD_AD_H
 #define TEST_FORWARD_AD_H
 #include <cmath>
+#include <vector>
 
 #include "../base/forward_ad.h"
 
@@ -29,7 +30,7 @@ void Test_FAD()
 
   // Define wrapper object
   FAD_Test f;
-  FAD_Wrapper<3, 3> F(f);
+  FAD_Wrapper F(f, 3, 3);
 
   // Initialize templates and evaluate function
   F.init(x);

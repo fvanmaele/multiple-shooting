@@ -1,5 +1,5 @@
-#ifndef EXPLICIT_EULER_H
-#define EXPLICIT_EULER_H
+#ifndef EULER_H
+#define EULER_H
 #include <iostream>
 
 #include "eos_method.h"
@@ -27,4 +27,4 @@ private:
   // EOS_Method::uapprox;
 };
 
-#endif // EXPLICIT_EULER_H
+#endif // EULER_H

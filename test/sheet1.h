@@ -1,7 +1,6 @@
 #ifndef SHEET1_H
 #define SHEET1_H
 #include "../algo/convergence.h"
-#include "../base/functor.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
 #include "test_runge_kutta.h"
@@ -30,10 +29,8 @@ void Problem_P12(FP_Type h)
             << "OOC: (Blackbox, h = " << h << ") "
             << OOC << std::endl;
 
-  DOPRI T;
-  ButcherTableau<7> Tab(T.A, T.b1, T.b2, T.c);
-
-  ERK Method2(f, t0, u0, Tab.matrix, Tab.weights, Tab.weights_low, Tab.nodes);
+  DOPRI Tab;
+  ERK<7> Method2(f, t0, u0, Tab.A, Tab.b1, Tab.b2, Tab.c);
   FP_Type EOC2 = eoc_1step(Method2, t1, h);
   FP_Type OOC2 = ooc_1step(Method2, t1, h, u);
 

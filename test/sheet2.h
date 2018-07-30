@@ -4,7 +4,6 @@
 #include <cassert>
 
 #include "../algo/convergence.h"
-#include "../base/functor.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
 #include "../ivp/runge_kutta.h"
@@ -36,10 +35,8 @@ void Problem_P22(FP_Type h, std::ostream &output)
   u0[1] = 1.0;
 
   // Solve the equations with the classic Runge-Kutta method
-  ERK_04 T;
-  ButcherTableau<4> Tab(T.A, T.b, T.c);
-
-  ERK Method2(rhs, t0, u0, Tab.matrix, Tab.weights, Tab.nodes);
+  ERK_04 Tab;
+  ERK<4> Method2(rhs, t0, u0, Tab.A, Tab.b, Tab.c);
   //ERK_Test_O4 Method2(rhs, t0, u0);
   Method2.iterate_up_to(t1, h);
   Method2.print(output);
