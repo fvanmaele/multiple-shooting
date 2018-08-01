@@ -9,42 +9,31 @@
 #include "tableau.h"
 #include "eos_method.h"
 
-template <size_t N>
+template <typename ButcherTableau>
 class ERK : public EOS_Method
 {
 public:
-  // In addition to the usual arguments, the Range_Kuuta method
-  // requires a matrix A and two vectors b, c.
-
-  // Constructor for explicit methods
-  ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      std::array<FP_Type, N*N> matrix,
-      std::array<FP_Type, N> weights,
-      std::array<FP_Type, N> nodes)
-    :
-      EOS_Method(f, t0, u0), A(N, N, matrix.data()),
-      b1(weights.begin(), weights.end()),
-      c(nodes.begin(), nodes.end())
+  // Constructor for explicit and embedded methods
+  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
+    EOS_Method(f, t0, u0)
   {
-    assert(c.size() == b1.size());
-    embedded_method = false;
-  }
+    ButcherTableau BTab;
 
-  // Constructor for embedded methods
-  ERK(RHS &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      std::array<FP_Type, N*N> matrix,
-      std::array<FP_Type, N> weights,
-      std::array<FP_Type, N> weights_low,
-      std::array<FP_Type, N> nodes)
-    :
-      EOS_Method(f, t0, u0), A(N, N, matrix.data()),
-      b1(weights.begin(), weights.end()),
-      b2(weights_low.begin(), weights_low.end()),
-      c(nodes.begin(), nodes.end())
-  {
-    assert(c.size() == b1.size());
-    assert(c.size() == b2.size());
-    embedded_method = true;
+    // move assignment?
+    A  = dealii::FullMatrix(BTab.n, BTab.n, BTab.A.data());
+    b1 = dealii::Vector<FP_Type>(BTab.b_high.begin(), BTab.b_high.end());
+    c  = dealii::Vector<FP_Type>(BTab.c.begin(), BTab.c.end());
+
+    if (BTab.b_low.size())
+      {
+        embedded_method = true;
+        b2 = dealii::Vector<FP_Type>(BTab.b_low.begin(), BTab.b_low.end());
+      }
+    else
+      {
+        embedded_method = false;
+        b2 = dealii::Vector<FP_Type>();
+      }
   }
 
   dealii::Vector<FP_Type>
@@ -53,7 +42,7 @@ public:
   {
     size_t s = b.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
-    k.at(0) = f(t, u);
+    k.at(0) = f.value(t, u);
 
     for (size_t i = 1; i < s; i++)
       {
@@ -62,7 +51,7 @@ public:
         for (size_t j = 0; j < i; j++)
           g += A(i,j) * k.at(j);
 
-        k.at(i) = f(t + h*c[i], u + h*g);
+        k.at(i) = f.value(t + h*c[i], u + h*g);
         assert(k.at(i).size() == u.size());
       }
 
@@ -87,7 +76,8 @@ public:
   }
 
   void iterate_with_ssc(const FP_Type t_lim, const FP_Type h0,
-                        const FP_Type TOL, const size_t order)
+                        const FP_Type TOL, const size_t order,
+                        bool fundamental_matrix = false)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
@@ -115,14 +105,22 @@ public:
         FP_Type local_error = (inc_u - inc_v).l2_norm();
         FP_Type h_opt = h_var * std::pow(TOL/local_error, 1./(order+1));
 
+        // (3) Time step is rejected; repeat step with optimal value.
         if (h_opt < h_var)
-          { // (3) Time step is rejected; repeat step with optimal value.
+          {
             h_var = h_opt;
             misfires++;
             continue;
           }
+        // (4) Time step was accepted.
         else
-          { // (4) Time step was accepted.
+          { // Take last values (t, u) to compute step in variational equation,
+            // including the corresponding step size h_var.
+            if (fundamental_matrix)
+              // Note: the new step is written in-place, unlike the IVP solution.
+              Y += h_var * fund_matrix_increment(t, u, h_var, Y);
+
+            // Write new accepted values.
             u  = inc_u;
             t += h_var;
 
@@ -154,10 +152,11 @@ private:
   // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
+  // EOS_Method::Y;
 
   // Butcher tableau
-  const dealii::FullMatrix<FP_Type> A;
-  const dealii::Vector<FP_Type> b1, b2, c;
+  dealii::FullMatrix<FP_Type> A;
+  dealii::Vector<FP_Type> b1, b2, c;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

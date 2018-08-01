@@ -1,9 +1,34 @@
 #ifndef SHEET1_H
 #define SHEET1_H
+
 #include "../algo/convergence.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
 #include "test_runge_kutta.h"
+
+// This functor represents the RHS of the autonomous IVP
+//    u'(t) = u(t) = f;
+class RHS_P11 : public TimeFunctor
+{
+public:
+  virtual dealii::Vector<FP_Type>
+  value(FP_Type, const dealii::Vector<FP_Type> &u) override
+  {
+    return u;
+  }
+};
+
+// This functor represents the RHS of the IVP
+//    u'(t) = t*u(t) = f;
+class RHS_P13 : public TimeFunctor
+{
+public:
+  virtual dealii::Vector<FP_Type>
+  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
+  {
+    return t * u;
+  }
+};
 
 void Problem_P12(FP_Type h)
 {
@@ -29,8 +54,7 @@ void Problem_P12(FP_Type h)
             << "OOC: (Blackbox, h = " << h << ") "
             << OOC << std::endl;
 
-  DOPRI Tab;
-  ERK<7> Method2(f, t0, u0, Tab.A, Tab.b1, Tab.b2, Tab.c);
+  ERK<DOPRI> Method2(f, t0, u0);
   FP_Type EOC2 = eoc_1step(Method2, t1, h);
   FP_Type OOC2 = ooc_1step(Method2, t1, h, u);
 

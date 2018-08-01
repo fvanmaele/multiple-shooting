@@ -3,22 +3,22 @@
 #include "algo/newton.h"
 #include "base/forward_ad.h"
 #include "base/types.h"
-#include "ivp/rhs.h"
+#include "base/functor.h"
 #include "ivp/runge_kutta.h"
 
 #include "test/sheet1.h"
 #include "test/sheet2.h"
 #include "test/sheet3.h"
-#include "test/test_forward_ad.h"
+#include "test/test_ad.h"
 #include "test/test_newton.h"
 #include "test/test_runge_kutta.h"
 #include "test/test_bvp.h"
 
-class ThomasFermi : public RHS
+class ThomasFermi : public TimeFunctor
 {
 public:
   virtual dealii::Vector<FP_Type>
-  operator()(FP_Type t, const dealii::Vector<FP_Type> &u) override
+  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
   {
     dealii::Vector<FP_Type> result(2);
     result[0] = t * u[1];
@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
   Test_FAD();
   std::cout << std::endl;
   Test_Newton();
-  Test_ED();
+  Test_Stoer();
+  Test_Troesch();
   return 0;
 }

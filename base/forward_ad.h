@@ -18,76 +18,84 @@
 // Forward AD class (dynamic allocation)
 typedef Sacado::Fad::DFad<FP_Type> FAD_Number;
 
-struct FAD_Functor
+// C++17: std::optional for time parameter t
+struct FAD_TdVecField
 {
   virtual std::vector<FAD_Number>
-  operator()(const std::vector<FAD_Number> &x) = 0;
+  operator()(FAD_Number t, const std::vector<FAD_Number> &x) = 0;
 
-  virtual ~FAD_Functor()
-  {}
+  virtual ~FAD_TdVecField() = default;
 };
 
-// Class representing a function f: R^m -> R^n, with support
-// for evaluation and automatic (forward) differentation.
+// Class representing the right-hand side
+//    f: I x R^d -> R^d
+//
+// of an IVP, supporting evaluation and automatic differentation.
+template <size_t dim>
 class FAD_Wrapper
 {
 public:
-  FAD_Wrapper(FAD_Functor &_f, size_t _m, size_t _n) :
-    f(_f), FAD_x(_m), FAD_y(_n), m(_m), n(_n)
+  FAD_Wrapper(FAD_TdVecField &_f) :
+    f(_f), FAD_t(), FAD_u(dim), FAD_y(dim)
   {}
 
   // Instantiate AD template classes and functions
-  void init(const dealii::Vector<FP_Type> &x)
+  void init(FP_Type t, const dealii::Vector<FP_Type> &u)
   {
-    // Ensure argument length matches arguments
-    assert(x.size() == m);
+    assert(u.size() == dim);
 
-    for (size_t i = 0; i < x.size(); i++)
+    // Time parameter (passive variable)
+    FAD_t = t;
+
+    // Analytic derivative with respect to u
+    for (size_t i = 0; i < u.size(); i++)
       {
-        FAD_x.at(i) = x[i];
-        FAD_x.at(i).diff(i, m);
+        FAD_u.at(i) = u[i];
+        FAD_u.at(i).diff(i, dim);
       }
 
-    FAD_y = f(FAD_x);
-    assert(FAD_y.size() == n);
-
+    FAD_y = f(FAD_t, FAD_u);
     FAD_initialized = true;
   }
 
   // Evaluate function
   dealii::Vector<FP_Type> value() const
   {
+    assert(FAD_y.size() == dim);
+
     if (!FAD_initialized)
       {
         throw std::invalid_argument("FAD must be initialized");
       }
-    dealii::Vector<FP_Type> result(n);
+    dealii::Vector<FP_Type> result(dim);
 
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < dim; i++)
       {
         result(i) = FAD_y.at(i).val();
       }
     return result;
   }
 
-  // Evaluate Jacobian
-  dealii::FullMatrix<FP_Type> jacobian()
+  // Evaluate partial derivatives with respect to u
+  dealii::FullMatrix<FP_Type> nabla_u() const
   {
+    assert(FAD_y.size() == dim);
+
     if (!FAD_initialized)
       {
         throw std::invalid_argument("FAD must be initialized");
       }
-    dealii::FullMatrix<FP_Type> J(m, n);
+    dealii::FullMatrix<FP_Type> J(dim, dim);
 
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < dim; i++)
       {
         if (FAD_y.at(i).hasFastAccess())
-            for (size_t j = 0; j < m; j++)
+            for (size_t j = 0; j < dim; j++)
               {
                 J.set(i, j, FAD_y.at(i).fastAccessDx(j));
               }
         else
-            for (size_t j = 0; j < m; j++)
+            for (size_t j = 0; j < dim; j++)
               {
                 J.set(i, j, FAD_y.at(i).dx(j));
               }
@@ -97,54 +105,42 @@ public:
 
 private:
   // Function definition
-  FAD_Functor &f;
+  FAD_TdVecField &f;
+  FAD_Number FAD_t;
 
   // Save FAD input values in std::vector.
-  // See: https://github.com/dealii/dealii/issues/6940
-  std::vector<FAD_Number> FAD_x;
+  // https://github.com/dealii/dealii/issues/6940
+  std::vector<FAD_Number> FAD_u;
   std::vector<FAD_Number> FAD_y;
 
   // Markers
   bool FAD_initialized;
-  const size_t m;
-  const size_t n;
 };
 
-// This class assumes that the comparison of two vectors
-// is less expensive than the re-evaluation of functions
-// or their Jacobians. (cf. Sacado "FastAccess"?)
-class Function_AD : public DivFunctor
+template <size_t dim>
+class TimeFunctor_AD : public TimeDivFunctor
 {
 public:
-  Function_AD(FAD_Functor &f, size_t m, size_t n) :
-    F(f, m, n), x_last(0)
+  TimeFunctor_AD(FAD_TdVecField &f) :
+    F(f) // once differentiable
   {}
 
   virtual dealii::Vector<FP_Type>
-  value(const dealii::Vector<FP_Type> &x) override
+  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
   {
-    if (!(x.size() == x_last.size() && x == x_last))
-      {
-        F.init(x);
-        x_last = x;
-      }
+    F.init(t, u);
     return F.value();
   }
 
   virtual dealii::FullMatrix<FP_Type>
-  jacobian(const dealii::Vector<FP_Type> &x) override
+  nabla_u(FP_Type t, const dealii::Vector<FP_Type> &u) override
   {
-    if (!(x.size() == x_last.size() && x == x_last))
-      {
-        F.init(x);
-        x_last = x;
-      }
-    return F.jacobian();
+    F.init(t, u);
+    return F.nabla_u();
   }
 
 private:
-  FAD_Wrapper F;
-  dealii::Vector<FP_Type> x_last;
+  FAD_Wrapper<dim> F;
 };
 
 #endif // FORWARD_AD_H

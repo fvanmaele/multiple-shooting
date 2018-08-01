@@ -19,6 +19,20 @@ operator*(const dealii::LAPACKFullMatrix<FP_Type> &A,
 }
 
 dealii::LAPACKFullMatrix<FP_Type>
+operator*(FP_Type a, dealii::LAPACKFullMatrix<FP_Type> rhs)
+{
+  rhs *= a;
+  return rhs;
+}
+
+dealii::LAPACKFullMatrix<FP_Type>
+operator*(dealii::LAPACKFullMatrix<FP_Type> lhs, FP_Type a)
+{
+  lhs *= a;
+  return lhs;
+}
+
+dealii::LAPACKFullMatrix<FP_Type>
 operator*(const dealii::LAPACKFullMatrix<FP_Type> &A,
           const dealii::LAPACKFullMatrix<FP_Type> &B)
 {

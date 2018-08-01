@@ -72,4 +72,27 @@ private:
   FP_Type y_norm;
 };
 
+dealii::Vector<FP_Type>
+Newton_iterate(DivFunctor &F, dealii::Vector<FP_Type> s,
+               size_t step_limit = 50)
+{
+  Newton N(F, s.size());
+  size_t steps = 0;
+
+  for (size_t k = 0; k < step_limit; k++)
+    {
+      // Perform step of (quasi-)Newton method
+      s = N.step(F.jacobian(s), s, true);
+      steps++;
+
+      if (N.stopping_criterion(1e-8))
+        {
+          std::cout << "Solution of F: (" << steps << " steps) " << s;
+          return s;
+        }
+    }
+  std::cerr << "Warning: step limit exceeded" << std::endl;
+  return s;
+}
+
 #endif // NEWTON_H

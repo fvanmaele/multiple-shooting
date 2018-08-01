@@ -15,7 +15,7 @@ class Euler : public EOS_Method
   increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
                      const FP_Type &h) override
   {
-    return f(t, u);
+    return f.value(t, u);
   }
 
 private:
@@ -25,6 +25,7 @@ private:
   // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
+  // EOS_Method::Y;
 };
 
 #endif // EULER_H

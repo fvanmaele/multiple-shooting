@@ -8,30 +8,29 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
 {
   RHS_P21 rhs(5, 2, 2, 1);
   FP_Type t0 = 0.0;
-  FP_Type t1 = 50.0;
+  FP_Type t1 = 30.0;
 
   dealii::Vector<FP_Type> u0(2);
   u0[0] = 1.0;
   u0[1] = 1.0;
 
-  // Solve the equations with the Dormand-Prince 45 method
-  DOPRI Tab;
-
-  // Equidistant method
-  ERK<7> Equidistant(rhs, t0, u0, Tab.A, Tab.b1, Tab.c);
+  // Solve the equations with the Dormand-Prince 87 method
+  ERK<DOPRI> Equidistant(rhs, t0, u0);
   Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
-  std::cout << "Amount of steps: " << Equidistant.n_steps() << std::endl;
+  std::cout << "Amount of steps: (DOPRI, Equidistant) "
+            << Equidistant.n_steps() << std::endl;
 
-  // Adaptive method of order 5(4)
-  ERK<7> Adaptive(rhs, t0, u0, Tab.A, Tab.b1, Tab.b2, Tab.c);
-  Adaptive.iterate_with_ssc(t1, 1e-1, 1e-8, 4);
+  // Adaptive method of order 8(7)
+  ERK<DOPRI> Adaptive(rhs, t0, u0);
+  FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
+  Adaptive.iterate_with_ssc(t1, 1e-1, TOL, 4);
   Adaptive.print(output2);
 
   size_t steps = Adaptive.n_steps();
   size_t misfires = Adaptive.n_misfires();
-  std::cout << "Amount of steps: "
-            << steps << std::endl
+  std::cout << "Amount of steps: (DOPRI, Adaptive) "
+            << Adaptive.n_steps() << std::endl
             << "Amount of misfires: "
             << misfires << std::endl
             << "Amount of accepted steps: "

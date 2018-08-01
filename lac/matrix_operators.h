@@ -30,6 +30,20 @@ operator*(const dealii::FullMatrix<FP_Type> &A,
 }
 
 dealii::FullMatrix<FP_Type>
+operator*(FP_Type a, dealii::FullMatrix<FP_Type> rhs)
+{
+  rhs *= a;
+  return rhs;
+}
+
+dealii::FullMatrix<FP_Type>
+operator*(dealii::FullMatrix<FP_Type> lhs, FP_Type a)
+{
+  lhs *= a;
+  return lhs;
+}
+
+dealii::FullMatrix<FP_Type>
 operator+(dealii::FullMatrix<FP_Type> result,
           const dealii::FullMatrix<FP_Type> &B)
 {
@@ -42,9 +56,8 @@ operator+(dealii::FullMatrix<FP_Type> result,
 
 template <size_t n, size_t m>
 dealii::FullMatrix<FP_Type>
-std_to_Matrix(const std::vector<FP_Type> &v)
+std_to_Matrix(const std::array<FP_Type, n*m> &v)
 {
-  assert(v.size() == n*m);
   return dealii::FullMatrix<FP_Type>(n, m, v.data());
 }
 

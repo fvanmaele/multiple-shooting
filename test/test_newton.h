@@ -6,43 +6,57 @@
 #include "../algo/newton.h"
 #include "../base/forward_ad.h"
 
-struct FAD_Nonlinear : public FAD_Functor
+struct FAD_Aut : public FAD_TdVecField
 {
   virtual std::vector<FAD_Number>
-  operator()(const std::vector<FAD_Number> &x) override
+  operator()(FAD_Number, const std::vector<FAD_Number> &x) override
   {
     std::vector<FAD_Number> y = {
-      std::pow(x[0],2) + std::pow(x[1],2) - 1,
-      std::pow(x[0],2) - x[1]
+      std::pow(x[0], 2) + std::pow(x[1], 2) - 1,
+      std::pow(x[0], 2) - x[1]
     };
     return y;
   }
 };
 
+template <size_t dim>
+class Functor_AD : public DivFunctor
+{
+public:
+  Functor_AD(FAD_TdVecField &f) :
+    F(f) // once differentiable
+  {}
+
+  virtual dealii::Vector<FP_Type>
+  value(const dealii::Vector<FP_Type> &u) override
+  {
+    F.init(FP_Type(), u);
+    return F.value();
+  }
+
+  virtual dealii::FullMatrix<FP_Type>
+  jacobian(const dealii::Vector<FP_Type> &u) override
+  {
+    F.init(FP_Type(), u);
+    return F.nabla_u();
+  }
+
+private:
+  FAD_Wrapper<dim> F;
+};
+
 // Ortega, Scientific Computing, Tab. 4.3.2
 void Test_Newton()
 {
-  FAD_Nonlinear f;
-  Function_AD F(f, 2, 2);
-  Newton N(F, 2);
+  FAD_Aut f;
+  Functor_AD<2> F(f);
 
   // Starting value
   dealii::Vector<FP_Type> s(2);
   s[0] = 0.5;
   s[1] = 0.5;
 
-  size_t steps = 0;
-  for (size_t k = 0; k < 20; k++)
-    {
-      s = N.step(F.jacobian(s), s, true);
-      steps++;
-
-      if (N.stopping_criterion(1e-8))
-        {
-          std::cout << "Solution of F: (" << steps << " steps) " << s;
-          break;
-        }
-    }
+  Newton_iterate(F, s);
 }
 
 #endif // TEST_NEWTON_H
