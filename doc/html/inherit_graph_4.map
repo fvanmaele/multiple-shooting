@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structERK__04.html" title="ERK_04" alt="" coords="5,5,76,32"/>
+<area shape="rect" id="node1" href="$classFunctor.html" title="Functor" alt="" coords="5,56,72,83"/>
+<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="164,31,251,57"/>
+<area shape="rect" id="node7" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="120,81,295,108"/>
+<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="343,5,525,32"/>
+<area shape="rect" id="node4" href="$classShootingFunction.html" title="ShootingFunction" alt="" coords="373,56,495,83"/>
+<area shape="rect" id="node5" href="$classSF__Automatic.html" title="SF_Automatic" alt="" coords="573,31,679,57"/>
+<area shape="rect" id="node6" href="$classSF__External.html" title="SF_External" alt="" coords="579,81,673,108"/>
 </map>

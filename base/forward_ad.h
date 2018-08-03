@@ -21,12 +21,9 @@ typedef Sacado::Fad::DFad<FP_Type> NumberAD;
 // https://github.com/dealii/dealii/issues/6940
 typedef std::vector<NumberAD> VectorAD;
 
-typedef std::function<VectorAD(NumberAD, VectorAD)> tVecFieldAD;
-typedef std::function<VectorAD(VectorAD)> cVecFieldAD;
-
 // Helper functions
 void fad_differentiate(const std::vector<NumberAD> &FAD_y,
-               dealii::FullMatrix<FP_Type> &J)
+                       dealii::FullMatrix<FP_Type> &J)
 {
   size_t dim = FAD_y.size();
 
@@ -73,8 +70,6 @@ public:
   // Instantiate AD template classes and functions
   void init(const dealii::Vector<FP_Type> &u)
   {
-    static_assert(std::is_same<Callable, cVecFieldAD>::value,
-                  "function does not support FAD");
     assert(u.size() == dim);
 
     // Analytic derivative with respect to u
@@ -109,10 +104,9 @@ public:
   {
     if (!FAD_initialized)
       throw std::invalid_argument("FAD must be initialized");
-
     dealii::FullMatrix<FP_Type> J(dim, dim);
-    fad_differentiate(FAD_y, J);
 
+    fad_differentiate(FAD_y, J);
     return J;
   }
 
@@ -145,7 +139,6 @@ public:
 
   void init(FP_Type t, const dealii::Vector<FP_Type> &u)
   {
-    static_assert(std::is_same<Callable, tVecFieldAD>::value, "function does not support FAD");
     assert(u.size() == dim);
 
     // Time parameter (passive variable)
@@ -164,10 +157,9 @@ public:
   {
     if (!FAD_initialized)
       throw std::invalid_argument("FAD must be initialized");
-
     dealii::Vector<FP_Type> y(dim);
-    fad_evaluate(FAD_y, y);
 
+    fad_evaluate(FAD_y, y);
     return y;
   }
 
@@ -184,10 +176,9 @@ public:
   {
     if (!FAD_initialized)
       throw std::invalid_argument("FAD must be initialized");
-
     dealii::FullMatrix<FP_Type> J(dim, dim);
-    fad_differentiate(FAD_y, J);
 
+    fad_differentiate(FAD_y, J);
     return J;
   }
 

@@ -14,7 +14,7 @@ class ERK : public EOS_Method
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(tVecField &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
+  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
     EOS_Method(f, t0, u0)
   {
     ButcherTableau BTab;
@@ -38,7 +38,8 @@ public:
 
   dealii::Vector<FP_Type>
   k_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
-              FP_Type h, const dealii::Vector<FP_Type> &b, tVecField &f)
+              FP_Type h, const dealii::Vector<FP_Type> &b,
+              TimeFunctor &f)
   {
     size_t s = b.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
@@ -64,7 +65,7 @@ public:
 
   virtual dealii::Vector<FP_Type>
   increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, tVecField &f) override
+                     FP_Type h, TimeFunctor &f) override
   {
     // Explicit method of higher order (constructor)
     return k_increment(t, u, h, b1, f);
@@ -77,11 +78,15 @@ public:
 
   void iterate_with_ssc(const FP_Type t_lim, const FP_Type h0,
                         const FP_Type TOL, const size_t order,
-                        bool fundamental_matrix = false)
+                        bool fund_matrix = false)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
     FP_Type h_var = h0; // initial step size
+
+    TimeDivFunctor *f_diff = dynamic_cast<TimeDivFunctor*>(&f);
+    if (fund_matrix && f_diff == nullptr)
+      throw std::invalid_argument("functor is not differentiable");
 
     // Dynamic allocation, declare outside loop
     dealii::Vector<FP_Type> u = u0;
@@ -115,10 +120,10 @@ public:
         // (4) Time step was accepted.
         else
           { // Take last values (t, u) to compute step in variational equation,
-            // including the corresponding step size h_var.
-            if (fundamental_matrix)
-              // Note: the new step is written in-place, unlike the IVP solution.
-              Y.add(h_var, fund_matrix_increment(t, u, h_var, Y, f));
+            // including the corresponding step h_var.
+            // Note: the new step is written in-place, unlike the IVP solution.
+            if (fund_matrix)
+              Y.add(h_var, fund_matrix_increment(t, u, h_var, Y, f_diff));
 
             // Write new accepted values.
             u  = inc_u;

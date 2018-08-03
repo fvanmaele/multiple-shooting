@@ -12,7 +12,7 @@ class Euler : public EOS_Method
 
   virtual dealii::Vector<FP_Type>
   increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, tVecField &f) override
+                     FP_Type h, TimeFunctor &f) override
   {
     return f(t, u);
   }

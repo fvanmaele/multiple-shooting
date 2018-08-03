@@ -8,6 +8,8 @@
 
 #include "../base/types.h"
 #include "../lac/lac_types.h"
+#include "../lac/vector_operators.h"
+#include "../lac/matrix_operators.h"
 
 /* This class solves an IVP of shape
  *     u'(t) = f(t, u(t));  u(t_0) = u_0
@@ -37,7 +39,7 @@ public:
 
   // The intial values could be stored solely in the timepoints
   // resp. uapprox vector, but this is left out for simplicity.
-  EOS_Method(tVecField &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0)
+  EOS_Method(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0)
     :
       f(_f), t0(_t0), u0(_u0),
       timepoints(1, _t0), uapprox(1, _u0),
@@ -91,7 +93,7 @@ public:
 
   virtual dealii::Vector<FP_Type>
   increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, tVecField &f)
+                     FP_Type h, TimeFunctor &f)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
@@ -99,12 +101,12 @@ public:
   virtual ~EOS_Method() = default;
 
   // Compute increment function of variational equation from IVP step.
+  // Assumes that the right-hand side f is differentiable in u.
   dealii::FullMatrix<FP_Type>
   fund_matrix_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
                         FP_Type h, const dealii::FullMatrix<FP_Type> &Y,
-                        tVecField &f)
+                        TimeDivFunctor *f)
   {
-    assert(false);
     dealii::Vector<FP_Type> phi(Y.m());
     dealii::FullMatrix<FP_Type> Y_inc = Y;
 
@@ -114,14 +116,16 @@ public:
         for (size_t i = 0; i < Y.m(); i++)
           phi(i) = Y(i, j);
 
-//        tVecField lambda = [nabla, &phi]
-//            (FP_Type t, const dealii::Vector<FP_Type> &u)
-//        {
-//            return nabla(t, u) * phi;
-//        };
+        // Generate RHS of variational equation.
+        auto lambda = [&f, &phi]
+            (FP_Type t, const dealii::Vector<FP_Type> &u)
+        {
+            return f->diff(t, u) * phi;
+        };
 
-//        // Write back result
-//        phi = increment_function(t, u, h, lambda);
+        // Write back result
+        std_tWrapper F(lambda, phi.size());
+        phi = increment_function(t, u, h, F);
 
         for (size_t i = 0; i < Y.m(); i++)
           Y_inc(i, j) = phi(i);
@@ -130,12 +134,15 @@ public:
   }
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h,
-                     bool fundamental_matrix = false)
+  void iterate_up_to(FP_Type t_lim, FP_Type h, bool fund_matrix = false)
   {
     // init input variables
     FP_Type t = t0;
     dealii::Vector<FP_Type> u = u0;
+
+    TimeDivFunctor *f_diff = dynamic_cast<TimeDivFunctor*>(&f);
+    if (fund_matrix && f_diff == nullptr)
+      throw std::invalid_argument("functor is not differentiable");
 
     // init output variables
     reset();
@@ -149,9 +156,9 @@ public:
 
         // Take last values (t, u) to compute step in variational equation,
         // including the corresponding step size.
-        if (fundamental_matrix)
-          // Note: the new step is written in-place, unlike the IVP solution.
-          Y.add(h, fund_matrix_increment(t, u, h, Y, f));
+        // Note: the new step is written in-place, unlike the IVP solution.
+        if (fund_matrix)
+          Y.add(h, fund_matrix_increment(t, u, h, Y, f_diff));
 
         // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
         // t_k = t_{k-1} + h
@@ -167,7 +174,7 @@ public:
   }
 
 private:
-  tVecField &f;
+  TimeFunctor &f;
   FP_Type t0;
   dealii::Vector<FP_Type> u0;
   size_t steps;

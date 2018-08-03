@@ -7,7 +7,7 @@
 void Problem_P32(std::ostream &output1, std::ostream &output2,
                  std::ostream &output3)
 {
-  tVecField f = LotkaVolterra;
+  std_tWrapper f(LotkaVolterra<VectorD2>, 2);
   FP_Type t0 = 0.0;
   FP_Type t1 = 30.0;
 

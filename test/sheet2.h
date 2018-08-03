@@ -8,10 +8,10 @@
 #include "../ivp/euler.h"
 #include "../ivp/runge_kutta.h"
 
-dealii::Vector<FP_Type>
-LotkaVolterra(FP_Type t, const dealii::Vector<FP_Type> &u)
+template <typename Vector>
+Vector LotkaVolterra(typename Vector::value_type, const Vector &u)
 {
-  dealii::Vector<FP_Type> result(2);
+  Vector result(2);
   result[0] = u[0] * (5 - 2 * u[1]);
   result[1] = u[1] * (2 * u[0] - 1);
 
@@ -20,7 +20,7 @@ LotkaVolterra(FP_Type t, const dealii::Vector<FP_Type> &u)
 
 void Problem_P21(FP_Type h, std::ostream &output)
 {
-  tVecField f = LotkaVolterra;
+  std_tWrapper f(LotkaVolterra<VectorD2>, 2);
   FP_Type t0 = 0.0;
   FP_Type t1 = 10.0;
 
@@ -36,7 +36,7 @@ void Problem_P21(FP_Type h, std::ostream &output)
 
 void Problem_P22(FP_Type h, std::ostream &output)
 {
-  tVecField f = LotkaVolterra;
+  std_tWrapper f(LotkaVolterra<VectorD2>, 2);
   FP_Type t0 = 0.0;
   FP_Type t1 = 10.0;
 

@@ -21,20 +21,20 @@ Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classERK_a600b2ded4e6baa75492d621b792c8493}\label{classERK_a600b2ded4e6baa75492d621b792c8493}} 
-{\bfseries E\+RK} (t\+Vec\+Field \&f, F\+P\+\_\+\+Type t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ u0)
+\mbox{\Hypertarget{classERK_a2e9bccb7699bc97bd3800c25d86ee814}\label{classERK_a2e9bccb7699bc97bd3800c25d86ee814}} 
+{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ u0)
 \item 
-\mbox{\Hypertarget{classERK_a3c11900d43dfde8035ad6b077b36ea2b}\label{classERK_a3c11900d43dfde8035ad6b077b36ea2b}} 
-dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b, t\+Vec\+Field \&f)
+\mbox{\Hypertarget{classERK_afae19be9dd7961c2324deda0f2439c74}\label{classERK_afae19be9dd7961c2324deda0f2439c74}} 
+dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b, \hyperlink{classTimeFunctor}{Time\+Functor} \&f)
 \item 
-\mbox{\Hypertarget{classERK_a327c6d1744ea1af69832401ba5db4bf8}\label{classERK_a327c6d1744ea1af69832401ba5db4bf8}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, t\+Vec\+Field \&f) override
+\mbox{\Hypertarget{classERK_a96ece8656df8073bc85281ef29706856}\label{classERK_a96ece8656df8073bc85281ef29706856}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, \hyperlink{classTimeFunctor}{Time\+Functor} \&f) override
 \item 
 \mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
 size\+\_\+t {\bfseries n\+\_\+misfires} () const
 \item 
-\mbox{\Hypertarget{classERK_a579d1dca336908852a3a283dd97f13f8}\label{classERK_a579d1dca336908852a3a283dd97f13f8}} 
-void {\bfseries iterate\+\_\+with\+\_\+ssc} (const F\+P\+\_\+\+Type t\+\_\+lim, const F\+P\+\_\+\+Type h0, const F\+P\+\_\+\+Type T\+OL, const size\+\_\+t order, bool fundamental\+\_\+matrix=false)
+\mbox{\Hypertarget{classERK_a4078c1ed0c303d456c1f6e7c25bc0121}\label{classERK_a4078c1ed0c303d456c1f6e7c25bc0121}} 
+void {\bfseries iterate\+\_\+with\+\_\+ssc} (const F\+P\+\_\+\+Type t\+\_\+lim, const F\+P\+\_\+\+Type h0, const F\+P\+\_\+\+Type T\+OL, const size\+\_\+t order, bool fund\+\_\+matrix=false)
 \item 
 \mbox{\Hypertarget{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}\label{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}} 
 void {\bfseries print\+\_\+step\+\_\+size} (std\+::ostream \&out)

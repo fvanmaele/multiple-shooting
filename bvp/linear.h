@@ -5,10 +5,11 @@
 
 // Class to represent a 2-dimensional separated linear BVP, with
 // boundary conditions on the first component.
+template <typename DiffMethod>
 class SimpleBVP
 {
 public:
-  SimpleBVP(tVecField _f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
+  SimpleBVP(TimeFunctor &_f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
     f(_f), a(_a), b(_b), c(_c)
   {
     std::array<FP_Type, 4> _A = { 1, 0,
@@ -26,7 +27,7 @@ public:
   void single_shooting(const std::vector<dealii::Vector<FP_Type> > &start)
   {
     assert(start.size());
-    SF_External F(f, a, b, A, B, c);
+    DiffMethod F(f, a, b, A, B, c);
     Newton N(F, 2);
 
     for (auto &s : start)
@@ -38,8 +39,7 @@ public:
   {
     if (dim > 2)
       throw std::logic_error("Function not implemented");
-
-    SF_External F(f, a, b, A, B, c);
+    DiffMethod F(f, a, b, A, B, c);
 
     for (auto &s : range)
       {
@@ -61,7 +61,7 @@ public:
   }
 
 private:
-  tVecField f;
+  TimeFunctor &f;
   FP_Type a, b;
   dealii::Vector<FP_Type> c;
   dealii::FullMatrix<FP_Type> A, B;

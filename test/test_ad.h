@@ -6,13 +6,14 @@
 #include "../base/forward_ad.h"
 
 // f: R^3 -> R^3,  n = m = 3
-VectorAD FAD_Test(const VectorAD &u)
+template <typename Vector>
+Vector FAD_Test(const Vector &u)
 {
-  std::vector<NumberAD> y = {
-    std::pow(u[0], 3) * std::sin(u[1]),
-    std::cos(u[0]) * std::sin(u[1]),
-    std::exp(u[2])
-  };
+  Vector y(3);
+  y[0] = std::pow(u[0], 3) * std::sin(u[1]);
+  y[1] = std::cos(u[0]) * std::sin(u[1]);
+  y[2] = std::exp(u[2]);
+
   return y;
 }
 
@@ -24,8 +25,7 @@ void Test_FAD()
   u[2] = 3;
 
   // Define wrapper object
-  cVecFieldAD f = FAD_Test;
-  FAD_cWrapper F(f, 3);
+  FAD_cWrapper F(FAD_Test<VectorAD>, 3);
 
   // Initialize templates and evaluate function
   F.init(u);

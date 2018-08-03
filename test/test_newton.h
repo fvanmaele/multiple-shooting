@@ -25,8 +25,7 @@ void Test_Newton()
   s[0] = 0.5;
   s[1] = 0.5;
 
-  cVecFieldAD f = AutFAD;
-  FAD_cWrapper F(f, 2);
+  FAD_cWrapper F(AutFAD, 2);
   Newton N(F, 2);
 
   N.iterate(s);
