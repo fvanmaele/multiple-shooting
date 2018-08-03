@@ -1,0 +1,46 @@
+\hypertarget{classERK}{}\section{E\+RK$<$ Butcher\+Tableau $>$ Class Template Reference}
+\label{classERK}\index{E\+R\+K$<$ Butcher\+Tableau $>$@{E\+R\+K$<$ Butcher\+Tableau $>$}}
+
+
+Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{classERK__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{classERK__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classERK_a600b2ded4e6baa75492d621b792c8493}\label{classERK_a600b2ded4e6baa75492d621b792c8493}} 
+{\bfseries E\+RK} (t\+Vec\+Field \&f, F\+P\+\_\+\+Type t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ u0)
+\item 
+\mbox{\Hypertarget{classERK_a3c11900d43dfde8035ad6b077b36ea2b}\label{classERK_a3c11900d43dfde8035ad6b077b36ea2b}} 
+dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b, t\+Vec\+Field \&f)
+\item 
+\mbox{\Hypertarget{classERK_a327c6d1744ea1af69832401ba5db4bf8}\label{classERK_a327c6d1744ea1af69832401ba5db4bf8}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, t\+Vec\+Field \&f) override
+\item 
+\mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
+size\+\_\+t {\bfseries n\+\_\+misfires} () const
+\item 
+\mbox{\Hypertarget{classERK_a579d1dca336908852a3a283dd97f13f8}\label{classERK_a579d1dca336908852a3a283dd97f13f8}} 
+void {\bfseries iterate\+\_\+with\+\_\+ssc} (const F\+P\+\_\+\+Type t\+\_\+lim, const F\+P\+\_\+\+Type h0, const F\+P\+\_\+\+Type T\+OL, const size\+\_\+t order, bool fundamental\+\_\+matrix=false)
+\item 
+\mbox{\Hypertarget{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}\label{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}} 
+void {\bfseries print\+\_\+step\+\_\+size} (std\+::ostream \&out)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+ivp/runge\+\_\+kutta.\+h\end{DoxyCompactItemize}

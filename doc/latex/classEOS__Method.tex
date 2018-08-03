@@ -1,0 +1,67 @@
+\hypertarget{classEOS__Method}{}\section{E\+O\+S\+\_\+\+Method Class Reference}
+\label{classEOS__Method}\index{E\+O\+S\+\_\+\+Method@{E\+O\+S\+\_\+\+Method}}
+
+
+Inheritance diagram for E\+O\+S\+\_\+\+Method\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classEOS__Method__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEOS__Method_ab1c44a70bbbcdda56efdd788e49bfd80}\label{classEOS__Method_ab1c44a70bbbcdda56efdd788e49bfd80}} 
+{\bfseries E\+O\+S\+\_\+\+Method} (t\+Vec\+Field \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \+\_\+u0)
+\item 
+\mbox{\Hypertarget{classEOS__Method_a51157a38f285e475337c4e67d1ccd279}\label{classEOS__Method_a51157a38f285e475337c4e67d1ccd279}} 
+dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries approx} () const
+\item 
+\mbox{\Hypertarget{classEOS__Method_a3f7157f6b6518ea3395f90b3c5a795b8}\label{classEOS__Method_a3f7157f6b6518ea3395f90b3c5a795b8}} 
+F\+P\+\_\+\+Type {\bfseries endpoint} () const
+\item 
+\mbox{\Hypertarget{classEOS__Method_aa733b1416d87f4382d4b6abd24c59013}\label{classEOS__Method_aa733b1416d87f4382d4b6abd24c59013}} 
+dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries fund\+\_\+matrix} () const
+\item 
+\mbox{\Hypertarget{classEOS__Method_aa323926fa9f41a8a011c1a370c2bed7d}\label{classEOS__Method_aa323926fa9f41a8a011c1a370c2bed7d}} 
+size\+\_\+t {\bfseries n\+\_\+steps} () const
+\item 
+\mbox{\Hypertarget{classEOS__Method_ae7f7cd39eddbc7dde0c004773c00ad6e}\label{classEOS__Method_ae7f7cd39eddbc7dde0c004773c00ad6e}} 
+void {\bfseries print} (std\+::ostream \&out=std\+::cout) const
+\item 
+\mbox{\Hypertarget{classEOS__Method_a2abc87316deb095a84ed74e1ddfd56ec}\label{classEOS__Method_a2abc87316deb095a84ed74e1ddfd56ec}} 
+void {\bfseries reset} ()
+\item 
+\mbox{\Hypertarget{classEOS__Method_a8f1d297e535ca2ca7441bafcea43742c}\label{classEOS__Method_a8f1d297e535ca2ca7441bafcea43742c}} 
+void {\bfseries save\+\_\+step} (const F\+P\+\_\+\+Type \&t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u)
+\item 
+\mbox{\Hypertarget{classEOS__Method_abfd4da141c0877b5d52bafec5179d385}\label{classEOS__Method_abfd4da141c0877b5d52bafec5179d385}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, t\+Vec\+Field \&f)
+\item 
+\mbox{\Hypertarget{classEOS__Method_a444ba4c59e39b52c22302562d0ef2efa}\label{classEOS__Method_a444ba4c59e39b52c22302562d0ef2efa}} 
+dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries fund\+\_\+matrix\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ \&Y, t\+Vec\+Field \&f)
+\item 
+\mbox{\Hypertarget{classEOS__Method_ab2bdba943634581b320714739c525620}\label{classEOS__Method_ab2bdba943634581b320714739c525620}} 
+void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h, bool fundamental\+\_\+matrix=false)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEOS__Method_af3aa570b8e278b935d7dc84d2774ccb7}\label{classEOS__Method_af3aa570b8e278b935d7dc84d2774ccb7}} 
+class {\bfseries Blackbox}
+\item 
+\mbox{\Hypertarget{classEOS__Method_a9e8c94ebada889fba517c82fc3408d32}\label{classEOS__Method_a9e8c94ebada889fba517c82fc3408d32}} 
+class {\bfseries Euler}
+\item 
+\mbox{\Hypertarget{classEOS__Method_aaaa2b514e0ee583889d7f78273370f56}\label{classEOS__Method_aaaa2b514e0ee583889d7f78273370f56}} 
+class {\bfseries E\+R\+K\+\_\+\+Test\+\_\+\+O4}
+\item 
+\mbox{\Hypertarget{classEOS__Method_a55adbdc4c0fea0e770e4d18b0379d490}\label{classEOS__Method_a55adbdc4c0fea0e770e4d18b0379d490}} 
+{\footnotesize template$<$typename B\+Tab $>$ }\\class {\bfseries E\+RK}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+ivp/eos\+\_\+method.\+h\end{DoxyCompactItemize}
