@@ -2,9 +2,8 @@
 #define VECTOR_OPERATORS_H
 #include <algorithm>
 
-#include <deal.II/lac/vector.h>
-
 #include "../base/types.h"
+#include "lac_types.h"
 
 // The following operators are added for better readability
 // of vector operations, at the cost of efficiency (additional copying

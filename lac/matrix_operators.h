@@ -1,9 +1,8 @@
 #ifndef MATRIX_OPERATORS_H
 #define MATRIX_OPERATORS_H
 
-#include <deal.II/lac/full_matrix.h>
-
 #include "../base/types.h"
+#include "lac_types.h"
 
 // FullMatrix operators
 

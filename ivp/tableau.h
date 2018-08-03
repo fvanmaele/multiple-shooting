@@ -3,9 +3,6 @@
 
 #include <array>
 
-#include <deal.II/lac/vector.h>
-#include <deal.II/lac/full_matrix.h>
-
 #include "../base/types.h"
 
 // Classic Range-Kutta method

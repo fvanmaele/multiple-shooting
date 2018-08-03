@@ -5,53 +5,38 @@
 #include <limits>
 
 #include "../base/types.h"
+#include "../lac/lac_types.h"
 #include "../bvp/linear.h"
 
 // RHS for the initial value problem:
 //    w'' = 1.5 * w^2
+//
 // resp. the system
 //    (u1, u2)' = (u2, 1.5 * u1^2)
-class RHS_Stoer : public TimeFunctor
+dealii::Vector<FP_Type>
+Stoer(FP_Type t, const dealii::Vector<FP_Type> &u)
 {
-public:
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type t, const dealii::Vector<FP_Type> &u)
-  {
-    assert(u.size() == 2);
-    dealii::Vector<FP_Type> result(2);
+  dealii::Vector<FP_Type> result(2);
+  result[0] = u[1];
+  result[1] = 1.5 * std::pow(u[0], 2);
 
-    result[0] = u[1];
-    result[1] = 1.5 * std::pow(u[0], 2);
+  return result;
+}
 
-    return result;
-  }
-};
-
-class RHS_Troesch : public TimeFunctor
+dealii::Vector<FP_Type>
+Troesch(FP_Type t, const dealii::Vector<FP_Type> &u)
 {
-public:
-  RHS_Troesch(FP_Type _Lambda) :
-    Lambda(_Lambda)
-  {}
+  dealii::Vector<FP_Type> result(2);
+  result[0] = u[1];
+  result[1] = 5 * std::sinh(5 * u[0]);
 
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
-  {
-    dealii::Vector<FP_Type> result(2);
-    result[0] = u[1];
-    result[1] = Lambda * std::sinh(Lambda * u[0]);
-
-    return result;
-  }
-
-private:
-  FP_Type Lambda;
-};
+  return result;
+}
 
 // Stoer, Bulirsch, Num. Math 2, pp.192 (problem of 2nd order)
 void Test_Stoer()
 {
-  RHS_Stoer f;
+  tVecField f = Stoer;
   FP_Type a = 0.0;
   FP_Type b = 1.0;
 
@@ -95,10 +80,10 @@ void Test_Stoer()
   std::system("gnuplot -p -e \"plot 'bvp_sval.dat' using 2:4 with lines\"");
 }
 
-// Randwertaufgabe von Troesch, siehe Num. Math. 2, 7.4.3.8
+// Troesch BVP, see Num. Math. 2, 7.4.3.8
 void Test_Troesch()
 {
-  RHS_Troesch f(5);
+  tVecField f = Troesch;
   FP_Type a = 0.0;
   FP_Type b = 1.0;
 

@@ -1,9 +1,7 @@
 #include <iostream>
 
-#include "algo/newton.h"
 #include "base/forward_ad.h"
 #include "base/types.h"
-#include "base/functor.h"
 #include "ivp/runge_kutta.h"
 
 #include "test/sheet1.h"
@@ -14,19 +12,15 @@
 #include "test/test_runge_kutta.h"
 #include "test/test_bvp.h"
 
-class ThomasFermi : public TimeFunctor
+dealii::Vector<FP_Type>
+ThomasFermi(FP_Type t, const dealii::Vector<FP_Type> &u)
 {
-public:
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
-  {
-    dealii::Vector<FP_Type> result(2);
-    result[0] = t * u[1];
-    result[1] = 4 * std::pow(u[0], 1.5);
+  dealii::Vector<FP_Type> result(2);
+  result[0] = t * u[1];
+  result[1] = 4 * std::pow(u[0], 1.5);
 
-    return result;
-  }
-};
+  return result;
+}
 
 int main(int argc, char* argv[])
 {

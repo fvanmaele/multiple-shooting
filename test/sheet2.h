@@ -8,33 +8,19 @@
 #include "../ivp/euler.h"
 #include "../ivp/runge_kutta.h"
 
-// This functor models the Lotka-Volterra equations.
-class RHS_P21 : public TimeFunctor
+dealii::Vector<FP_Type>
+LotkaVolterra(FP_Type t, const dealii::Vector<FP_Type> &u)
 {
-public:
-  // Constructor for the 4 parameters a, b, c, d.
-  RHS_P21(FP_Type _a, FP_Type _b, FP_Type _c, FP_Type _d) :
-    a(_a), b(_b), c(_c), d(_d)
-  {}
+  dealii::Vector<FP_Type> result(2);
+  result[0] = u[0] * (5 - 2 * u[1]);
+  result[1] = u[1] * (2 * u[0] - 1);
 
-  // u represents the vector u = (u1(t), u2(t)).
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
-  {
-    dealii::Vector<FP_Type> result(2);
-    result[0] = u[0] * (a - b * u[1]);
-    result[1] = u[1] * (c * u[0] - d);
-
-    return result;
-  }
-
-private:
-  FP_Type a, b, c, d;
-};
+  return result;
+}
 
 void Problem_P21(FP_Type h, std::ostream &output)
 {
-  RHS_P21 rhs(5, 2, 2, 1);
+  tVecField f = LotkaVolterra;
   FP_Type t0 = 0.0;
   FP_Type t1 = 10.0;
 
@@ -43,14 +29,14 @@ void Problem_P21(FP_Type h, std::ostream &output)
   u0[1] = 1.0;
 
   // Solve the equations with the explicit Euler method
-  Euler Method1(rhs, t0, u0);
+  Euler Method1(f, t0, u0);
   Method1.iterate_up_to(t1, h);
   Method1.print(output);
 }
 
 void Problem_P22(FP_Type h, std::ostream &output)
 {
-  RHS_P21 rhs(5, 2, 2, 1);
+  tVecField f = LotkaVolterra;
   FP_Type t0 = 0.0;
   FP_Type t1 = 10.0;
 
@@ -59,7 +45,7 @@ void Problem_P22(FP_Type h, std::ostream &output)
   u0[1] = 1.0;
 
   // Solve the equations with the classic Runge-Kutta method
-  ERK<ERK_04> Method2(rhs, t0, u0);
+  ERK<ERK_04> Method2(f, t0, u0);
   //ERK_Test_O4 Method2(rhs, t0, u0);
   Method2.iterate_up_to(t1, h);
   Method2.print(output);

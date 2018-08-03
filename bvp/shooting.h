@@ -5,14 +5,17 @@
 
 #include "../algo/newton.h"
 #include "../base/forward_ad.h"
-#include "../base/functor.h"
 #include "../base/types.h"
+#include "../lac/lac_types.h"
+#include "../lac/matrix_operators.h"
+#include "../lac/vector_operators.h"
 #include "../ivp/runge_kutta.h"
 
 // Single shooting method for linear BVPs
 //    y' = f(x,y),  A*y(a) + B*y(b) = c
 //
 // See Stoer, Num. Math. 2, pp.195
+template <typename Callable>
 class ShootingFunction : public DivFunctor
 {
 public:
@@ -21,7 +24,7 @@ public:
   friend class SF_Automatic;  // Automatic differentation
   friend class SF_Manual;     // Use pre-computed fundamental matrix
 
-  ShootingFunction(TimeFunctor &_f, FP_Type _t0, FP_Type _t1,
+  ShootingFunction(Callable _f, FP_Type _t0, FP_Type _t1,
                    dealii::FullMatrix<FP_Type> _A,
                    dealii::FullMatrix<FP_Type> _B,
                    dealii::Vector<FP_Type> _c) :
@@ -45,27 +48,26 @@ public:
 
   virtual ~ShootingFunction() = default;
 
-  // Virtual methods for Functor class
   virtual dealii::Vector<FP_Type>
-  value(const dealii::Vector<FP_Type> &s) override
+  operator()(const dealii::Vector<FP_Type> &s) override
   {
     return A*s + B*solve_y(s) - c;
   }
 
   virtual dealii::FullMatrix<FP_Type>
-  jacobian(const dealii::Vector<FP_Type> &s) override
+  diff(const dealii::Vector<FP_Type> &s) override
   {
     return A + B*solve_Z(s);
   }
 
 private:
-  TimeFunctor &f;
+  tVecField f;
   FP_Type t0, t1;
   dealii::FullMatrix<FP_Type> A, B;
   dealii::Vector<FP_Type> c;
 };
 
-class SF_External : public ShootingFunction
+class SF_External : public ShootingFunction<tVecField>
 {
 public:
   using ShootingFunction::ShootingFunction;
@@ -118,19 +120,14 @@ private:
   // ShootingFunction::c
 };
 
-class SF_Automatic : public ShootingFunction
+class SF_Automatic : public ShootingFunction<tVecFieldAD>
 {
   using ShootingFunction::ShootingFunction;
 
   virtual dealii::FullMatrix<FP_Type>
   solve_Z(const dealii::Vector<FP_Type> &s) override
   {
-    // Check if AD Functor is available
-    TimeFunctor_AD* f_ad = dynamic_cast<TimeFunctor_AD*>(&f);
-    if (f_ad == nullptr)
-      throw std::invalid_argument("No FAD functor chosen");
-
-// ...
+    ;
   }
 
 private:

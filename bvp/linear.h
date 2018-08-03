@@ -8,7 +8,7 @@
 class SimpleBVP
 {
 public:
-  SimpleBVP(TimeFunctor &_f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
+  SimpleBVP(tVecField _f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
     f(_f), a(_a), b(_b), c(_c)
   {
     std::array<FP_Type, 4> _A = { 1, 0,
@@ -25,11 +25,12 @@ public:
   // of starting values instead of a single entry.
   void single_shooting(const std::vector<dealii::Vector<FP_Type> > &start)
   {
-    SF_External F(f, a, b, A, B, c);
     assert(start.size());
+    SF_External F(f, a, b, A, B, c);
+    Newton N(F, 2);
 
     for (auto &s : start)
-      Newton_iterate(F, s);
+      N.iterate(s);
   }
 
   void shooting_graph(size_t dim, const std::vector<dealii::Vector<FP_Type> > &range,
@@ -42,7 +43,7 @@ public:
 
     for (auto &s : range)
       {
-        dealii::Vector<FP_Type> diff = F.value(s);
+        dealii::Vector<FP_Type> diff = F(s);
         switch (dim)
           {
           case 1 :
@@ -60,7 +61,7 @@ public:
   }
 
 private:
-  TimeFunctor &f;
+  tVecField f;
   FP_Type a, b;
   dealii::Vector<FP_Type> c;
   dealii::FullMatrix<FP_Type> A, B;

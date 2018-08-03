@@ -6,36 +6,17 @@
 #include "../ivp/euler.h"
 #include "test_runge_kutta.h"
 
-// This functor represents the RHS of the autonomous IVP
-//    u'(t) = u(t) = f;
-class RHS_P11 : public TimeFunctor
-{
-public:
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type, const dealii::Vector<FP_Type> &u) override
-  {
-    return u;
-  }
-};
-
-// This functor represents the RHS of the IVP
-//    u'(t) = t*u(t) = f;
-class RHS_P13 : public TimeFunctor
-{
-public:
-  virtual dealii::Vector<FP_Type>
-  value(FP_Type t, const dealii::Vector<FP_Type> &u) override
-  {
-    return t * u;
-  }
-};
-
 void Problem_P12(FP_Type h)
 {
   // IVP y'(t) = c*y(t) on the interval [0, 2]
   FP_Type t0 = 0.0;
   FP_Type t1 = 2.0;
-  RHS_P11 f;
+
+  tVecField f = []
+      (FP_Type t, const dealii::Vector<FP_Type> &u)
+  {
+    return u;
+  };
 
   // initial value u(0) = 1
   dealii::Vector<FP_Type> u0(1);
@@ -69,7 +50,12 @@ void Problem_P13(FP_Type h)
   // IVP u'(t) = t * u(t) on the interval [0, 1]
   FP_Type t0 = 0.0;
   FP_Type t1 = 1.0;
-  RHS_P13 f;
+
+  tVecField f = []
+      (FP_Type t, const dealii::Vector<FP_Type> &u)
+  {
+    return t * u;
+  };
 
   // Initial value u(0) = PI
   dealii::Vector<FP_Type> u0(1);

@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "eos_method.h"
-#include "../base/types.h"
 
 class Euler : public EOS_Method
 {
@@ -12,10 +11,10 @@ class Euler : public EOS_Method
   using EOS_Method::EOS_Method;
 
   virtual dealii::Vector<FP_Type>
-  increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
-                     const FP_Type &h) override
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
+                     FP_Type h, tVecField &f) override
   {
-    return f.value(t, u);
+    return f(t, u);
   }
 
 private:

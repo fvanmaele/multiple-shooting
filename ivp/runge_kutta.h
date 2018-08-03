@@ -6,15 +6,15 @@
 #include <deal.II/lac/full_matrix.h>
 
 #include "../lac/vector_operators.h"
-#include "tableau.h"
 #include "eos_method.h"
+#include "tableau.h"
 
 template <typename ButcherTableau>
 class ERK : public EOS_Method
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
+  ERK(tVecField &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
     EOS_Method(f, t0, u0)
   {
     ButcherTableau BTab;
@@ -37,12 +37,12 @@ public:
   }
 
   dealii::Vector<FP_Type>
-  k_increment(const FP_Type &t, const dealii::Vector<FP_Type> &u,
-              const FP_Type &h, const dealii::Vector<FP_Type> &b)
+  k_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
+              FP_Type h, const dealii::Vector<FP_Type> &b, tVecField &f)
   {
     size_t s = b.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
-    k.at(0) = f.value(t, u);
+    k.at(0) = f(t, u);
 
     for (size_t i = 1; i < s; i++)
       {
@@ -51,7 +51,7 @@ public:
         for (size_t j = 0; j < i; j++)
           g += A(i,j) * k.at(j);
 
-        k.at(i) = f.value(t + h*c[i], u + h*g);
+        k.at(i) = f(t + h*c[i], u + h*g);
         assert(k.at(i).size() == u.size());
       }
 
@@ -63,11 +63,11 @@ public:
   }
 
   virtual dealii::Vector<FP_Type>
-  increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
-                     const FP_Type &h) override
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
+                     FP_Type h, tVecField &f) override
   {
     // Explicit method of higher order (constructor)
-    return k_increment(t, u, h, b1);
+    return k_increment(t, u, h, b1, f);
   }
 
   size_t n_misfires() const
@@ -96,8 +96,8 @@ public:
     // Algorithm 2.4.2
     while (t_lim - t > 0)
       { // (1) Candidates for u_k, v_k with time step h_k
-        inc_u = u + h_var * k_increment(t, u, h_var, b1);
-        inc_v = u + h_var * k_increment(t, u, h_var, b2);
+        inc_u = u + h_var * k_increment(t, u, h_var, b1, f);
+        inc_v = u + h_var * k_increment(t, u, h_var, b2, f);
         steps++;
 
         // (2) Compute optimal step size.
@@ -118,7 +118,7 @@ public:
             // including the corresponding step size h_var.
             if (fundamental_matrix)
               // Note: the new step is written in-place, unlike the IVP solution.
-              Y += h_var * fund_matrix_increment(t, u, h_var, Y);
+              Y.add(h_var, fund_matrix_increment(t, u, h_var, Y, f));
 
             // Write new accepted values.
             u  = inc_u;

@@ -1,12 +1,13 @@
 #ifndef SHEET3_H
 #define SHEET3_H
 
+#include "../test/sheet2.h"
 #include "../ivp/runge_kutta.h"
 
 void Problem_P32(std::ostream &output1, std::ostream &output2,
                  std::ostream &output3)
 {
-  RHS_P21 rhs(5, 2, 2, 1);
+  tVecField f = LotkaVolterra;
   FP_Type t0 = 0.0;
   FP_Type t1 = 30.0;
 
@@ -15,14 +16,14 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
   u0[1] = 1.0;
 
   // Solve the equations with the Dormand-Prince 87 method
-  ERK<DOPRI> Equidistant(rhs, t0, u0);
+  ERK<DOPRI> Equidistant(f, t0, u0);
   Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
   std::cout << "Amount of steps: (DOPRI, Equidistant) "
             << Equidistant.n_steps() << std::endl;
 
   // Adaptive method of order 8(7)
-  ERK<DOPRI> Adaptive(rhs, t0, u0);
+  ERK<DOPRI> Adaptive(f, t0, u0);
   FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
   Adaptive.iterate_with_ssc(t1, 1e-1, TOL, 4);
   Adaptive.print(output2);

@@ -10,13 +10,13 @@ public:
   using EOS_Method::EOS_Method;
 
   virtual dealii::Vector<FP_Type>
-  increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
-                     const FP_Type &h) override
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
+                     FP_Type h, tVecField &f) override
   {
-    dealii::Vector<FP_Type> k1 = f.value(t, u);
-    dealii::Vector<FP_Type> k2 = f.value(t + 0.5*h, u + 0.5*h*k1);
-    dealii::Vector<FP_Type> k3 = f.value(t + 0.5*h, u + 0.5*h*k2);
-    dealii::Vector<FP_Type> k4 = f.value(t + h, u + h*k3);
+    dealii::Vector<FP_Type> k1 = f(t, u);
+    dealii::Vector<FP_Type> k2 = f(t + 0.5*h, u + 0.5*h*k1);
+    dealii::Vector<FP_Type> k3 = f(t + 0.5*h, u + 0.5*h*k2);
+    dealii::Vector<FP_Type> k4 = f(t + h, u + h*k3);
 
     return 1./6*k1 + 2./6*k2 + 2./6*k3 + 1./6*k4;
   }
@@ -56,18 +56,18 @@ public:
   using EOS_Method::EOS_Method;
 
   virtual dealii::Vector<FP_Type>
-  increment_function(const FP_Type &t, const dealii::Vector<FP_Type> &u,
-                     const FP_Type &h) override
+  increment_function(const FP_Type t, const dealii::Vector<FP_Type> &u,
+                     const FP_Type h, tVecField &f) override
   {
     // intermediate computations for current step
     dealii::Vector<FP_Type> k1, k2, k3, k4, k5, k6;
     // functor return type: dealii::Vector
-    k1 = f.value(t, u);
-    k2 = f.value(t + c2[0]*h, u + h*(c2[1]*k1));
-    k3 = f.value(t + c3[0]*h, u + h*(c3[1]*k1 + c3[2]*k2));
-    k4 = f.value(t + c4[0]*h, u + h*(c4[1]*k1 - c4[2]*k2 + c4[3]*k3));
-    k5 = f.value(t + c5[0]*h, u + h*(c5[1]*k1 - c5[2]*k2 + c5[3]*k3 - c5[4]*k4));
-    k6 = f.value(t + c6[0]*h, u + h*(c6[1]*k1 - c6[2]*k2 + c6[3]*k3 + c6[4]*k4 - c6[5]*k5));
+    k1 = f(t, u);
+    k2 = f(t + c2[0]*h, u + h*(c2[1]*k1));
+    k3 = f(t + c3[0]*h, u + h*(c3[1]*k1 + c3[2]*k2));
+    k4 = f(t + c4[0]*h, u + h*(c4[1]*k1 - c4[2]*k2 + c4[3]*k3));
+    k5 = f(t + c5[0]*h, u + h*(c5[1]*k1 - c5[2]*k2 + c5[3]*k3 - c5[4]*k4));
+    k6 = f(t + c6[0]*h, u + h*(c6[1]*k1 - c6[2]*k2 + c6[3]*k3 + c6[4]*k4 - c6[5]*k5));
 
     // return increment
     return s1*k1 + s3*k3 + s4*k4 - s5*k5 + s6*k6;
