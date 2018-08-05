@@ -7,11 +7,11 @@
 void Problem_P32(std::ostream &output1, std::ostream &output2,
                  std::ostream &output3)
 {
-  std_tWrapper f(LotkaVolterra<VectorD2>, 2);
+  std_tWrapper f(LotkaVolterra, 2);
   FP_Type t0 = 0.0;
   FP_Type t1 = 30.0;
 
-  dealii::Vector<FP_Type> u0(2);
+  VectorD2 u0(2);
   u0[0] = 1.0;
   u0[1] = 1.0;
 
