@@ -14,12 +14,12 @@ class ERK : public EOS_Method
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
-    EOS_Method(f, t0, u0)
+  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0,
+      bool _fund_matrix = false) :
+    EOS_Method(f, t0, u0), fund_matrix(_fund_matrix)
   {
     ButcherTableau BTab;
 
-    // move assignment?
     A  = dealii::FullMatrix(BTab.n, BTab.n, BTab.A.data());
     b1 = dealii::Vector<FP_Type>(BTab.b_high.begin(), BTab.b_high.end());
     c  = dealii::Vector<FP_Type>(BTab.c.begin(), BTab.c.end());
@@ -28,6 +28,7 @@ public:
       {
         embedded_method = true;
         b2 = dealii::Vector<FP_Type>(BTab.b_low.begin(), BTab.b_low.end());
+        assert(b1.size() == b2.size());
       }
     else
       {
@@ -36,12 +37,11 @@ public:
       }
   }
 
-  dealii::Vector<FP_Type>
+  std::vector<dealii::Vector<FP_Type> >
   k_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
-              FP_Type h, const dealii::Vector<FP_Type> &b,
-              TimeFunctor &f)
+              FP_Type h, TimeFunctor &f)
   {
-    size_t s = b.size();
+    size_t s = b1.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
     k.at(0) = f(t, u);
 
@@ -55,20 +55,26 @@ public:
         k.at(i) = f(t + h*c[i], u + h*g);
         assert(k.at(i).size() == u.size());
       }
+    return k;
+  }
 
-    dealii::Vector<FP_Type> result(u.size());
+  dealii::Vector<FP_Type>
+  k_weighed(const std::vector<dealii::Vector<FP_Type> > &k,
+            const dealii::Vector<FP_Type> &b)
+  {
+    dealii::Vector<FP_Type> sum(k.at(0).size()); // u0.size()
 
-    for (size_t i = 0; i < s; i++)
-      result += b(i) * k.at(i);
-    return result;
+    for (size_t i = 0; i < k.size(); i++)
+      sum += b(i) * k.at(i);
+    return sum;
   }
 
   virtual dealii::Vector<FP_Type>
   increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, TimeFunctor &f) override
+                     FP_Type h) override
   {
-    // Explicit method of higher order (constructor)
-    return k_increment(t, u, h, b1, f);
+    // Explicit method of higher order
+    return k_weighed(k_increment(t, u, h, f), b1);
   }
 
   size_t n_misfires() const
@@ -77,16 +83,11 @@ public:
   }
 
   void iterate_with_ssc(const FP_Type t_lim, const FP_Type h0,
-                        const FP_Type TOL, const size_t order,
-                        bool fund_matrix = false)
+                        const FP_Type TOL, const size_t order)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
     FP_Type h_var = h0; // initial step size
-
-    TimeDivFunctor *f_diff = dynamic_cast<TimeDivFunctor*>(&f);
-    if (fund_matrix && f_diff == nullptr)
-      throw std::invalid_argument("functor is not differentiable");
 
     // Dynamic allocation, declare outside loop
     dealii::Vector<FP_Type> u = u0;
@@ -101,8 +102,8 @@ public:
     // Algorithm 2.4.2
     while (t_lim - t > 0)
       { // (1) Candidates for u_k, v_k with time step h_k
-        inc_u = u + h_var * k_increment(t, u, h_var, b1, f);
-        inc_v = u + h_var * k_increment(t, u, h_var, b2, f);
+        inc_u = u + h_var * k_weighed(k_increment(t, u, h_var, f), b1);
+        inc_v = u + h_var * k_weighed(k_increment(t, u, h_var, f), b2);
         steps++;
 
         // (2) Compute optimal step size.
@@ -117,15 +118,8 @@ public:
             misfires++;
             continue;
           }
-        // (4) Time step was accepted.
         else
-          { // Take last values (t, u) to compute step in variational equation,
-            // including the corresponding step h_var.
-            // Note: the new step is written in-place, unlike the IVP solution.
-            if (fund_matrix)
-              Y.add(h_var, fund_matrix_increment(t, u, h_var, Y, f_diff));
-
-            // Write new accepted values.
+          { // (4) Time step was accepted.
             u  = inc_u;
             t += h_var;
 
@@ -157,7 +151,6 @@ private:
   // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
-  // EOS_Method::Y;
 
   // Butcher tableau
   dealii::FullMatrix<FP_Type> A;
@@ -168,6 +161,7 @@ private:
 
   // Markers
   bool embedded_method;
+  bool fund_matrix;
   size_t misfires;
 };
 

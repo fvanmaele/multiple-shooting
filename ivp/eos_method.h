@@ -42,8 +42,7 @@ public:
   EOS_Method(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0)
     :
       f(_f), t0(_t0), u0(_u0),
-      timepoints(1, _t0), uapprox(1, _u0),
-      Y(dealii::IdentityMatrix(_u0.size())) // Y(t_0) = I
+      timepoints(1, _t0), uapprox(1, _u0)
   {}
 
   // Access functions
@@ -55,11 +54,6 @@ public:
   FP_Type endpoint() const
   {
     return timepoints.back();
-  }
-
-  dealii::FullMatrix<FP_Type> fund_matrix() const
-  {
-    return Y;
   }
 
   size_t n_steps() const
@@ -82,7 +76,6 @@ public:
   {
     timepoints.assign(1, t0);
     uapprox.assign(1, u0);
-    Y = 0;
   }
 
   void save_step(const FP_Type &t, const dealii::Vector<FP_Type> &u)
@@ -92,57 +85,19 @@ public:
   }
 
   virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, TimeFunctor &f)
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u, FP_Type h)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
 
   virtual ~EOS_Method() = default;
 
-  // Compute increment function of variational equation from IVP step.
-  // Assumes that the right-hand side f is differentiable in u.
-  dealii::FullMatrix<FP_Type>
-  fund_matrix_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
-                        FP_Type h, const dealii::FullMatrix<FP_Type> &Y,
-                        TimeDivFunctor *f)
-  {
-    dealii::Vector<FP_Type> phi(Y.m());
-    dealii::FullMatrix<FP_Type> Y_inc = Y;
-
-    for (size_t j = 0; j < Y.n(); j++)
-      {
-        // Compute values column by column
-        for (size_t i = 0; i < Y.m(); i++)
-          phi(i) = Y(i, j);
-
-        // Generate RHS of variational equation.
-        auto lambda = [&f, &phi]
-            (FP_Type t, const dealii::Vector<FP_Type> &u)
-        {
-            return f->diff(t, u) * phi;
-        };
-
-        // Write back result
-        std_tWrapper F(lambda, phi.size());
-        phi = increment_function(t, u, h, F);
-
-        for (size_t i = 0; i < Y.m(); i++)
-          Y_inc(i, j) = phi(i);
-      }
-    return Y_inc;
-  }
-
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h, bool fund_matrix = false)
+  void iterate_up_to(FP_Type t_lim, FP_Type h)
   {
     // init input variables
     FP_Type t = t0;
     dealii::Vector<FP_Type> u = u0;
-
-    TimeDivFunctor *f_diff = dynamic_cast<TimeDivFunctor*>(&f);
-    if (fund_matrix && f_diff == nullptr)
-      throw std::invalid_argument("functor is not differentiable");
 
     // init output variables
     reset();
@@ -154,15 +109,9 @@ public:
         if (t + 1.1*h >= t_lim)
           h = t_lim - t;
 
-        // Take last values (t, u) to compute step in variational equation,
-        // including the corresponding step size.
-        // Note: the new step is written in-place, unlike the IVP solution.
-        if (fund_matrix)
-          Y.add(h, fund_matrix_increment(t, u, h, Y, f_diff));
-
         // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
         // t_k = t_{k-1} + h
-        u += h * increment_function(t, u, h, f);
+        u += h * increment_function(t, u, h);
         t += h;
 
         // Add u_k, t_k to result vectors
@@ -182,9 +131,6 @@ private:
   // Result vectors for the IVP
   std::vector<FP_Type> timepoints;
   std::vector<dealii::Vector<FP_Type> > uapprox;
-
-  // Variational equation
-  dealii::FullMatrix<FP_Type> Y;
 };
 
 #endif // EOS_METHOD_H

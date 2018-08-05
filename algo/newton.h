@@ -16,15 +16,16 @@ class Newton
 public:
   // Step-size control requires that f is callable, since
   // new values of y are computed for varying x.
-  Newton(Callable _f, size_t _dim) :
-    f(_f), y(_dim), y_norm(-1), dim(_dim)
+  Newton(Callable _f, size_t _dim, FP_Type _TOL = 1e-8,
+         bool _ssc = true, size_t _ssc_lim = 20)
+    :
+      f(_f), dim(_dim), y(_dim), y_norm(-1), TOL(_TOL),
+      steps(0), ssc_steps(0), ssc_lim(_ssc_lim), ssc(_ssc)
   {}
 
   dealii::Vector<FP_Type>
   step(const dealii::FullMatrix<FP_Type> &J,
-       const dealii::Vector<FP_Type> &x,
-       bool step_size_control = true,
-       size_t ssc_limit = 20)
+       const dealii::Vector<FP_Type> &x)
   {
     assert(x.size() == dim);
     y = f(x);
@@ -40,19 +41,22 @@ public:
     Jacobian.compute_lu_factorization();
     dealii::Vector<FP_Type> d(y);
     Jacobian.solve(d);
-    if (step_size_control)
+
+    if (ssc)
       {
         // Candidate for next step x_{k+1}
         dealii::Vector<FP_Type> x_next(x.size());
 
         // j ist not guaranteed to be bounded (see Remark 4.2.4)
-        for (size_t j = 0; j < ssc_limit; j++)
+        for (size_t j = 0; j < ssc_lim; j++)
           {
             // Compute new value of x
             x_next = x - std::pow(0.5, j)*d;
 
             if (f(x_next).l2_norm() < y_norm)
               break;
+            else
+              ssc_steps++;
           }
         return x_next;
       }
@@ -60,30 +64,29 @@ public:
       return x - d;
   }
 
-  bool stopping_criterion(FP_Type TOL) const
-  {
-    if (y_norm < 0)
-      throw std::invalid_argument("no Newton step performed");
-
-    return y_norm < TOL;
-  }
-
   dealii::Vector<FP_Type>
   iterate(dealii::Vector<FP_Type> s, size_t step_limit = 50)
   {
     static_assert(std::is_base_of<DivFunctor, Callable>::value,
                   "function is not differentiable");
-    size_t steps = 0;
+    steps = 0;
+    ssc_steps = 0;
 
     for (size_t k = 0; k < step_limit; k++)
       {
         // Perform step of (quasi-)Newton method
-        s = step(f.diff(s), s, true);
+        s = step(f.diff(s), s);
         steps++;
 
-        if (stopping_criterion(1e-8))
+        if (y_norm < TOL)
           {
-            std::cout << "Solution of F: (" << steps << " steps) " << s;
+            if (y_norm < 0)
+              throw std::invalid_argument("norm must be positive");
+            if (ssc)
+              std::cout << "Solution of F: (" << steps << " steps, "
+                        << ssc_steps << " ssc) " << s;
+            else
+              std::cout << "Solution of F: (" << steps << " steps) " << s;
             return s;
           }
       }
@@ -93,9 +96,14 @@ public:
 
 private:
   Callable f;
+  size_t dim;
   dealii::Vector<FP_Type> y;
   FP_Type y_norm;
-  size_t dim;
+  FP_Type TOL;
+
+  // Step-size control
+  size_t steps, ssc_steps, ssc_lim;
+  bool ssc;
 };
 
 #endif // NEWTON_H

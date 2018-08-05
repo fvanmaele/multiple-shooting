@@ -23,6 +23,13 @@ Vector Stoer(typename Vector::value_type t, const Vector &u)
   return result;
 }
 
+dealii::FullMatrix<FP_Type>
+Stoer_diff(FP_Type t, const dealii::Vector<FP_Type> &u)
+{
+  std::array<FP_Type, 4> J = { 0, 1, 3*u[0], 0 };
+  return dealii::FullMatrix<FP_Type>(2, 2, J.data());
+}
+
 template <typename Vector>
 Vector Troesch(typename Vector::value_type t, const Vector &u)
 {
@@ -31,6 +38,13 @@ Vector Troesch(typename Vector::value_type t, const Vector &u)
   result[1] = 5 * std::sinh(5 * u[0]);
 
   return result;
+}
+
+dealii::FullMatrix<FP_Type>
+Troesch_diff(FP_Type t, const dealii::Vector<FP_Type> &u)
+{
+  std::array<FP_Type, 4> J = { 0, 1, 25*std::cosh(5*u[0]), 0 };
+  return dealii::FullMatrix<FP_Type>(2, 2, J.data());
 }
 
 // Stoer, Bulirsch, Num. Math 2, pp.192 (problem of 2nd order)

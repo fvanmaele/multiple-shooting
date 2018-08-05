@@ -11,7 +11,7 @@ public:
 
   virtual dealii::Vector<FP_Type>
   increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
-                     FP_Type h, TimeFunctor &f) override
+                     FP_Type h) override
   {
     dealii::Vector<FP_Type> k1 = f(t, u);
     dealii::Vector<FP_Type> k2 = f(t + 0.5*h, u + 0.5*h*k1);
@@ -57,7 +57,7 @@ public:
 
   virtual dealii::Vector<FP_Type>
   increment_function(const FP_Type t, const dealii::Vector<FP_Type> &u,
-                     const FP_Type h, TimeFunctor &f) override
+                     const FP_Type h) override
   {
     // intermediate computations for current step
     dealii::Vector<FP_Type> k1, k2, k3, k4, k5, k6;
@@ -80,7 +80,6 @@ private:
   // EOS_Method::steps;
   // EOS_Method::timepoints;
   // EOS_Method::uapprox;
-  // EOS_Method::Y;
 };
 
 #endif // TEST_RUNGE_KUTTA_H
