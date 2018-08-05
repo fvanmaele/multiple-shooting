@@ -2,10 +2,10 @@
 #define RUNGE_KUTTA_H
 
 #include <cmath>
-
-#include <deal.II/lac/full_matrix.h>
+#include <utility>
 
 #include "../lac/vector_operators.h"
+#include "../lac/matrix_operators.h"
 #include "eos_method.h"
 #include "tableau.h"
 
@@ -22,6 +22,7 @@ public:
     A  = dealii::FullMatrix(BTab.n, BTab.n, BTab.A.data());
     b1 = dealii::Vector<FP_Type>(BTab.b_high.begin(), BTab.b_high.end());
     c  = dealii::Vector<FP_Type>(BTab.c.begin(), BTab.c.end());
+    order = BTab.p;
 
     if (BTab.b_low.size())
       {
@@ -36,11 +37,12 @@ public:
       }
   }
 
-  std::vector<dealii::Vector<FP_Type> >
+  dealii::Vector<FP_Type>
   k_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
-              FP_Type h, TimeFunctor &f)
+              FP_Type h, const dealii::Vector<FP_Type> &b)
   {
-    size_t s = b1.size();
+    size_t s = b.size();
+    size_t n = u.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
     k.at(0) = f(t, u);
 
@@ -49,23 +51,63 @@ public:
         dealii::Vector<FP_Type> g(u.size());
 
         for (size_t j = 0; j < i; j++)
-          g += A(i,j) * k.at(j);
+          g += A(i, j) * k.at(j);
 
         k.at(i) = f(t + h*c[i], u + h*g);
-        assert(k.at(i).size() == u.size());
       }
-    return k;
+
+    dealii::Vector<FP_Type> u_inc(n);
+
+    for (size_t i = 0; i < s; i++)
+      u_inc += b(i) * k.at(i);
+
+    return u_inc;
   }
 
-  dealii::Vector<FP_Type>
-  k_weighed(const std::vector<dealii::Vector<FP_Type> > &k,
-            const dealii::Vector<FP_Type> &b)
-  {
-    dealii::Vector<FP_Type> sum(k.at(0).size()); // u0.size()
 
-    for (size_t i = 0; i < k.size(); i++)
-      sum += b(i) * k.at(i);
-    return sum;
+  std::pair<dealii::Vector<FP_Type>, dealii::FullMatrix<FP_Type> >
+  k_variational(FP_Type t, const dealii::Vector<FP_Type> &u,
+                FP_Type h, const dealii::Vector<FP_Type> &b,
+                const dealii::FullMatrix<FP_Type> &Y,
+                TimeDivFunctor *F)
+  {
+    size_t s = b.size();
+    size_t n = u.size();
+    assert(Y.m() == n);
+    assert(Y.n() == n);
+
+    // Increments k_1, ..., k_s for solution u(t)
+    std::vector<dealii::Vector<FP_Type> > k(s);
+    k.at(0) = (*F)(t, u);
+
+    // Increments K_1, ..., K_s for solution Y(t)
+    std::vector<dealii::FullMatrix<FP_Type> > K(s);
+    K.at(0) = (*F).diff(t, u) * Y;
+
+    for (size_t i = 1; i < s; i++)
+      {
+        dealii::Vector<FP_Type> g(n);
+        dealii::FullMatrix<FP_Type> G(n);
+
+        for (size_t j = 0; j < i; j++)
+          {
+            g += A(i, j) * k.at(j);
+            G.add(1, A(i, j) * K.at(j));
+          }
+
+        k.at(i) = (*F)(t + h*c[i], u + h*g);
+        K.at(i) = (*F).diff(t + h*c[i], h*g) * (Y + h*G);
+      }
+
+    dealii::Vector<FP_Type> inc_u(n);
+    dealii::FullMatrix<FP_Type> inc_Y(n, n);
+
+    for (size_t i = 0; i < s; i++)
+      {
+        inc_u += b(i) * k.at(i);
+        inc_Y.add(1, b(i) * K.at(i));
+      }
+    return std::make_pair(inc_u, inc_Y);
   }
 
   virtual dealii::Vector<FP_Type>
@@ -73,7 +115,7 @@ public:
                      FP_Type h) override
   {
     // Explicit method of higher order
-    return k_weighed(k_increment(t, u, h, f), b1);
+    return k_increment(t, u, h, b1);
   }
 
   size_t n_misfires() const
@@ -81,34 +123,61 @@ public:
     return misfires;
   }
 
+  dealii::FullMatrix<FP_Type>
+  fund_matrix() const
+  {
+    return Y;
+  }
+
   void iterate_with_ssc(const FP_Type t_lim, const FP_Type h0,
-                        const FP_Type TOL, const size_t order)
+                        const FP_Type TOL, bool fundamental_matrix)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
     FP_Type h_var = h0; // initial step size
+    size_t n = u0.size();
+
+    TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
+    if (fundamental_matrix && f_diff == nullptr)
+      throw std::invalid_argument("right-hand side is not differentiable");
 
     // Dynamic allocation, declare outside loop
     dealii::Vector<FP_Type> u = u0;
-    dealii::Vector<FP_Type> inc_u(u.size());
-    dealii::Vector<FP_Type> inc_v(u.size());
+    dealii::Vector<FP_Type> inc_u(n);
+    dealii::Vector<FP_Type> inc_v(n);
 
     // Init output variables
     EOS_Method::reset();
     steps = 0;
     misfires = 0;
 
+    // Initial value for fundamental matrix Y(t; t0)
+    Y = dealii::IdentityMatrix(n);
+    dealii::FullMatrix<FP_Type> inc_Y(n, n);
+
     // Algorithm 2.4.2
+    // The step-size is controlled only by the IVP, not the variational equation,
+    // to avoid recomputing the Jacobian on a rejected time step.
     while (t_lim - t > 0)
       { // (1) Candidates for u_k, v_k with time step h_k
-        inc_u = u + h_var * k_weighed(k_increment(t, u, h_var, f), b1);
-        inc_v = u + h_var * k_weighed(k_increment(t, u, h_var, f), b2);
+        if (fundamental_matrix)
+          {
+            auto U = k_variational(t, u, h_var, b1, Y, f_diff);
+
+            inc_u = u + h_var * U.first;
+            inc_v = u + h_var * k_increment(t, u, h_var, b2);
+            inc_Y = Y + h_var * U.second;
+          }
+        else
+          {
+            inc_u = u + h_var * k_increment(t, u, h_var, b1);
+            inc_v = u + h_var * k_increment(t, u, h_var, b2);
+          }
         steps++;
 
         // (2) Compute optimal step size.
-        // Use norm properties to save operations.
         FP_Type local_error = (inc_u - inc_v).l2_norm();
-        FP_Type h_opt = h_var * std::pow(TOL/local_error, 1./(order+1));
+        FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / order);
 
         // (3) Time step is rejected; repeat step with optimal value.
         if (h_opt < h_var)
@@ -119,11 +188,14 @@ public:
           }
         else
           { // (4) Time step was accepted.
-            u  = inc_u;
+            u = inc_u;
+            Y = inc_Y;
             t += h_var;
 
+            // Save intermediary solutions to IVP. (In the variational equation,
+            // only the last step Y_n is stored.)
             EOS_Method::save_step(t, u);
-            step_sizes.emplace_back(h_var);
+            step_sizes.push_back(h_var);
 
             // Set time step for next iteration.
             h_var = h_opt;
@@ -154,6 +226,10 @@ private:
   // Butcher tableau
   dealii::FullMatrix<FP_Type> A;
   dealii::Vector<FP_Type> b1, b2, c;
+  size_t order;
+
+  // Variational equation
+  dealii::FullMatrix<FP_Type> Y;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

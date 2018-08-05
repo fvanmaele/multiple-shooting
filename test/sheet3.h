@@ -25,7 +25,7 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
   // Adaptive method of order 8(7)
   ERK<DOPRI> Adaptive(f, t0, u0);
   FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
-  Adaptive.iterate_with_ssc(t1, 1e-1, TOL, 4);
+  Adaptive.iterate_with_ssc(t1, 1e-1, TOL, false);
   Adaptive.print(output2);
 
   size_t steps = Adaptive.n_steps();

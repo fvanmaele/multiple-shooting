@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <limits>
+#include <string>
 
 #include "../base/types.h"
 #include "../lac/lac_types.h"
@@ -34,11 +35,11 @@ Vector Troesch(typename Vector::value_type t, const Vector &u)
 }
 
 template <typename DiffMethod>
-void Test_Graph(SimpleBVP<DiffMethod> &BVP)
+void Stoer_Graph(SimpleBVP<DiffMethod> &BVP, std::string filename)
 {
   // Create plot
   std::ofstream output_file1;
-  output_file1.open("bvp_sval_ed.dat");
+  output_file1.open(filename.c_str());
   assert(output_file1.is_open());
 
   std::vector<dealii::Vector<FP_Type> > range;
@@ -53,13 +54,15 @@ void Test_Graph(SimpleBVP<DiffMethod> &BVP)
     }
 
   BVP.shooting_graph(2, range, output_file1);
-  std::system("gnuplot -p -e \"plot 'bvp_sval_ed.dat' using 2:4 with lines\"");
+  std::string cmd = "gnuplot -p -e \"plot '" + filename + "' using 2:4 with lines\"";
+  std::system(cmd.c_str());
 }
 
 // Stoer, Bulirsch, Num. Math 2, pp.192 (problem of 2nd order)
 void Test_Stoer()
 {
   std_tWrapper f(Stoer<VectorD2>, 2);
+  FAD_tWrapper f_ad(Stoer<VectorAD>, 2);
   FP_Type a = 0.0;
   FP_Type b = 1.0;
 
@@ -80,15 +83,23 @@ void Test_Stoer()
   s[1] = -1;
   start.emplace_back(s);
 
-  std::cout << "Single shooting (Stoer)" << std::endl;
+  std::cout << "Single shooting (Stoer, ext. diff.)" << std::endl;
   SimpleBVP<SF_External> BVP(f, a, b, c);
   BVP.single_shooting(start);
+
+  std::cout << "Single shooting (Stoer, aut. diff.)" << std::endl;
+  SimpleBVP<SF_Automatic> BVP_AD(f_ad, a, b, c);
+  BVP_AD.single_shooting(start);
+
+  Stoer_Graph<SF_External>(BVP, "bvp_stoer_ed.dat");
+  Stoer_Graph<SF_Automatic>(BVP_AD, "bvp_stoer_ad.dat");
 }
 
 // Troesch BVP, see Num. Math. 2, 7.4.3.8
 void Test_Troesch()
 {
   std_tWrapper f(Troesch<VectorD2>, 2);
+  FAD_tWrapper f_ad(Troesch<VectorAD>, 2);
   FP_Type a = 0.0;
   FP_Type b = 1.0;
 
@@ -104,8 +115,12 @@ void Test_Troesch()
   s[1] = 0.05;
   start.emplace_back(s);
 
-  std::cout << "Single shooting (Troesch)" << std::endl;
+  std::cout << "Single shooting (Troesch, ext. diff.)" << std::endl;
   SimpleBVP<SF_External> BVP(f, a, b, c);
+  BVP.single_shooting(start);
+
+  std::cout << "Single shooting (Troesch, aut. diff.)" << std::endl;
+  SimpleBVP<SF_Automatic> BVP_AD(f_ad, a, b, c);
   BVP.single_shooting(start);
 }
 

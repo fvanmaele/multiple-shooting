@@ -8,7 +8,8 @@
 // Classic Range-Kutta method
 struct ERK_04
 {
-  const size_t n = 4;
+  const size_t n = 4; // dimension
+  const size_t p = 4; // order
 
   const std::array<FP_Type, 4> c = {
     0, 0.5, 0.5, 1.0
@@ -32,6 +33,7 @@ struct ERK_04
 struct KARP
 {
   const size_t n = 6;
+  const size_t p = 5;
 
   const std::array<FP_Type, 6> c  = {
     0, 1./5, 3./10, 3./5, 1, 7./8
@@ -59,6 +61,7 @@ struct KARP
 struct DOPRI
 {
   const size_t n = 7;
+  const size_t p = 5;
 
   const std::array<FP_Type, 7> c  = {
     0, 1./5, 3./10, 4./5, 8./9, 1., 1.
@@ -86,6 +89,7 @@ struct DOPRI
 struct DOPRI87
 {
   const size_t n = 13;
+  const size_t p = 8;
 
   const std::array<FP_Type, 13> c =  {
     0., 1./18, 1./12, 1./8, 5./16, 3./8, 59./400, 93./200, 5490023248./9719169821, 13./20, 1201146811./1299019798, 1., 1.

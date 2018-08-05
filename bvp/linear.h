@@ -31,12 +31,7 @@ public:
     Newton N(F, 2);
 
     for (auto &s : start)
-      {
-        if (std::is_same<DiffMethod, SF_External>::value)
-          N.iterate(s);
-        else
-          N.iterate_broyden(s);
-      }
+      N.iterate(s);
   }
 
   void shooting_graph(size_t dim, const std::vector<dealii::Vector<FP_Type> > &range,
