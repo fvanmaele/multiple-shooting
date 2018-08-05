@@ -16,7 +16,7 @@ class Newton
 public:
   // Step-size control requires that f is callable, since
   // new values of y are computed for varying x.
-  Newton(Callable _f, size_t _dim, FP_Type _TOL = 1e-8,
+  Newton(Callable _f, size_t _dim, FP_Type _TOL = 1e-6,
          bool _ssc = true, size_t _ssc_lim = 20)
     :
       f(_f), dim(_dim), y(_dim), y_norm(-1), TOL(_TOL),
@@ -31,7 +31,7 @@ public:
     y = f(x);
     y_norm = y.l2_norm();
 
-    // The Jacobian J is taken argument to allow using
+    // The Jacobian J is taken as argument to allow using
     // this function for both Newton and quasi-Newton methods.
     dealii::LAPACKFullMatrix<FP_Type> Jacobian(y.size(), y.size());
     Jacobian = J;
@@ -65,7 +65,7 @@ public:
   }
 
   dealii::Vector<FP_Type>
-  iterate(dealii::Vector<FP_Type> s, size_t step_limit = 50)
+  iterate(dealii::Vector<FP_Type> x, size_t step_limit = 50)
   {
     static_assert(std::is_base_of<DivFunctor, Callable>::value,
                   "function is not differentiable");
@@ -75,7 +75,7 @@ public:
     for (size_t k = 0; k < step_limit; k++)
       {
         // Perform step of (quasi-)Newton method
-        s = step(f.diff(s), s);
+        x = step(f.diff(x), x);
         steps++;
 
         if (y_norm < TOL)
@@ -84,14 +84,66 @@ public:
               throw std::invalid_argument("norm must be positive");
             if (ssc)
               std::cout << "Solution of F: (" << steps << " steps, "
-                        << ssc_steps << " ssc) " << s;
+                        << ssc_steps << " ssc) " << x;
             else
-              std::cout << "Solution of F: (" << steps << " steps) " << s;
-            return s;
+              std::cout << "Solution of F: (" << steps << " steps) " << x;
+            return x;
           }
       }
     std::cerr << "Warning: step limit exceeded" << std::endl;
-    return s;
+    return x;
+  }
+
+  dealii::Vector<FP_Type>
+  iterate_broyden(dealii::Vector<FP_Type> x, size_t step_limit = 50)
+  {
+    std::cerr << "Using Broyden method" << std::endl;
+    static_assert(std::is_base_of<DivFunctor, Callable>::value,
+                  "function is not differentiable");
+    steps = 0;
+    ssc_steps = 0;
+
+    dealii::FullMatrix<FP_Type> J = f.diff(x);
+    dealii::FullMatrix<FP_Type> J_prev(J);
+    dealii::Vector<FP_Type> x_prev(x);
+    x = step(J, x);
+
+    for (size_t k = 1; k < step_limit; k++)
+      {
+        // Full computation of Jacobian every 4 steps
+        if (k % 5 == 0)
+          {
+            J = f.diff(x);
+            x = step(J, x);
+          }
+        else
+          {
+            dealii::Vector<FP_Type> p = x - x_prev;
+            dealii::Vector<FP_Type> q = f(x) - f(x_prev);
+
+            dealii::FullMatrix<FP_Type> V(p.size(), p.size());
+            V.outer_product(q - J_prev * p, p);
+
+            // For larger J, use Sherman-Morrison formula to update J^{-1} directly
+            J = J_prev + 1. / p.norm_sqr() * V;
+            x = step(J, x);
+          }
+        steps++;
+
+        if (y_norm < TOL)
+          {
+            if (y_norm < 0)
+              throw std::invalid_argument("norm must be positive");
+            if (ssc)
+              std::cout << "Solution of F: (" << steps << " steps, "
+                        << ssc_steps << " ssc) " << x;
+            else
+              std::cout << "Solution of F: (" << steps << " steps) " << x;
+            return x;
+          }
+      }
+    std::cerr << "Warning: step limit exceeded" << std::endl;
+    return x;
   }
 
 private:

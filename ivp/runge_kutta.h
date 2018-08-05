@@ -14,9 +14,8 @@ class ERK : public EOS_Method
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      bool _fund_matrix = false) :
-    EOS_Method(f, t0, u0), fund_matrix(_fund_matrix)
+  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
+    EOS_Method(f, t0, u0)
   {
     ButcherTableau BTab;
 
@@ -161,7 +160,6 @@ private:
 
   // Markers
   bool embedded_method;
-  bool fund_matrix;
   size_t misfires;
 };
 

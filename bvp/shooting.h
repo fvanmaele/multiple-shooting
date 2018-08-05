@@ -110,9 +110,6 @@ public:
         for (size_t i = 0; i < s.size(); i++)
           Z.set(i, j, delta_y(i));
       }
-
-    Z.print_formatted(std::cout, 3, true, 0, "0");
-    std::cout << std::endl;
     return Z;
   }
 
@@ -175,9 +172,6 @@ class SF_Automatic : public ShootingFunction
         for (size_t i = 0; i < Z.m(); i++)
           Z.set(i, j, phi(i));
       }
-
-    Z.print_formatted(std::cout, 3, true, 0, "0");
-    std::cout << std::endl;
     return Z;
   }
 
