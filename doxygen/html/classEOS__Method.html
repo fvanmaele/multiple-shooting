@@ -91,9 +91,6 @@ dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="botto
 <tr class="memitem:a3f7157f6b6518ea3395f90b3c5a795b8"><td class="memItemLeft" align="right" valign="top"><a id="a3f7157f6b6518ea3395f90b3c5a795b8"></a>
 FP_Type&#160;</td><td class="memItemRight" valign="bottom"><b>endpoint</b> () const</td></tr>
 <tr class="separator:a3f7157f6b6518ea3395f90b3c5a795b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa733b1416d87f4382d4b6abd24c59013"><td class="memItemLeft" align="right" valign="top"><a id="aa733b1416d87f4382d4b6abd24c59013"></a>
-dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix</b> () const</td></tr>
-<tr class="separator:aa733b1416d87f4382d4b6abd24c59013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa323926fa9f41a8a011c1a370c2bed7d"><td class="memItemLeft" align="right" valign="top"><a id="aa323926fa9f41a8a011c1a370c2bed7d"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_steps</b> () const</td></tr>
 <tr class="separator:aa323926fa9f41a8a011c1a370c2bed7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,15 +103,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr
 <tr class="memitem:a8f1d297e535ca2ca7441bafcea43742c"><td class="memItemLeft" align="right" valign="top"><a id="a8f1d297e535ca2ca7441bafcea43742c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const FP_Type &amp;t, const dealii::Vector&lt; FP_Type &gt; &amp;u)</td></tr>
 <tr class="separator:a8f1d297e535ca2ca7441bafcea43742c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f185a8f9e48c3db101b1f3e6b588173"><td class="memItemLeft" align="right" valign="top"><a id="a0f185a8f9e48c3db101b1f3e6b588173"></a>
-virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, <a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f)</td></tr>
-<tr class="separator:a0f185a8f9e48c3db101b1f3e6b588173"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a517941a279977b5093cd7a422bc12d7d"><td class="memItemLeft" align="right" valign="top"><a id="a517941a279977b5093cd7a422bc12d7d"></a>
-dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, const dealii::FullMatrix&lt; FP_Type &gt; &amp;Y, <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a> *f)</td></tr>
-<tr class="separator:a517941a279977b5093cd7a422bc12d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92ed100b4b154a7adb3a37b6e078b3ce"><td class="memItemLeft" align="right" valign="top"><a id="a92ed100b4b154a7adb3a37b6e078b3ce"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, bool fund_matrix=false)</td></tr>
-<tr class="separator:a92ed100b4b154a7adb3a37b6e078b3ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71f54df232ff780bc731b57d24b9f62e"><td class="memItemLeft" align="right" valign="top"><a id="a71f54df232ff780bc731b57d24b9f62e"></a>
+virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h)</td></tr>
+<tr class="separator:a71f54df232ff780bc731b57d24b9f62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b2f44ec8d634b8eec6ec51f35425333"><td class="memItemLeft" align="right" valign="top"><a id="a2b2f44ec8d634b8eec6ec51f35425333"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h)</td></tr>
+<tr class="separator:a2b2f44ec8d634b8eec6ec51f35425333"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>

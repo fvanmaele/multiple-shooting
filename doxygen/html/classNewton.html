@@ -70,18 +70,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae4ba28e81968382bfdd3213bbc762611"><td class="memItemLeft" align="right" valign="top"><a id="ae4ba28e81968382bfdd3213bbc762611"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Newton</b> (Callable _f, size_t _dim)</td></tr>
-<tr class="separator:ae4ba28e81968382bfdd3213bbc762611"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e7db9daefa5fb97a77de03cadd132e4"><td class="memItemLeft" align="right" valign="top"><a id="a2e7db9daefa5fb97a77de03cadd132e4"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (const dealii::FullMatrix&lt; FP_Type &gt; &amp;J, const dealii::Vector&lt; FP_Type &gt; &amp;x, bool step_size_control=true, size_t ssc_limit=20)</td></tr>
-<tr class="separator:a2e7db9daefa5fb97a77de03cadd132e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3fde95489168338724e34d35a17d58d"><td class="memItemLeft" align="right" valign="top"><a id="ab3fde95489168338724e34d35a17d58d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>stopping_criterion</b> (FP_Type TOL) const</td></tr>
-<tr class="separator:ab3fde95489168338724e34d35a17d58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7914b92f40c22ddc30926657663c386d"><td class="memItemLeft" align="right" valign="top"><a id="a7914b92f40c22ddc30926657663c386d"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>iterate</b> (dealii::Vector&lt; FP_Type &gt; s, size_t step_limit=50)</td></tr>
-<tr class="separator:a7914b92f40c22ddc30926657663c386d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memItemLeft" align="right" valign="top"><a id="a8271deaf4a7dd62152c126fb506b8d9b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Newton</b> (Callable _f, size_t _dim, FP_Type _TOL=1e-6, bool _ssc=true, size_t _ssc_lim=20)</td></tr>
+<tr class="separator:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d9bcbab5d492230aa0415c24016640"><td class="memItemLeft" align="right" valign="top"><a id="af1d9bcbab5d492230aa0415c24016640"></a>
+dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (const dealii::FullMatrix&lt; FP_Type &gt; &amp;J, const dealii::Vector&lt; FP_Type &gt; &amp;x)</td></tr>
+<tr class="separator:af1d9bcbab5d492230aa0415c24016640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8ef9ee70c7f35b08d619b25e5fc2194"><td class="memItemLeft" align="right" valign="top"><a id="af8ef9ee70c7f35b08d619b25e5fc2194"></a>
+dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>iterate</b> (dealii::Vector&lt; FP_Type &gt; x, size_t step_limit=50)</td></tr>
+<tr class="separator:af8ef9ee70c7f35b08d619b25e5fc2194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a324169685445ba3cda382f05fac41aab"><td class="memItemLeft" align="right" valign="top"><a id="a324169685445ba3cda382f05fac41aab"></a>
+dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_broyden</b> (dealii::Vector&lt; FP_Type &gt; x, size_t step_limit=50)</td></tr>
+<tr class="separator:a324169685445ba3cda382f05fac41aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>algo/<a class="el" href="newton_8h_source.html">newton.h</a></li>

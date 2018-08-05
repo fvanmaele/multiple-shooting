@@ -24,17 +24,20 @@ Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \mbox{\Hypertarget{classERK_a2e9bccb7699bc97bd3800c25d86ee814}\label{classERK_a2e9bccb7699bc97bd3800c25d86ee814}} 
 {\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ u0)
 \item 
-\mbox{\Hypertarget{classERK_afae19be9dd7961c2324deda0f2439c74}\label{classERK_afae19be9dd7961c2324deda0f2439c74}} 
-dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b, \hyperlink{classTimeFunctor}{Time\+Functor} \&f)
+\mbox{\Hypertarget{classERK_a6d4e2e59dc9c8fc8f3fe67522485ca3d}\label{classERK_a6d4e2e59dc9c8fc8f3fe67522485ca3d}} 
+std\+::vector$<$ dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, \hyperlink{classTimeFunctor}{Time\+Functor} \&f)
 \item 
-\mbox{\Hypertarget{classERK_a96ece8656df8073bc85281ef29706856}\label{classERK_a96ece8656df8073bc85281ef29706856}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, \hyperlink{classTimeFunctor}{Time\+Functor} \&f) override
+\mbox{\Hypertarget{classERK_a43fe4b23617b7d013f64b10bad3782e7}\label{classERK_a43fe4b23617b7d013f64b10bad3782e7}} 
+dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+weighed} (const std\+::vector$<$ dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ $>$ \&k, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b)
+\item 
+\mbox{\Hypertarget{classERK_ad6b4a1f225469f47dad5b17bb6791f30}\label{classERK_ad6b4a1f225469f47dad5b17bb6791f30}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h) override
 \item 
 \mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
 size\+\_\+t {\bfseries n\+\_\+misfires} () const
 \item 
-\mbox{\Hypertarget{classERK_a4078c1ed0c303d456c1f6e7c25bc0121}\label{classERK_a4078c1ed0c303d456c1f6e7c25bc0121}} 
-void {\bfseries iterate\+\_\+with\+\_\+ssc} (const F\+P\+\_\+\+Type t\+\_\+lim, const F\+P\+\_\+\+Type h0, const F\+P\+\_\+\+Type T\+OL, const size\+\_\+t order, bool fund\+\_\+matrix=false)
+\mbox{\Hypertarget{classERK_a1c910a06f9210a07061864f67fc31b3e}\label{classERK_a1c910a06f9210a07061864f67fc31b3e}} 
+void {\bfseries iterate\+\_\+with\+\_\+ssc} (const F\+P\+\_\+\+Type t\+\_\+lim, const F\+P\+\_\+\+Type h0, const F\+P\+\_\+\+Type T\+OL, const size\+\_\+t order)
 \item 
 \mbox{\Hypertarget{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}\label{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}} 
 void {\bfseries print\+\_\+step\+\_\+size} (std\+::ostream \&out)

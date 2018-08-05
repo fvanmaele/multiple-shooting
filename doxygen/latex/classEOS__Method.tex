@@ -21,9 +21,6 @@ dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries approx} () const
 \mbox{\Hypertarget{classEOS__Method_a3f7157f6b6518ea3395f90b3c5a795b8}\label{classEOS__Method_a3f7157f6b6518ea3395f90b3c5a795b8}} 
 F\+P\+\_\+\+Type {\bfseries endpoint} () const
 \item 
-\mbox{\Hypertarget{classEOS__Method_aa733b1416d87f4382d4b6abd24c59013}\label{classEOS__Method_aa733b1416d87f4382d4b6abd24c59013}} 
-dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries fund\+\_\+matrix} () const
-\item 
 \mbox{\Hypertarget{classEOS__Method_aa323926fa9f41a8a011c1a370c2bed7d}\label{classEOS__Method_aa323926fa9f41a8a011c1a370c2bed7d}} 
 size\+\_\+t {\bfseries n\+\_\+steps} () const
 \item 
@@ -36,14 +33,11 @@ void {\bfseries reset} ()
 \mbox{\Hypertarget{classEOS__Method_a8f1d297e535ca2ca7441bafcea43742c}\label{classEOS__Method_a8f1d297e535ca2ca7441bafcea43742c}} 
 void {\bfseries save\+\_\+step} (const F\+P\+\_\+\+Type \&t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u)
 \item 
-\mbox{\Hypertarget{classEOS__Method_a0f185a8f9e48c3db101b1f3e6b588173}\label{classEOS__Method_a0f185a8f9e48c3db101b1f3e6b588173}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, \hyperlink{classTimeFunctor}{Time\+Functor} \&f)
+\mbox{\Hypertarget{classEOS__Method_a71f54df232ff780bc731b57d24b9f62e}\label{classEOS__Method_a71f54df232ff780bc731b57d24b9f62e}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h)
 \item 
-\mbox{\Hypertarget{classEOS__Method_a517941a279977b5093cd7a422bc12d7d}\label{classEOS__Method_a517941a279977b5093cd7a422bc12d7d}} 
-dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries fund\+\_\+matrix\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u, F\+P\+\_\+\+Type h, const dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$f)
-\item 
-\mbox{\Hypertarget{classEOS__Method_a92ed100b4b154a7adb3a37b6e078b3ce}\label{classEOS__Method_a92ed100b4b154a7adb3a37b6e078b3ce}} 
-void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h, bool fund\+\_\+matrix=false)
+\mbox{\Hypertarget{classEOS__Method_a2b2f44ec8d634b8eec6ec51f35425333}\label{classEOS__Method_a2b2f44ec8d634b8eec6ec51f35425333}} 
+void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h)
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}

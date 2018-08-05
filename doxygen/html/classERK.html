@@ -89,18 +89,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2e9bccb7699bc97bd3800c25d86ee814"><td class="memItemLeft" align="right" valign="top"><a id="a2e9bccb7699bc97bd3800c25d86ee814"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ERK</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f, FP_Type t0, dealii::Vector&lt; FP_Type &gt; u0)</td></tr>
 <tr class="separator:a2e9bccb7699bc97bd3800c25d86ee814"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afae19be9dd7961c2324deda0f2439c74"><td class="memItemLeft" align="right" valign="top"><a id="afae19be9dd7961c2324deda0f2439c74"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, const dealii::Vector&lt; FP_Type &gt; &amp;b, <a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f)</td></tr>
-<tr class="separator:afae19be9dd7961c2324deda0f2439c74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96ece8656df8073bc85281ef29706856"><td class="memItemLeft" align="right" valign="top"><a id="a96ece8656df8073bc85281ef29706856"></a>
-virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, <a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f) override</td></tr>
-<tr class="separator:a96ece8656df8073bc85281ef29706856"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d4e2e59dc9c8fc8f3fe67522485ca3d"><td class="memItemLeft" align="right" valign="top"><a id="a6d4e2e59dc9c8fc8f3fe67522485ca3d"></a>
+std::vector&lt; dealii::Vector&lt; FP_Type &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, <a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f)</td></tr>
+<tr class="separator:a6d4e2e59dc9c8fc8f3fe67522485ca3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43fe4b23617b7d013f64b10bad3782e7"><td class="memItemLeft" align="right" valign="top"><a id="a43fe4b23617b7d013f64b10bad3782e7"></a>
+dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_weighed</b> (const std::vector&lt; dealii::Vector&lt; FP_Type &gt; &gt; &amp;k, const dealii::Vector&lt; FP_Type &gt; &amp;b)</td></tr>
+<tr class="separator:a43fe4b23617b7d013f64b10bad3782e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6b4a1f225469f47dad5b17bb6791f30"><td class="memItemLeft" align="right" valign="top"><a id="ad6b4a1f225469f47dad5b17bb6791f30"></a>
+virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h) override</td></tr>
+<tr class="separator:ad6b4a1f225469f47dad5b17bb6791f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3f71b3f5364ffcab63a715d95adb911"><td class="memItemLeft" align="right" valign="top"><a id="ae3f71b3f5364ffcab63a715d95adb911"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_misfires</b> () const</td></tr>
 <tr class="separator:ae3f71b3f5364ffcab63a715d95adb911"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4078c1ed0c303d456c1f6e7c25bc0121"><td class="memItemLeft" align="right" valign="top"><a id="a4078c1ed0c303d456c1f6e7c25bc0121"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_with_ssc</b> (const FP_Type t_lim, const FP_Type h0, const FP_Type TOL, const size_t order, bool fund_matrix=false)</td></tr>
-<tr class="separator:a4078c1ed0c303d456c1f6e7c25bc0121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c910a06f9210a07061864f67fc31b3e"><td class="memItemLeft" align="right" valign="top"><a id="a1c910a06f9210a07061864f67fc31b3e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_with_ssc</b> (const FP_Type t_lim, const FP_Type h0, const FP_Type TOL, const size_t order)</td></tr>
+<tr class="separator:a1c910a06f9210a07061864f67fc31b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memItemLeft" align="right" valign="top"><a id="a6057b70fbd97bbe2e5b2d0233aef46a4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print_step_size</b> (std::ostream &amp;out)</td></tr>
 <tr class="separator:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,9 +117,6 @@ dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="botto
 <tr class="memitem:a3f7157f6b6518ea3395f90b3c5a795b8 inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="a3f7157f6b6518ea3395f90b3c5a795b8"></a>
 FP_Type&#160;</td><td class="memItemRight" valign="bottom"><b>endpoint</b> () const</td></tr>
 <tr class="separator:a3f7157f6b6518ea3395f90b3c5a795b8 inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa733b1416d87f4382d4b6abd24c59013 inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="aa733b1416d87f4382d4b6abd24c59013"></a>
-dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix</b> () const</td></tr>
-<tr class="separator:aa733b1416d87f4382d4b6abd24c59013 inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa323926fa9f41a8a011c1a370c2bed7d inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="aa323926fa9f41a8a011c1a370c2bed7d"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_steps</b> () const</td></tr>
 <tr class="separator:aa323926fa9f41a8a011c1a370c2bed7d inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,12 +129,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr
 <tr class="memitem:a8f1d297e535ca2ca7441bafcea43742c inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="a8f1d297e535ca2ca7441bafcea43742c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const FP_Type &amp;t, const dealii::Vector&lt; FP_Type &gt; &amp;u)</td></tr>
 <tr class="separator:a8f1d297e535ca2ca7441bafcea43742c inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a517941a279977b5093cd7a422bc12d7d inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="a517941a279977b5093cd7a422bc12d7d"></a>
-dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, const dealii::FullMatrix&lt; FP_Type &gt; &amp;Y, <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a> *f)</td></tr>
-<tr class="separator:a517941a279977b5093cd7a422bc12d7d inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92ed100b4b154a7adb3a37b6e078b3ce inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="a92ed100b4b154a7adb3a37b6e078b3ce"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, bool fund_matrix=false)</td></tr>
-<tr class="separator:a92ed100b4b154a7adb3a37b6e078b3ce inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b2f44ec8d634b8eec6ec51f35425333 inherit pub_methods_classEOS__Method"><td class="memItemLeft" align="right" valign="top"><a id="a2b2f44ec8d634b8eec6ec51f35425333"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h)</td></tr>
+<tr class="separator:a2b2f44ec8d634b8eec6ec51f35425333 inherit pub_methods_classEOS__Method"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>ivp/<a class="el" href="runge__kutta_8h_source.html">runge_kutta.h</a></li>
