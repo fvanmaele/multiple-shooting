@@ -83,8 +83,6 @@ void Test_Sheet1()
 {
   // Too numerically unstable for smaller values of h.
   Problem_P12(1e-1);
-  std::cout << std::endl;
-
   Problem_P13(1e-1);
   Problem_P13(1e-2);
   Problem_P13(1e-3);

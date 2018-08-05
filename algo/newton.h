@@ -110,8 +110,8 @@ public:
 
     for (size_t k = 1; k < step_limit; k++)
       {
-        // Full computation of Jacobian every 4 steps
-        if (k % 5 == 0)
+        // Full computation of Jacobian every 3 steps
+        if (k % 3 == 0)
           {
             J = f.diff(x);
             x = step(J, x);

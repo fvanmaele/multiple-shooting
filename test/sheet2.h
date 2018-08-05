@@ -52,8 +52,7 @@ void Problem_P22(FP_Type h, std::ostream &output)
 
 void Test_Sheet2()
 {
-  std::cout << std::endl
-            << "Lotka-Volterra equations (P21), h = 0.1" << std::endl;
+  std::cout << "Plots for Lotka-Volterra equation (P21), h = 0.1" << std::endl;
 
   std::ofstream output_file;
   output_file.open("volterra_euler.dat");
