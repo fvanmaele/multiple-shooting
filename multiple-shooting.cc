@@ -14,8 +14,11 @@ VectorD2 ThomasFermi(FP_Type t, const VectorD2 &u)
   return y;
 }
 
-int main(int argc, char* argv[])
+int main()
 {
-  all_tests();
+  Test::exercise_sheet();
+  Test::aut_diff();
+  Test::linear_bvp();
+  Test::var_equation();
   return 0;
 }

@@ -4,7 +4,7 @@
 #include "../lac/vector_operators.h"
 #include "../ivp/runge_kutta.h"
 
-class ERK_Test_O4 : public EOS_Method
+class ERK_Test_04 : public EOS_Method
 {
 public:
   using EOS_Method::EOS_Method;

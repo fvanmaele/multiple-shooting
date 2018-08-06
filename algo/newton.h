@@ -65,7 +65,7 @@ public:
   }
 
   dealii::Vector<FP_Type>
-  iterate(dealii::Vector<FP_Type> x, size_t step_limit = 50)
+  iterate(dealii::Vector<FP_Type> x, size_t step_limit = 25)
   {
     static_assert(std::is_base_of<DivFunctor, Callable>::value,
                   "function is not differentiable");
@@ -149,6 +149,7 @@ public:
 private:
   Callable f;
   size_t dim;
+
   dealii::Vector<FP_Type> y;
   FP_Type y_norm;
   FP_Type TOL;

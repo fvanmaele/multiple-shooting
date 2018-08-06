@@ -45,7 +45,7 @@ void Problem_P22(FP_Type h, std::ostream &output)
 
   // Solve the equations with the classic Runge-Kutta method
   ERK<ERK_04> Method2(f, t0, u0);
-  //ERK_Test_O4 Method2(rhs, t0, u0);
+  //ERK_Test_04 Method2(rhs, t0, u0);
   Method2.iterate_up_to(t1, h);
   Method2.print(output);
 }

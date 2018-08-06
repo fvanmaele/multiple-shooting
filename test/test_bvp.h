@@ -15,7 +15,7 @@
 // resp. the system
 //    (u1, u2)' = (u2, 1.5 * u1^2)
 template <typename Vector>
-Vector Stoer(typename Vector::value_type t, const Vector &u)
+Vector Stoer(typename Vector::value_type, const Vector &u)
 {
   Vector result(2);
   result[0] = u[1];
@@ -25,7 +25,7 @@ Vector Stoer(typename Vector::value_type t, const Vector &u)
 }
 
 template <typename Vector>
-Vector Troesch(typename Vector::value_type t, const Vector &u)
+Vector Troesch(typename Vector::value_type, const Vector &u)
 {
   Vector result(2);
   result[0] = u[1];

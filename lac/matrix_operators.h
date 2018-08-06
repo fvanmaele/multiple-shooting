@@ -1,6 +1,8 @@
 #ifndef MATRIX_OPERATORS_H
 #define MATRIX_OPERATORS_H
 
+#include <iostream>
+
 #include "../base/types.h"
 #include "lac_types.h"
 
@@ -53,11 +55,11 @@ operator+(dealii::FullMatrix<FP_Type> result,
   return result;
 }
 
-template <size_t n, size_t m>
-dealii::FullMatrix<FP_Type>
-std_to_Matrix(const std::array<FP_Type, n*m> &v)
+std::ostream&
+operator<<(std::ostream &os, const dealii::FullMatrix<FP_Type> &A)
 {
-  return dealii::FullMatrix<FP_Type>(n, m, v.data());
+  A.print_formatted(os, 3, true, 0, "0");
+  return os;
 }
 
 #endif // MATRIX_OPERATORS_H

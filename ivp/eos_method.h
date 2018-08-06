@@ -32,7 +32,7 @@ public:
   // Implementations with fixed step length (template method pattern)
   friend class Blackbox;
   friend class Euler;
-  friend class ERK_Test_O4;
+  friend class ERK_Test_04;
 
   template <typename BTab>
   friend class ERK;

@@ -6,7 +6,7 @@
 #include "../ivp/euler.h"
 #include "test_runge_kutta.h"
 
-VectorD2 RHS_P11(FP_Type t, const VectorD2 &u)
+VectorD2 RHS_P11(FP_Type, const VectorD2 &u)
 {
   return u;
 }

@@ -114,8 +114,6 @@ public:
         for (size_t i = 0; i < s.size(); i++)
           Z.set(i, j, delta_y(i));
       }
-
-    Z.print_formatted(std::cout, 3, true, 0, "0");
     return Z;
   }
 
@@ -160,10 +158,7 @@ class SF_Automatic : public ShootingFunction
     // Compute IVP and variational equation simultaneously. (Step-size is
     // controlled only by the IVP.)
     AdaptiveMethod.iterate_with_ssc(t1, 1e-1, TOL, true);
-    dealii::FullMatrix<FP_Type> Z = AdaptiveMethod.fund_matrix();
-
-    Z.print_formatted(std::cout, 3, true, 0, "0");
-    return Z;
+    return AdaptiveMethod.fund_matrix();
   }
 
 private:

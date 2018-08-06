@@ -96,7 +96,7 @@ public:
           }
 
         k.at(i) = (*F)(t + h*c[i], u + h*g);
-        K.at(i) = (*F).diff(t + h*c[i], h*g) * (Y + h*G);
+        K.at(i) = (*F).diff(t + h*c[i], u + h*g) * (Y + h*G);
       }
 
     dealii::Vector<FP_Type> inc_u(n);

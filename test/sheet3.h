@@ -16,14 +16,14 @@ void Problem_P32(std::ostream &output1, std::ostream &output2,
   u0[1] = 1.0;
 
   // Solve the equations with the Dormand-Prince 87 method
-  ERK<DOPRI> Equidistant(f, t0, u0);
+  ERK<DOPRI87> Equidistant(f, t0, u0);
   Equidistant.iterate_up_to(t1, 1e-3);
   Equidistant.print(output1);
   std::cout << "Amount of steps: (DOPRI, Equidistant) "
             << Equidistant.n_steps() << std::endl;
 
   // Adaptive method of order 8(7)
-  ERK<DOPRI> Adaptive(f, t0, u0);
+  ERK<DOPRI87> Adaptive(f, t0, u0);
   FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
   Adaptive.iterate_with_ssc(t1, 1e-1, TOL, false);
   Adaptive.print(output2);

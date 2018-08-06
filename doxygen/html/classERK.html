@@ -89,21 +89,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2e9bccb7699bc97bd3800c25d86ee814"><td class="memItemLeft" align="right" valign="top"><a id="a2e9bccb7699bc97bd3800c25d86ee814"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ERK</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f, FP_Type t0, dealii::Vector&lt; FP_Type &gt; u0)</td></tr>
 <tr class="separator:a2e9bccb7699bc97bd3800c25d86ee814"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d4e2e59dc9c8fc8f3fe67522485ca3d"><td class="memItemLeft" align="right" valign="top"><a id="a6d4e2e59dc9c8fc8f3fe67522485ca3d"></a>
-std::vector&lt; dealii::Vector&lt; FP_Type &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, <a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f)</td></tr>
-<tr class="separator:a6d4e2e59dc9c8fc8f3fe67522485ca3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43fe4b23617b7d013f64b10bad3782e7"><td class="memItemLeft" align="right" valign="top"><a id="a43fe4b23617b7d013f64b10bad3782e7"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_weighed</b> (const std::vector&lt; dealii::Vector&lt; FP_Type &gt; &gt; &amp;k, const dealii::Vector&lt; FP_Type &gt; &amp;b)</td></tr>
-<tr class="separator:a43fe4b23617b7d013f64b10bad3782e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afebd211b4d191591950da1544a1e2051"><td class="memItemLeft" align="right" valign="top"><a id="afebd211b4d191591950da1544a1e2051"></a>
+dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_increment</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, const dealii::Vector&lt; FP_Type &gt; &amp;b)</td></tr>
+<tr class="separator:afebd211b4d191591950da1544a1e2051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44ab542f5f577a322819c0a05a791db0"><td class="memItemLeft" align="right" valign="top"><a id="a44ab542f5f577a322819c0a05a791db0"></a>
+std::pair&lt; dealii::Vector&lt; FP_Type &gt;, dealii::FullMatrix&lt; FP_Type &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>k_variational</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h, const dealii::Vector&lt; FP_Type &gt; &amp;b, const dealii::FullMatrix&lt; FP_Type &gt; &amp;Y, <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a> *F)</td></tr>
+<tr class="separator:a44ab542f5f577a322819c0a05a791db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6b4a1f225469f47dad5b17bb6791f30"><td class="memItemLeft" align="right" valign="top"><a id="ad6b4a1f225469f47dad5b17bb6791f30"></a>
 virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u, FP_Type h) override</td></tr>
 <tr class="separator:ad6b4a1f225469f47dad5b17bb6791f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3f71b3f5364ffcab63a715d95adb911"><td class="memItemLeft" align="right" valign="top"><a id="ae3f71b3f5364ffcab63a715d95adb911"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_misfires</b> () const</td></tr>
 <tr class="separator:ae3f71b3f5364ffcab63a715d95adb911"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c910a06f9210a07061864f67fc31b3e"><td class="memItemLeft" align="right" valign="top"><a id="a1c910a06f9210a07061864f67fc31b3e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_with_ssc</b> (const FP_Type t_lim, const FP_Type h0, const FP_Type TOL, const size_t order)</td></tr>
-<tr class="separator:a1c910a06f9210a07061864f67fc31b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8835e6d68d903c7111da0b077821e3b"><td class="memItemLeft" align="right" valign="top"><a id="ac8835e6d68d903c7111da0b077821e3b"></a>
+dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix</b> () const</td></tr>
+<tr class="separator:ac8835e6d68d903c7111da0b077821e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d23b9eb9d2f8defa0ca371e2f8cc2bc"><td class="memItemLeft" align="right" valign="top"><a id="a7d23b9eb9d2f8defa0ca371e2f8cc2bc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_with_ssc</b> (const FP_Type t_lim, const FP_Type h0, const FP_Type TOL, bool fundamental_matrix)</td></tr>
+<tr class="separator:a7d23b9eb9d2f8defa0ca371e2f8cc2bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memItemLeft" align="right" valign="top"><a id="a6057b70fbd97bbe2e5b2d0233aef46a4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print_step_size</b> (std::ostream &amp;out)</td></tr>
 <tr class="separator:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
