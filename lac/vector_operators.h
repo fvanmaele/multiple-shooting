@@ -1,6 +1,8 @@
 #ifndef VECTOR_OPERATORS_H
 #define VECTOR_OPERATORS_H
 #include <algorithm>
+#include <cmath>
+#include <iostream>
 
 #include "../base/types.h"
 #include "lac_types.h"
@@ -43,6 +45,20 @@ operator-(dealii::Vector<FP_Type> lhs,
 {
   lhs -= rhs;
   return lhs;
+}
+
+std::ostream&
+operator<<(std::ostream &os, const std::vector<FP_Type> &v)
+{
+  for (size_t i = 0; i < v.size(); i++)
+    {
+      if (i == v.size()-1)
+        os << v.at(i);
+      else
+        os << v.at(i) << "\t";
+    }
+  os << std::endl;
+  return os;
 }
 
 #endif // VECTOR_OPERATORS_H

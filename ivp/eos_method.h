@@ -16,17 +16,10 @@
  *
  * using an explicit one-step method.
  *
- * Constructor:
- *    f     (callable) Right hand side of ODE in standard form.
- *    t0    (FP_Type)  Initial time value. Default is 0.
- *    y0    (vector)  Initial value. Default is 1.
- *    steps (int)     FP_Type of integration steps. Default is 100.
- *    h     (FP_Type)  Step length. Default is 1e-2.
- *
  * The common wrapped functionality includes collecting of intermediary
  * computation results.
 */
-class EOS_Method
+class OneStepMethod
 {
 public:
   // Implementations with fixed step length (template method pattern)
@@ -37,11 +30,12 @@ public:
   template <typename BTab>
   friend class ERK;
 
-  // The intial values could be stored solely in the timepoints
-  // resp. uapprox vector, but this is left out for simplicity.
-  EOS_Method(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0)
+  // The exact solution may be specified as an optional argument
+  // for comparison purposes.
+  OneStepMethod(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0,
+             Curve *_u = nullptr)
     :
-      f(_f), t0(_t0), u0(_u0),
+      f(_f), u(_u), t0(_t0), u0(_u0),
       timepoints(1, _t0), uapprox(1, _u0)
   {}
 
@@ -72,6 +66,18 @@ public:
       }
   }
 
+  bool sol_is_nan(const dealii::Vector<FP_Type> &y)
+  {
+    for (size_t i = 0; i < y.size(); i++)
+      {
+        if (std::isnan(y[i]))
+          {
+            return true;
+          }
+      }
+    return false;
+  }
+
   void reset()
   {
     timepoints.assign(1, t0);
@@ -80,53 +86,63 @@ public:
 
   void save_step(const FP_Type &t, const dealii::Vector<FP_Type> &u)
   {
-    timepoints.emplace_back(t);
-    uapprox.emplace_back(u);
+    timepoints.push_back(t);
+    uapprox.push_back(u);
   }
 
   virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u, FP_Type h)
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &y, FP_Type h)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
 
-  virtual ~EOS_Method() = default;
+  virtual ~OneStepMethod() = default;
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h)
+  void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2)
   {
     // init input variables
     FP_Type t = t0;
-    dealii::Vector<FP_Type> u = u0;
+    FP_Type h_arg = h; // copy for step assert
+    dealii::Vector<FP_Type> y = u0;
 
     // init output variables
     reset();
     steps = 0;
 
     while (t_lim - t > 0)
-      {
-        // Guarantee to hit right interval end
-        if (t + 1.1*h >= t_lim)
-          h = t_lim - t;
-
-        // u_k = u_{k-1} + h*F(t_{k-1}, u_{k-1})
+      { // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
         // t_k = t_{k-1} + h
-        u += h * increment_function(t, u, h);
+        y += h * increment_function(t, y, h);
         t += h;
 
         // Add u_k, t_k to result vectors
-        save_step(t, u);
+        save_step(t, y);
         steps++;
+
+        if (sol_is_nan(y))
+          throw std::overflow_error("global error too large (NaN)");
+
+        if (u != nullptr)
+          if (y.l2_norm() >= C*(*u)(t).l2_norm())
+            throw std::domain_error("global error too large");
+
+        // Guarantee to hit right interval end
+        if (t + 1.1*h >= t_lim)
+          h = t_lim - t;
       }
     assert(timepoints.back() == t_lim);
-    assert(steps = (size_t)(t_lim - t0) / h);
+
+    if (steps != (size_t)(t_lim - t0) / h_arg)
+      throw std::domain_error("step size mismatch");
   }
 
 private:
-  TimeFunctor &f;
-  FP_Type t0;
-  dealii::Vector<FP_Type> u0;
-  size_t steps;
+  TimeFunctor &f;             // rhs of ODE in standard form
+  Curve *u;                   // exact solution
+  FP_Type t0;                 // initial time value
+  dealii::Vector<FP_Type> u0; // initial value
+  size_t steps;               // amount of integration steps
 
   // Result vectors for the IVP
   std::vector<FP_Type> timepoints;

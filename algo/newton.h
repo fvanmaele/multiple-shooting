@@ -6,6 +6,7 @@
 #include "../base/types.h"
 #include "../base/forward_ad.h"
 #include "../lac/lac_types.h"
+#include "../lac/matrix_operators.h"
 #include "../lac/vector_operators.h"
 
 // Solve nonlinear root finding problem:

@@ -39,7 +39,7 @@ void check_region(const std::vector<FP_Type> &v,
               << std::endl;
 }
 
-FP_Type eoc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
+FP_Type eoc_1step(OneStepMethod &M, const FP_Type t_lim, const FP_Type h,
                   const size_t ROA_Max = 3, const FP_Type TOL = 1e-1)
 {
   std::vector<FP_Type> v;
@@ -76,7 +76,7 @@ FP_Type eoc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
   return v.back();
 }
 
-FP_Type ooc_1step(EOS_Method &M, const FP_Type t_lim, const FP_Type h,
+FP_Type ooc_1step(OneStepMethod &M, const FP_Type t_lim, const FP_Type h,
                   const dealii::Vector<FP_Type> &u,
                   const size_t ROA_Max = 3, const FP_Type TOL = 1e-1)
 {

@@ -16,15 +16,15 @@ namespace Test
   {
     std::cout << "== Exercise Sheet 1 =="
               << std::endl;
-    Test_Sheet1();
+    Test::Sheet1();
     std::cout << std::endl
               << "== Exercise Sheet 2 =="
               << std::endl;
-    Test_Sheet2();
+    Test::Sheet2();
     std::cout << std::endl
               << "== Exercise Sheet 3 =="
               << std::endl;
-    Test_Sheet3();
+    Test::Sheet3();
     std::cout << std::endl
               << "== Automatic Differentation =="
               << std::endl;
@@ -32,42 +32,42 @@ namespace Test
 
   void aut_diff()
   {
-    Test_FAD();
-    std::cout << std::endl
-              << "== Newton Method =="
-              << std::endl;
+    Test::FAD();
   }
 
   void linear_bvp()
   {
-    Test_Newton();
+    std::cout << "== Newton Method =="
+              << std::endl;
+    Test::Ortega();
     std::cout << std::endl
               << "== BVP (Stoer, single shooting) =="
               << std::endl;
-    Test_Stoer();
+    Test::Stoer();
     std::cout << std::endl
               << "== BVP (Troesch, single shooting) =="
               << std::endl;
-    Test_Troesch();
+    Test::Troesch();
+    std::cout << std::endl;
   }
 
   void var_equation()
   {
     std::cout << "== Variational equation, problem 1 =="
               << std::endl;
-    Test_P1();
+    Test::Var1();
     std::cout << std::endl
               << "== Variational equation, problem 2 =="
               << std::endl;
-    Test_P2();
+    Test::Var2();
     std::cout << std::endl
               << "== Variational equation, problem 3 =="
               << std::endl;
-    Test_P3();
+    Test::Var3();
     std::cout << std::endl
               << "== Variational equation, problem 4 =="
               << std::endl;
-    Test_P4();
+    Test::Var4();
   }
 }
 

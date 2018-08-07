@@ -12,10 +12,9 @@ public:
   SimpleBVP(TimeFunctor &_f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
     f(_f), a(_a), b(_b), c(_c)
   {
-    std::array<FP_Type, 4> _A = { 1, 0,
-                                  0, 0 };
-    std::array<FP_Type, 4> _B = { 0, 0,
-                                  1, 0 };
+    std::array<FP_Type, 4> _A = { 1, 0, 0, 0 };
+    std::array<FP_Type, 4> _B = { 0, 0, 1, 0 };
+
     // construct matrix
     A = dealii::FullMatrix<FP_Type>(2, 2, _A.data());
     B = dealii::FullMatrix<FP_Type>(2, 2, _B.data());

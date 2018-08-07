@@ -9,6 +9,15 @@
 typedef dealii::Vector<FP_Type> VectorD2;
 typedef dealii::FullMatrix<FP_Type> MatrixD2;
 
+class Curve
+{
+public:
+  virtual VectorD2
+  operator()(FP_Type t) = 0;
+
+  virtual ~Curve() = default;
+};
+
 class TimeFunctor
 {
 public:

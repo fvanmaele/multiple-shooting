@@ -10,12 +10,13 @@
 #include "tableau.h"
 
 template <typename ButcherTableau>
-class ERK : public EOS_Method
+class ERK : public OneStepMethod
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0) :
-    EOS_Method(f, t0, u0)
+  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0,
+      Curve *u = nullptr) :
+    OneStepMethod(f, t0, u0, u)
   {
     ButcherTableau BTab;
 
@@ -38,22 +39,22 @@ public:
   }
 
   dealii::Vector<FP_Type>
-  k_increment(FP_Type t, const dealii::Vector<FP_Type> &u,
+  k_increment(FP_Type t, const dealii::Vector<FP_Type> &y,
               FP_Type h, const dealii::Vector<FP_Type> &b)
   {
     size_t s = b.size();
-    size_t n = u.size();
+    size_t n = y.size();
     std::vector<dealii::Vector<FP_Type> > k(s);
-    k.at(0) = f(t, u);
+    k.at(0) = f(t, y);
 
     for (size_t i = 1; i < s; i++)
       {
-        dealii::Vector<FP_Type> g(u.size());
+        dealii::Vector<FP_Type> g(y.size());
 
         for (size_t j = 0; j < i; j++)
           g += A(i, j) * k.at(j);
 
-        k.at(i) = f(t + h*c[i], u + h*g);
+        k.at(i) = f(t + h*c[i], y + h*g);
       }
 
     dealii::Vector<FP_Type> u_inc(n);
@@ -66,23 +67,23 @@ public:
 
 
   std::pair<dealii::Vector<FP_Type>, dealii::FullMatrix<FP_Type> >
-  k_variational(FP_Type t, const dealii::Vector<FP_Type> &u,
+  k_variational(FP_Type t, const dealii::Vector<FP_Type> &y,
                 FP_Type h, const dealii::Vector<FP_Type> &b,
                 const dealii::FullMatrix<FP_Type> &Y,
                 TimeDivFunctor *F)
   {
     size_t s = b.size();
-    size_t n = u.size();
+    size_t n = y.size();
     assert(Y.m() == n);
     assert(Y.n() == n);
 
-    // Increments k_1, ..., k_s for solution u(t)
+    // Increments k_1, ..., k_s for solution y(t)
     std::vector<dealii::Vector<FP_Type> > k(s);
-    k.at(0) = (*F)(t, u);
+    k.at(0) = (*F)(t, y);
 
     // Increments K_1, ..., K_s for solution Y(t)
     std::vector<dealii::FullMatrix<FP_Type> > K(s);
-    K.at(0) = (*F).diff(t, u) * Y;
+    K.at(0) = (*F).diff(t, y) * Y;
 
     for (size_t i = 1; i < s; i++)
       {
@@ -95,8 +96,8 @@ public:
             G.add(1, A(i, j) * K.at(j));
           }
 
-        k.at(i) = (*F)(t + h*c[i], u + h*g);
-        K.at(i) = (*F).diff(t + h*c[i], u + h*g) * (Y + h*G);
+        k.at(i) = (*F)(t + h*c[i], y + h*g);
+        K.at(i) = (*F).diff(t + h*c[i], y + h*g) * (Y + h*G);
       }
 
     dealii::Vector<FP_Type> inc_u(n);
@@ -111,11 +112,11 @@ public:
   }
 
   virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &u,
+  increment_function(FP_Type t, const dealii::Vector<FP_Type> &y,
                      FP_Type h) override
   {
     // Explicit method of higher order
-    return k_increment(t, u, h, b1);
+    return k_increment(t, y, h, b1);
   }
 
   size_t n_misfires() const
@@ -126,11 +127,12 @@ public:
   dealii::FullMatrix<FP_Type>
   fund_matrix() const
   {
-    return Y;
+    return Yn;
   }
 
-  void iterate_with_ssc(const FP_Type t_lim, const FP_Type h0,
-                        const FP_Type TOL, bool fundamental_matrix)
+  void iterate_with_ssc(FP_Type t_lim, FP_Type h0, FP_Type TOL,
+                        bool fundamental_matrix = false,
+                        FP_Type C = 2)
   {
     assert(embedded_method);
     FP_Type t = t0;     // start time
@@ -142,18 +144,18 @@ public:
       throw std::invalid_argument("right-hand side is not differentiable");
 
     // Dynamic allocation, declare outside loop
-    dealii::Vector<FP_Type> u = u0;
-    dealii::Vector<FP_Type> inc_u(n);
-    dealii::Vector<FP_Type> inc_v(n);
+    dealii::Vector<FP_Type> y = u0;
+    dealii::Vector<FP_Type> inc_y1(n);
+    dealii::Vector<FP_Type> inc_y2(n);
 
     // Init output variables
-    EOS_Method::reset();
+    OneStepMethod::reset();
     steps = 0;
     misfires = 0;
 
-    // Initial value for fundamental matrix Y(t; t0)
-    Y = dealii::IdentityMatrix(n);
-    dealii::FullMatrix<FP_Type> inc_Y(n, n);
+    // Initial value for fundamental matrix Yn(t; t0)
+    Yn = dealii::IdentityMatrix(n);
+    dealii::FullMatrix<FP_Type> inc_Yn(n, n);
 
     // Algorithm 2.4.2
     // The step-size is controlled only by the IVP, not the variational equation,
@@ -162,21 +164,24 @@ public:
       { // (1) Candidates for u_k, v_k with time step h_k
         if (fundamental_matrix)
           {
-            auto U = k_variational(t, u, h_var, b1, Y, f_diff);
+            auto U = k_variational(t, y, h_var, b1, Yn, f_diff);
 
-            inc_u = u + h_var * U.first;
-            inc_v = u + h_var * k_increment(t, u, h_var, b2);
-            inc_Y = Y + h_var * U.second;
+            inc_y1 = y + h_var * U.first;
+            inc_y2 = y + h_var * k_increment(t, y, h_var, b2);
+            inc_Yn = Yn + h_var * U.second;
           }
         else
           {
-            inc_u = u + h_var * k_increment(t, u, h_var, b1);
-            inc_v = u + h_var * k_increment(t, u, h_var, b2);
+            inc_y1 = y + h_var * k_increment(t, y, h_var, b1);
+            inc_y2 = y + h_var * k_increment(t, y, h_var, b2);
           }
         steps++;
 
+        if (sol_is_nan(inc_y1))
+          throw std::overflow_error("global error too large (NaN)");
+
         // (2) Compute optimal step size.
-        FP_Type local_error = (inc_u - inc_v).l2_norm();
+        FP_Type local_error = (inc_y1 - inc_y2).l2_norm();
         FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / order);
 
         // (3) Time step is rejected; repeat step with optimal value.
@@ -188,14 +193,19 @@ public:
           }
         else
           { // (4) Time step was accepted.
-            u = inc_u;
-            Y = inc_Y;
+            y  = inc_y1;
+            Yn = inc_Yn;
             t += h_var;
 
             // Save intermediary solutions to IVP. (In the variational equation,
             // only the last step Y_n is stored.)
-            EOS_Method::save_step(t, u);
+            OneStepMethod::save_step(t, y);
             step_sizes.push_back(h_var);
+
+            // Comparison to exact solution
+            if (u != nullptr)
+              if (y.l2_norm() >= C*(*u)(t).l2_norm())
+                throw std::domain_error("global error too large");
 
             // Set time step for next iteration.
             h_var = h_opt;
@@ -205,6 +215,7 @@ public:
               h_var = t_lim - t;
           }
       }
+    assert(timepoints.back() == t_lim);
   }
 
   void print_step_size(std::ostream &out)
@@ -216,12 +227,13 @@ public:
   }
 
 private:
-  // EOS_Method::f;
-  // EOS_Method::t0;
-  // EOS_Method::u0;
-  // EOS_Method::steps;
-  // EOS_Method::timepoints;
-  // EOS_Method::uapprox;
+  // OneStepMethod::f;
+  // OneStepMethod::u;
+  // OneStepMethod::t0;
+  // OneStepMethod::u0;
+  // OneStepMethod::steps;
+  // OneStepMethod::timepoints;
+  // OneStepMethod::uapprox;
 
   // Butcher tableau
   dealii::FullMatrix<FP_Type> A;
@@ -229,7 +241,7 @@ private:
   size_t order;
 
   // Variational equation
-  dealii::FullMatrix<FP_Type> Y;
+  dealii::FullMatrix<FP_Type> Yn;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;
