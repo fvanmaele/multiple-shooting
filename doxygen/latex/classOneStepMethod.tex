@@ -1,0 +1,65 @@
+\hypertarget{classOneStepMethod}{}\section{One\+Step\+Method Class Reference}
+\label{classOneStepMethod}\index{One\+Step\+Method@{One\+Step\+Method}}
+
+
+Inheritance diagram for One\+Step\+Method\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classOneStepMethod__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classOneStepMethod_aa29cf55321c2a83634b93ec42a32c500}\label{classOneStepMethod_aa29cf55321c2a83634b93ec42a32c500}} 
+{\bfseries One\+Step\+Method} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \+\_\+u0, \hyperlink{classCurve}{Curve} $\ast$\+\_\+u=nullptr)
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a90a5bfa6317794d9003939e660c48e5d}\label{classOneStepMethod_a90a5bfa6317794d9003939e660c48e5d}} 
+dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries approx} () const
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a5fa1efcb274907b97f31cfbbb0c5dc07}\label{classOneStepMethod_a5fa1efcb274907b97f31cfbbb0c5dc07}} 
+F\+P\+\_\+\+Type {\bfseries endpoint} () const
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a7ae5bcaf0c1e48551456a6f0835414d2}\label{classOneStepMethod_a7ae5bcaf0c1e48551456a6f0835414d2}} 
+size\+\_\+t {\bfseries n\+\_\+steps} () const
+\item 
+\mbox{\Hypertarget{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}\label{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}} 
+void {\bfseries print} (std\+::ostream \&out=std\+::cout) const
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a9d448dbaafc95b02ce6bc88cc33c8363}\label{classOneStepMethod_a9d448dbaafc95b02ce6bc88cc33c8363}} 
+bool {\bfseries sol\+\_\+is\+\_\+nan} (const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&y)
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a4e6743b0343a6c5bb75e423649915b86}\label{classOneStepMethod_a4e6743b0343a6c5bb75e423649915b86}} 
+void {\bfseries reset} ()
+\item 
+\mbox{\Hypertarget{classOneStepMethod_ae3c4a4994e2ce22c43f0d3e6902986a4}\label{classOneStepMethod_ae3c4a4994e2ce22c43f0d3e6902986a4}} 
+void {\bfseries save\+\_\+step} (const F\+P\+\_\+\+Type \&t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u)
+\item 
+\mbox{\Hypertarget{classOneStepMethod_ad2298660914a06674080194c8c97e1b1}\label{classOneStepMethod_ad2298660914a06674080194c8c97e1b1}} 
+virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&y, F\+P\+\_\+\+Type h)
+\item 
+\mbox{\Hypertarget{classOneStepMethod_adf00efa88d6fb3d1e9f7b3024375a0b4}\label{classOneStepMethod_adf00efa88d6fb3d1e9f7b3024375a0b4}} 
+void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h, F\+P\+\_\+\+Type C=2)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classOneStepMethod_af3aa570b8e278b935d7dc84d2774ccb7}\label{classOneStepMethod_af3aa570b8e278b935d7dc84d2774ccb7}} 
+class {\bfseries Blackbox}
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a9e8c94ebada889fba517c82fc3408d32}\label{classOneStepMethod_a9e8c94ebada889fba517c82fc3408d32}} 
+class {\bfseries Euler}
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a146a867264afb1cda48fa788ceca1f13}\label{classOneStepMethod_a146a867264afb1cda48fa788ceca1f13}} 
+class {\bfseries E\+R\+K\+\_\+\+Test\+\_\+04}
+\item 
+\mbox{\Hypertarget{classOneStepMethod_a55adbdc4c0fea0e770e4d18b0379d490}\label{classOneStepMethod_a55adbdc4c0fea0e770e4d18b0379d490}} 
+{\footnotesize template$<$typename B\+Tab $>$ }\\class {\bfseries E\+RK}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+ivp/eos\+\_\+method.\+h\end{DoxyCompactItemize}

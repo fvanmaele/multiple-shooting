@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structDOPRI.html" title="DOPRI" alt="" coords="5,5,71,32"/>
+<area shape="rect" id="node1" href="$classCurve.html" title="Curve" alt="" coords="5,31,63,57"/>
+<area shape="rect" id="node2" href="$classCurveTF.html" title="CurveTF" alt="" coords="137,5,211,32"/>
+<area shape="rect" id="node3" href="$classTest_1_1CurveLinear.html" title="Test::CurveLinear" alt="" coords="111,56,237,83"/>
 </map>

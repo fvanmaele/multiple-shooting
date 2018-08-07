@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['newton',['Newton',['../classNewton.html',1,'']]]
+  ['karp',['KARP',['../structKARP.html',1,'']]]
 ];

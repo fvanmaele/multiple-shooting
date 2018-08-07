@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['divfunctor',['DivFunctor',['../classDivFunctor.html',1,'']]],
-  ['dopri',['DOPRI',['../structDOPRI.html',1,'']]],
-  ['dopri87',['DOPRI87',['../structDOPRI87.html',1,'']]]
+  ['curve',['Curve',['../classCurve.html',1,'']]],
+  ['curvelinear',['CurveLinear',['../classTest_1_1CurveLinear.html',1,'Test']]],
+  ['curvetf',['CurveTF',['../classCurveTF.html',1,'']]]
 ];
