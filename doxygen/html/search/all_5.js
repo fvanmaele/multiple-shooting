@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['karp',['KARP',['../structKARP.html',1,'']]]
+  ['gnuplot',['GnuPlot',['../classGnuPlot.html',1,'']]]
 ];

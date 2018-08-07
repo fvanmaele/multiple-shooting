@@ -59,6 +59,7 @@ public:
             else
               ssc_steps++;
           }
+
         return x_next;
       }
     else

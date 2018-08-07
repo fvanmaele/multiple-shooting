@@ -202,20 +202,24 @@ public:
             OneStepMethod::save_step(t, y);
             step_sizes.push_back(h_var);
 
+            // Set time step for next iteration.
+            h_var = h_opt;
+
+            // (*) Guarantee to hit right interval end (Rem. 2.4.3)
+            if (t + 1.1*h_var >= t_lim)
+              h_var = t_lim - t;
+
             // Comparison to exact solution
             if (u != nullptr)
               if (y.l2_norm() >= C*(*u)(t).l2_norm())
                 throw std::domain_error("global error too large");
-
-            // Set time step for next iteration.
-            h_var = h_opt;
-
-            // Avoid rounding errors (Remark 2.4.3)
-            if (t + 1.1*h_var >= t_lim)
-              h_var = t_lim - t;
           }
       }
-    assert(timepoints.back() == t_lim);
+
+    if (timepoints.back() != t_lim)
+      std::cerr << "warning: time step outside interval boundary ("
+                << timepoints.back() << "; [" << t0 << ", " << t_lim << "])"
+                << std::endl;
   }
 
   void print_step_size(std::ostream &out)

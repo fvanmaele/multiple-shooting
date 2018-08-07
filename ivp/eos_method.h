@@ -111,7 +111,11 @@ public:
     steps = 0;
 
     while (t_lim - t > 0)
-      { // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
+      { // Guarantee to hit right interval end (Rem. 2.4.3)
+        if (t + 1.1*h >= t_lim)
+          h = t_lim - t;
+
+        // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
         // t_k = t_{k-1} + h
         y += h * increment_function(t, y, h);
         t += h;
@@ -126,15 +130,16 @@ public:
         if (u != nullptr)
           if (y.l2_norm() >= C*(*u)(t).l2_norm())
             throw std::domain_error("global error too large");
-
-        // Guarantee to hit right interval end
-        if (t + 1.1*h >= t_lim)
-          h = t_lim - t;
       }
-    assert(timepoints.back() == t_lim);
 
-    if (steps != (size_t)(t_lim - t0) / h_arg)
-      throw std::domain_error("step size mismatch");
+    if (static_cast<FP_Type>(steps) != (t_lim - t0) / h_arg)
+      std::cerr << "warning: step size mismatch"
+                << std::endl;
+
+    if (timepoints.back() != t_lim)
+      std::cerr << "warning: time step outside interval boundary ("
+                << timepoints.back() << "; [" << t0 << ", " << t_lim << "]"
+                << std::endl;
   }
 
 private:

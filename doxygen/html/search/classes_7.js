@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['onestepmethod',['OneStepMethod',['../classOneStepMethod.html',1,'']]]
+  ['newton',['Newton',['../classNewton.html',1,'']]]
 ];
