@@ -46,4 +46,21 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
   return T;
 }
 
+// Create vector of equidistant points
+std::vector<FP_Type>
+linspace(FP_Type a, FP_Type b, int n = 100)
+{
+  assert(a < b);
+  assert(n > 0);
+
+  std::vector<FP_Type> v(n);
+  FP_Type h = (b - a) / (FP_Type)(n-1);
+
+  for (size_t i = 0; i < v.size(); i++)
+    {
+      v[i] = a + i*h;
+    }
+  return v;
+}
+
 #endif // TRAJECTORY_H

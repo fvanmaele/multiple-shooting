@@ -4,6 +4,7 @@
 #include <cassert>
 
 #include "../algo/convergence.h"
+#include "../base/gnuplot.h"
 #include "../base/types.h"
 #include "../ivp/euler.h"
 #include "../ivp/runge_kutta.h"
@@ -56,24 +57,15 @@ namespace Test
   {
     std::cout << "Plots for Lotka-Volterra equation (P21), h = 0.1" << std::endl;
 
-    std::ofstream output_file;
-    output_file.open("volterra_euler.dat");
-    assert(output_file.is_open());
+    std::ofstream output_file1, output_file2;
+    GnuPlot Dat1("volterra_euler.dat", output_file1);
+    GnuPlot Dat2("volterra_runge.dat", output_file2);
 
-    // Generate output data and run GNUPLOT (via shell)
-    Problem_P21(1e-1, output_file);
-    output_file.close();
-    std::system("gnuplot -p -e \"plot 'volterra_euler.dat' using 1:2 with lines, "
-                "'volterra_euler.dat' using 1:3 with lines\"");
+    Problem_P21(1e-1, output_file1);
+    Dat1.plot_with_lines(2);
 
-    // Generate output data for Runge-Kutta method
-    output_file.open("volterra_runge.dat");
-    assert(output_file.is_open());
-
-    Problem_P22(1e-1, output_file);
-    output_file.close();
-    std::system("gnuplot -p -e \"plot 'volterra_runge.dat' using 1:2 with lines, "
-                "'volterra_runge.dat' using 1:3 with lines\"");
+    Problem_P22(1e-1, output_file2);
+    Dat2.plot_with_lines(2);
   }
 }
 

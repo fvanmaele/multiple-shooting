@@ -8,8 +8,9 @@
 #include "ivp/runge_kutta.h"
 #include "test/run_tests.h"
 
+static int n_intervals = 20;
+static bool adaptive_intervals = false;
 static bool run_tests = false;
-static int intervals = 20;
 
 class CurveTF : public Curve
 {
@@ -33,7 +34,7 @@ VectorD2 ThomasFermi(FP_Type t, const VectorD2 &u)
   return y;
 }
 
-void Solve_ThomasFermi()
+void Solve_ThomasFermi(int n, bool adaptive)
 {
   std_tWrapper f(ThomasFermi, 2);
   FP_Type a = 0;
@@ -49,20 +50,23 @@ void Solve_ThomasFermi()
   assert((*eta)(5)[0] == 0);
 
   // Compute starting trajectory
-  std::vector<FP_Type> subint = trajectory(a, b, f, eta, 1e-2, 1.5, false);
+  std::vector<FP_Type> subint;
+  if (adaptive)
+    subint = trajectory(a, b, f, eta, 1e-2, 1.5, false);
+  else
+    subint = linspace(a, b, n+1);
+
   std::cout << "Amount of intervals: " << subint.size()-1 << std::endl;
   std::cout << subint;
 
   // Plot trajectory
   std::ofstream output_file;
-  output_file.open("TF_trajectory.dat");
-  assert(output_file.is_open());
+  GnuPlot P("TF_trajectory.dat", output_file);
 
   for (auto &c : subint)
     output_file << c << "\t" << (*eta)(c);
 
-  std::system("gnuplot -p -e \"plot 'TF_trajectory.dat' using 1:2 with linespoints, "
-              "'TF_trajectory.dat' using 1:3 with linespoints\"");
+  P.plot_with_lines(1, "linespoints");
 }
 
 void usage()
@@ -81,7 +85,7 @@ int main(int argc, char* argv[])
 
       if (waiting_for_int)
         {
-          intervals = std::stoi(option);
+          n_intervals = std::stoi(option);
         }
       if (option == "--run-tests")
         {
@@ -95,6 +99,10 @@ int main(int argc, char* argv[])
       else if (option == "--intervals")
         {
           waiting_for_int = true;
+        }
+      else if (option == "--adaptive-intervals")
+        {
+          adaptive_intervals = true;
         }
       else
         {
@@ -118,7 +126,7 @@ int main(int argc, char* argv[])
     }
 
   // Linear separated BVP (::SimpleBVP)
-  Solve_ThomasFermi();
+  Solve_ThomasFermi(n_intervals, adaptive_intervals);
 
   return 0;
 }

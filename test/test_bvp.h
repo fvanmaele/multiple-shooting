@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../base/types.h"
+#include "../base/gnuplot.h"
 #include "../lac/lac_types.h"
 #include "../bvp/linear.h"
 #include "../bvp/trajectory.h"
@@ -146,15 +147,12 @@ namespace Test
     std::cout << subint;
 
     std::ofstream output_file;
-    output_file.open("Troesch_trajectory.dat");
-    assert(output_file.is_open());
+    GnuPlot Dat1("Troesch_trajectory.dat", output_file);
 
     // Plot trajectory
     for (auto &c : subint)
       output_file << c << "\t" << (*eta)(c);
-
-    std::system("gnuplot -p -e \"plot 'Troesch_trajectory.dat' using 1:2 with linespoints, "
-                "'Troesch_trajectory.dat' using 1:3 with linespoints\"");
+    Dat1.plot_with_lines(2, "linespoints");
   }
 }
 
