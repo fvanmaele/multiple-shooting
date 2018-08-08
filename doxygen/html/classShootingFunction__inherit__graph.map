@@ -1,6 +1,4 @@
 <map id="ShootingFunction" name="ShootingFunction">
-<area shape="rect" id="node4" href="$classSF__Automatic.html" title="SF_Automatic" alt="" coords="5,229,111,256"/>
-<area shape="rect" id="node5" href="$classSF__External.html" title="SF_External" alt="" coords="135,229,229,256"/>
-<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="76,80,163,107"/>
-<area shape="rect" id="node3" href="$classFunctor.html" title="Functor" alt="" coords="86,5,153,32"/>
+<area shape="rect" id="node2" href="$classSF__Automatic.html" title="SF_Automatic" alt="" coords="5,80,111,107"/>
+<area shape="rect" id="node3" href="$classSF__External.html" title="SF_External" alt="" coords="135,80,229,107"/>
 </map>

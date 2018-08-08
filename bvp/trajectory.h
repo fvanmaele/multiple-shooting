@@ -7,11 +7,6 @@
 #include "../lac/lac_types.h"
 #include "../ivp/runge_kutta.h"
 
-FP_Type round_to(FP_Type x, FP_Type TOL)
-{
-  return std::round(x/TOL*TOL);
-}
-
 // Find suitable initial values for subintervals using an approximate
 // solution to the BVP, i.e. a "starting trajectory".
 std::vector<FP_Type>
@@ -24,7 +19,6 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
   FP_Type t_i = a;
   T.push_back(t_i);
 
-  // XXX: rounding errors: check boundary up to TOL
   while (t_i < b)
     {
       // Initial value of eta' = f(t, eta_i)
@@ -34,7 +28,7 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
       try
       {
         if (ssc)
-          AdM.iterate_with_ssc(b, 1e-1, TOL, false, C);
+          AdM.iterate_with_ssc(b, 1e-3, TOL, false, C);
         else
           AdM.iterate_up_to(b, TOL, C);
 

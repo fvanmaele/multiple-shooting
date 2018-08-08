@@ -20,15 +20,16 @@ public:
   {
     VectorD2 y(2);
     y[0] = -1./5*t + 1;
-    y[1] = -1./500;
+    y[1] = -1./50;
 
     return y;
   }
 };
 
-VectorD2 RHS_ThomasFermi(FP_Type t, const VectorD2 &u)
+template <typename Vector>
+Vector RHS_ThomasFermi(typename Vector::value_type t, const Vector &u)
 {
-  VectorD2 y(2);
+  Vector y(2);
   y[0] = t * u[1];
   y[1] = 4 * std::pow(u[0], 1.5);
 
@@ -37,18 +38,14 @@ VectorD2 RHS_ThomasFermi(FP_Type t, const VectorD2 &u)
 
 void Solve_ThomasFermi(int n, bool adaptive)
 {
-  std_tWrapper f(RHS_ThomasFermi, 2);
+  std_tWrapper f(RHS_ThomasFermi<VectorD2>, 2);
   FP_Type a = 0;
   FP_Type b = 5;
 
-  FP_Type _A[4] = {1, 0, 0, 0};
-  FP_Type _B[4] = {0, 0, 1, 0};
-  dealii::FullMatrix<FP_Type> A(2, 2, _A);
-  dealii::FullMatrix<FP_Type> B(2, 2, _B);
-
-  VectorD2 c(2);
-  c[0] = 1;
-  c[1] = 0;
+  // Linear separated BVP
+  std::vector<FP_Type> A = {1, 0, 0, 0};
+  std::vector<FP_Type> B = {0, 0, 1, 0};
+  std::vector<FP_Type> c = {1, 0};
 
   // Define approximate solution for BVP
   CurveTF* eta = new CurveTF;
@@ -58,7 +55,9 @@ void Solve_ThomasFermi(int n, bool adaptive)
   // Compute starting trajectory
   std::vector<FP_Type> x;
   if (adaptive)
-    x = trajectory(a, b, f, eta);
+    // The TOL chosen here should match the initial step width
+    // chosen for adaptive methods (1e-3)
+    x = trajectory(a, b, f, eta, 1e-3, 2, false);
   else
     x = linspace(a, b, n+1);
 
@@ -80,14 +79,14 @@ void Solve_ThomasFermi(int n, bool adaptive)
   P.plot_with_lines(2, "linespoints");
 
   // Compute the n IVP's y(t; t_k, s_k)
-  SF_External Cannon(f, a, b, A, B, c);
+  SF_External S(f);
   std::vector<VectorD2> y;
   std::vector<VectorD2> s = s0;
 
   for (size_t i = 0; i < x.size()-1; i++)
     {
       std::cout << x.at(i) << "\t" << x.at(i+1) << "\t" << s.at(i);
-      VectorD2 y_stage = Cannon.solve_y(x.at(i), x.at(i+1), s.at(i));
+      VectorD2 y_stage = S.solve_y(x.at(i), x.at(i+1), s.at(i));
     }
 
   // ...
@@ -150,7 +149,7 @@ int main(int argc, char* argv[])
       Test::var_equation();
     }
 
-  // Linear separated BVP (::SimpleBVP)
+  // Linear separated BVP (::LinearBVP)
   Solve_ThomasFermi(n_intervals, adaptive_intervals);
 
   return 0;

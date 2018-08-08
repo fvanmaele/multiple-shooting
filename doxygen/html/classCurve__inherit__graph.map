@@ -1,4 +1,5 @@
 <map id="Curve" name="Curve">
 <area shape="rect" id="node2" href="$classCurveTF.html" title="CurveTF" alt="" coords="5,80,79,107"/>
-<area shape="rect" id="node3" href="$classTest_1_1CurveLinear.html" title="Test::CurveLinear" alt="" coords="103,80,229,107"/>
+<area shape="rect" id="node3" href="$classTest_1_1CurveStoer.html" title="Test::CurveStoer" alt="" coords="103,80,226,107"/>
+<area shape="rect" id="node4" href="$classTest_1_1CurveTroesch.html" title="Test::CurveTroesch" alt="" coords="250,80,389,107"/>
 </map>

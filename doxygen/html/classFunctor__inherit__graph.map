@@ -1,8 +1,6 @@
 <map id="Functor" name="Functor">
-<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="141,80,228,107"/>
-<area shape="rect" id="node7" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="252,80,427,107"/>
+<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="153,80,240,107"/>
+<area shape="rect" id="node5" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="264,80,439,107"/>
 <area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="5,155,188,181"/>
-<area shape="rect" id="node4" href="$classShootingFunction.html" title="ShootingFunction" alt="" coords="213,155,335,181"/>
-<area shape="rect" id="node5" href="$classSF__Automatic.html" title="SF_Automatic" alt="" coords="159,229,264,256"/>
-<area shape="rect" id="node6" href="$classSF__External.html" title="SF_External" alt="" coords="288,229,383,256"/>
+<area shape="rect" id="node4" href="$classLinearBVP.html" title="LinearBVP\&lt; DiffMethod \&gt;" alt="" coords="212,155,384,181"/>
 </map>

@@ -1,68 +1,60 @@
 #ifndef LINEAR_H
 #define LINEAR_H
 
+#include "../base/types.h"
+#include "../lac/lac_types.h"
+#include "../lac/matrix_operators.h"
+#include "../lac/vector_operators.h"
+
 #include "shooting.h"
 
-// Class to represent a 2-dimensional separated linear BVP, with
-// boundary conditions on the first component.
+// Single shooting method for linear BVPs
+//    y' = f(x,y),  A*y(a) + B*y(b) = c
+//
+// See Stoer, Num. Math. 2, pp.195
 template <typename DiffMethod>
-class SimpleBVP
+class LinearBVP : public DivFunctor
 {
 public:
-  SimpleBVP(TimeFunctor &_f, FP_Type _a, FP_Type _b, dealii::Vector<FP_Type> _c) :
-    f(_f), a(_a), b(_b), c(_c)
+  LinearBVP(TimeFunctor &_f, FP_Type _t0, FP_Type _t1,
+            std::vector<FP_Type> _A,
+            std::vector<FP_Type> _B,
+            std::vector<FP_Type> _c) :
+    f(_f), t0(_t0), t1(_t1), dim(_c.size())
   {
-    FP_Type _A[4] = {1, 0, 0, 0};
-    FP_Type _B[4] = {0, 0, 1, 0};
+    assert(_A.size() == _B.size());
+    assert(_A.size() == dim * dim);
 
-    // construct matrix
-    A = dealii::FullMatrix<FP_Type>(2, 2, _A);
-    B = dealii::FullMatrix<FP_Type>(2, 2, _B);
+    A = dealii::FullMatrix<FP_Type>(dim, dim, _A.data());
+    B = dealii::FullMatrix<FP_Type>(dim, dim, _B.data());
+    c = dealii::Vector<FP_Type>(_c.begin(), _c.end());
   }
 
-  // As the Newton method may converge to different roots, take a vector
-  // of starting values instead of a single entry.
-  void single_shooting(const std::vector<dealii::Vector<FP_Type> > &start)
+  virtual dealii::Vector<FP_Type>
+  operator()(const dealii::Vector<FP_Type> &s) override
   {
-    assert(start.size());
-    DiffMethod F(f, a, b, A, B, c);
-    Newton N(F, 2);
+    DiffMethod S(f);
+    dealii::Vector<FP_Type> y = S.solve_y(t0, t1, s);
 
-    for (auto &s : start)
-      N.iterate(s);
+    return A*s + B*y - c;
   }
 
-  void shooting_graph(size_t dim, const std::vector<dealii::Vector<FP_Type> > &range,
-                      std::ofstream &output_file)
+  virtual dealii::FullMatrix<FP_Type>
+  diff(const dealii::Vector<FP_Type> &s) override
   {
-    if (dim > 2)
-      throw std::logic_error("Function not implemented");
-    DiffMethod F(f, a, b, A, B, c);
+    DiffMethod S(f);
+    dealii::FullMatrix<FP_Type> Z = S.solve_Z(t0, t1, s);
 
-    for (auto &s : range)
-      {
-        dealii::Vector<FP_Type> diff = F(s);
-        switch (dim)
-          {
-          case 1 :
-            output_file << s[0]
-                << "\t" << diff[0] << std::endl;
-            break;
-          case 2 :
-            output_file << s[0]
-                << "\t" << s[1]
-                << "\t" << diff[0]
-                << "\t" << diff[1] << std::endl;
-            break;
-          }
-      }
+    return A + B*Z;
   }
 
 private:
   TimeFunctor &f;
-  FP_Type a, b;
-  dealii::Vector<FP_Type> c;
+  FP_Type t0, t1;
+  size_t dim;
+
   dealii::FullMatrix<FP_Type> A, B;
+  dealii::Vector<FP_Type> c;
 };
 
 #endif // LINEAR_H

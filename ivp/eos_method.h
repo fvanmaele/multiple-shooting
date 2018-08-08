@@ -103,7 +103,7 @@ public:
   {
     // init input variables
     FP_Type t = t0;
-    FP_Type h_arg = h; // copy for step assert
+    FP_Type h_arg = h; // copy for step check
     dealii::Vector<FP_Type> y = u0;
 
     // init output variables
@@ -111,7 +111,7 @@ public:
     steps = 0;
 
     while (t_lim - t > 0)
-      { // Guarantee to hit right interval end (Rem. 2.4.3)
+      { // Avoid rounding errors (Rem. 2.4.3)
         if (t + 1.1*h >= t_lim)
           h = t_lim - t;
 
@@ -133,12 +133,14 @@ public:
       }
 
     if (static_cast<FP_Type>(steps) != (t_lim - t0) / h_arg)
-      std::cerr << "warning: step size mismatch"
+      std::cerr << "warning: mismatch in step amount ("
+                << std::setprecision(15) << std::setw(15)
+                << (t_lim - t0) / h_arg << " to " << steps << ")"
                 << std::endl;
 
     if (timepoints.back() != t_lim)
-      std::cerr << "warning: time step outside interval boundary ("
-                << timepoints.back() << "; [" << t0 << ", " << t_lim << "]"
+      std::cerr << "warning: time step outside interval end ("
+                << timepoints.back() << "; [" << t0 << ", " << t_lim << "])"
                 << std::endl;
   }
 

@@ -11,11 +11,7 @@
 #include "../lac/vector_operators.h"
 #include "../ivp/runge_kutta.h"
 
-// Single shooting method for linear BVPs
-//    y' = f(x,y),  A*y(a) + B*y(b) = c
-//
-// See Stoer, Num. Math. 2, pp.195
-class ShootingFunction : public DivFunctor
+class ShootingFunction
 {
 public:
   // Implementations for solve_y, solve_Z
@@ -23,47 +19,24 @@ public:
   friend class SF_Automatic;  // Automatic differentation
   friend class SF_Manual;     // Use pre-computed fundamental matrix
 
-  ShootingFunction(TimeFunctor &_f, FP_Type _t0, FP_Type _t1,
-                   dealii::FullMatrix<FP_Type> _A,
-                   dealii::FullMatrix<FP_Type> _B,
-                   dealii::Vector<FP_Type> _c) :
-    f(_f), t0(_t0), t1(_t1), A(_A), B(_B), c(_c)
+  ShootingFunction(TimeFunctor &_f) : f(_f)
   {}
 
-  // A. Compute y(t1; s) by integrating IVP y(t0; s), where s is the
-  //    specified starting value.
+  // Compute y(t1; t0, s) by integrating IVP y(t0; s), where s represents
+  // the specified initial value.
   //  * Called multiple times per Newton step through step-size control.
   virtual dealii::Vector<FP_Type>
-  solve_y(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) = 0;
+  solve_y(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) = 0;
 
-  // B. Compute d_y(t1; s)/d_s by external or exact differentation.
+  // Compute D_s(y(t1; t0, s)) by external or exact differentation.
   //  * Called once per Newton step.
   virtual dealii::FullMatrix<FP_Type>
-  solve_Z(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) = 0;
+  solve_Z(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) = 0;
 
   virtual ~ShootingFunction() = default;
 
-  virtual dealii::Vector<FP_Type>
-  operator()(const dealii::Vector<FP_Type> &s) override
-  {
-    dealii::Vector<FP_Type> y = solve_y(t0, t1, s);
-    return A*s + B*y - c;
-  }
-
-  virtual dealii::FullMatrix<FP_Type>
-  diff(const dealii::Vector<FP_Type> &s) override
-  {
-    dealii::FullMatrix<FP_Type> Z = solve_Z(t0, t1, s);
-    return A + B*Z;
-  }
-
 private:
   TimeFunctor &f;
-  FP_Type t0, t1;
-  dealii::FullMatrix<FP_Type> A, B;
-  dealii::Vector<FP_Type> c;
 };
 
 class SF_External : public ShootingFunction
@@ -72,21 +45,19 @@ public:
   using ShootingFunction::ShootingFunction;
 
   virtual dealii::Vector<FP_Type>
-  solve_y(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) override
+  solve_y(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) override
   {
     ERK<DOPRI87> AdaptiveMethod(f, t0, s);
     FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
 
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-1, TOL, false);
+    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, false);
     return AdaptiveMethod.approx();
   }
 
   // For the choice of TOL in the adaptive method and constant Epsilon,
   // see Stoer, Num. Math. 2, pp.192.
   virtual dealii::FullMatrix<FP_Type>
-  solve_Z(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) override
+  solve_Z(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) override
   {
     dealii::FullMatrix<FP_Type> Z(s.size(), s.size());
     dealii::Vector<FP_Type> y = solve_y(t0, t1, s);
@@ -119,34 +90,27 @@ public:
 
 private:
   // ShootingFunction::f
-  // ShootingFunction::t0
-  // ShootingFunction::t1
-  // ShootingFunction::A
-  // ShootingFunction::B
-  // ShootingFunction::c
-  // ShootingFunction::TOL
 };
 
 // Assumes f is DivFunctor with AD support.
 class SF_Automatic : public ShootingFunction
 {
+public:
   using ShootingFunction::ShootingFunction;
 
   virtual dealii::Vector<FP_Type>
-  solve_y(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) override
+  solve_y(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) override
   {
     ERK<DOPRI87> AdaptiveMethod(f, t0, s);
     FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
 
     // Compute solution of IVP
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-1, TOL, false);
+    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, false);
     return AdaptiveMethod.approx();
   }
 
   virtual dealii::FullMatrix<FP_Type>
-  solve_Z(FP_Type t0, FP_Type t1,
-          const dealii::Vector<FP_Type> &s) override
+  solve_Z(FP_Type t0, FP_Type t1, const dealii::Vector<FP_Type> &s) override
   {
     TimeDivFunctor* f_ad = dynamic_cast<TimeDivFunctor*>(&f);
     if (f_ad == nullptr)
@@ -157,7 +121,7 @@ class SF_Automatic : public ShootingFunction
 
     // Compute IVP and variational equation simultaneously. (Step-size is
     // controlled only by the IVP.)
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-1, TOL, true);
+    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, true);
     return AdaptiveMethod.fund_matrix();
   }
 
@@ -165,10 +129,6 @@ private:
   // ShootingFunction::f
   // ShootingFunction::t0
   // ShootingFunction::t1
-  // ShootingFunction::A
-  // ShootingFunction::B
-  // ShootingFunction::c
-  // ShootingFunction::TOL
 };
 
 #endif // SHOOTING_H

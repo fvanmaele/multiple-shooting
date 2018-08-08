@@ -217,7 +217,7 @@ public:
       }
 
     if (timepoints.back() != t_lim)
-      std::cerr << "warning: time step outside interval boundary ("
+      std::cerr << "warning: time step outside interval end ("
                 << timepoints.back() << "; [" << t0 << ", " << t_lim << "])"
                 << std::endl;
   }

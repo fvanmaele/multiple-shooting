@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['newton',['Newton',['../classNewton.html',1,'']]]
+  ['linearbvp',['LinearBVP',['../classLinearBVP.html',1,'']]]
 ];
