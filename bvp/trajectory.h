@@ -22,8 +22,8 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
   while (t_i < b)
     {
       // Initial value of eta' = f(t, eta_i)
-      dealii::Vector<FP_Type> eta_i = (*eta)(t_i);
-      ERK<RK65> AdM(f, t_i, eta_i, eta);
+      VectorD2 eta_i = (*eta)(t_i);
+      ERK<DOPRI87> AdM(f, t_i, eta_i, eta);
 
       try
       {

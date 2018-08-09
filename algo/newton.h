@@ -2,6 +2,9 @@
 #define NEWTON_H
 
 #include <deal.II/lac/lapack_full_matrix.h>
+#include <deal.II/lac/lapack_templates.h>
+
+template class dealii::LAPACKFullMatrix<long double>;
 
 #include "../base/types.h"
 #include "../base/forward_ad.h"

@@ -61,4 +61,21 @@ operator<<(std::ostream &os, const std::vector<FP_Type> &v)
   return os;
 }
 
+dealii::Vector<FP_Type>
+init_vector(size_t dim, std::initializer_list<FP_Type> list)
+{
+  // Check range
+  assert(dim == list.size());
+
+  dealii::Vector<FP_Type> temp(dim);
+  size_t i = 0;
+
+  for (auto it = list.begin(); it != list.end(); it++)
+    {
+      temp(i) = *it;
+      i++;
+    }
+  return temp;
+}
+
 #endif // VECTOR_OPERATORS_H

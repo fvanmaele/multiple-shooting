@@ -2,12 +2,19 @@
 #define LAC_TYPES_H
 
 #include <deal.II/lac/vector.h>
+#include <deal.II/lac/vector.templates.h>
 #include <deal.II/lac/full_matrix.h>
+#include <deal.II/lac/full_matrix.templates.h>
 
 #include "../base/types.h"
 
 typedef dealii::Vector<FP_Type> VectorD2;
 typedef dealii::FullMatrix<FP_Type> MatrixD2;
+
+// Instantiations for extended precision types
+// https://www.dealii.org/9.0.0/doxygen/deal.II/Instantiations.html
+template class dealii::Vector<long double>;
+template class dealii::FullMatrix<long double>;
 
 class Curve
 {

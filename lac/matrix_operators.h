@@ -62,4 +62,29 @@ operator<<(std::ostream &os, const dealii::FullMatrix<FP_Type> &A)
   return os;
 }
 
+dealii::FullMatrix<FP_Type>
+init_matrix(size_t m, size_t n, std::initializer_list<FP_Type> list)
+{
+  // Check range
+  assert(list.size() == m*n);
+
+  dealii::FullMatrix<FP_Type> temp(m, n);
+  size_t i = 0;
+  size_t j = 0;
+
+  // Fill values row-by-row
+  for (auto it = list.begin(); it != list.end(); it++)
+    {
+      temp.set(i, j, *it);
+      j++;
+
+      if (j % m == 0)
+        {
+          i++;
+          j=0;
+        }
+    }
+  return temp;
+}
+
 #endif // MATRIX_OPERATORS_H

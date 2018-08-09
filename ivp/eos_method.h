@@ -33,9 +33,9 @@ public:
   // The exact solution may be specified as an optional argument
   // for comparison purposes.
   OneStepMethod(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0,
-             Curve *_u = nullptr)
+                Curve *_u = nullptr)
     :
-      f(_f), u(_u), t0(_t0), u0(_u0),
+      f(_f), u(_u), t0(_t0), u0(_u0), steps(0),
       timepoints(1, _t0), uapprox(1, _u0)
   {}
 
@@ -82,6 +82,7 @@ public:
   {
     timepoints.assign(1, t0);
     uapprox.assign(1, u0);
+    steps = 0;
   }
 
   void save_step(const FP_Type &t, const dealii::Vector<FP_Type> &u)
@@ -103,12 +104,10 @@ public:
   {
     // init input variables
     FP_Type t = t0;
-    FP_Type h_arg = h; // copy for step check
     dealii::Vector<FP_Type> y = u0;
 
     // init output variables
     reset();
-    steps = 0;
 
     while (t_lim - t > 0)
       { // Avoid rounding errors (Rem. 2.4.3)
@@ -131,12 +130,6 @@ public:
           if (y.l2_norm() >= C*(*u)(t).l2_norm())
             throw std::domain_error("global error too large");
       }
-
-    if (static_cast<FP_Type>(steps) != (t_lim - t0) / h_arg)
-      std::cerr << "warning: mismatch in step amount ("
-                << std::setprecision(15) << std::setw(15)
-                << (t_lim - t0) / h_arg << " to " << steps << ")"
-                << std::endl;
 
     if (timepoints.back() != t_lim)
       std::cerr << "warning: time step outside interval end ("

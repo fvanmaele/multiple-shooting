@@ -3,7 +3,11 @@
 #include <getopt.h>
 #include <thread>
 
+#include <deal.II/lac/block_vector.h>
+
 #include "base/types.h"
+#include "bvp/boundary.h"
+#include "bvp/methods.h"
 #include "bvp/shooting.h"
 #include "bvp/trajectory.h"
 #include "ivp/runge_kutta.h"
@@ -36,65 +40,62 @@ Vector RHS_ThomasFermi(typename Vector::value_type t, const Vector &u)
   return y;
 }
 
-void Solve_ThomasFermi(int n, bool adaptive)
+void Solve_ThomasFermi(int n_int, bool adaptive)
 {
   std_tWrapper f(RHS_ThomasFermi<VectorD2>, 2);
-  FP_Type a = 0;
-  FP_Type b = 5;
+  const FP_Type a = 0;
+  const FP_Type b = 5;
 
   // Linear separated BVP
-  std::vector<FP_Type> A = {1, 0, 0, 0};
-  std::vector<FP_Type> B = {0, 0, 1, 0};
-  std::vector<FP_Type> c = {1, 0};
+  const MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
+  const MatrixD2 B = init_matrix(2, 2, {0, 0, 1, 0});
+  const VectorD2 c = init_vector(2, {1, 0});
+  BC_Linear r(A, B, c);
 
   // Define approximate solution for BVP
   CurveTF* eta = new CurveTF;
   assert((*eta)(0)[0] == c[0]);
   assert((*eta)(5)[0] == c[1]);
 
-  // Compute starting trajectory
-  std::vector<FP_Type> x;
+  // Subdivide interval a = t0 < ... < t1 = b
+  std::vector<FP_Type> t;
+
   if (adaptive)
     // The TOL chosen here should match the initial step width
     // chosen for adaptive methods (1e-3)
-    x = trajectory(a, b, f, eta, 1e-3, 2, false);
+    t = trajectory(a, b, f, eta, 1e-3, 2, false);
   else
-    x = linspace(a, b, n+1);
+    t = linspace(a, b, n_int+1);
 
-  std::cout << "Amount of intervals: "
-            << x.size()-1 << std::endl;
+  assert(t.front() == a);
+  assert(t.back()  == b);
+
+  const size_t n = 2;
+  const size_t m = t.size();
+  std::cout << "Amount of intervals: " << m-1 << std::endl;
 
   // Starting values s(0)_1 ... s(0)_n
   std::vector<VectorD2> s0;
-  for (auto &c : x)
+
+  for (auto &c : t)
     s0.push_back((*eta)(c));
 
   // Plot trajectory
   std::ofstream output_file;
-  GnuPlot P("TF_trajectory.dat", output_file);
+  GnuPlot Dat1("TF_trajectory.dat", output_file);
 
-  for (size_t i = 0; i < x.size(); i++)
-    output_file << x.at(i) << "\t" << s0.at(i);
+  for (size_t i = 0; i < t.size(); i++)
+    output_file << t.at(i) << "\t" << s0.at(i);
+  Dat1.plot_with_lines(2, "linespoints");
 
-  P.plot_with_lines(2, "linespoints");
-
-  // Compute the n IVP's y(t; t_k, s_k)
-  SF_External S(f);
-  std::vector<VectorD2> y;
-  std::vector<VectorD2> s = s0;
-
-  for (size_t i = 0; i < x.size()-1; i++)
-    {
-      std::cout << x.at(i) << "\t" << x.at(i+1) << "\t" << s.at(i);
-      VectorD2 y_stage = S.solve_y(x.at(i), x.at(i+1), s.at(i));
-    }
-
+  // Begin multiple shooting method
   // ...
 }
 
 void usage()
 {
-  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>] [--adaptive]" << std::endl;
+  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>] [--adaptive]"
+            << std::endl;
   std::exit(1);
 }
 

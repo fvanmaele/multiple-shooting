@@ -10,8 +10,8 @@ class Euler : public OneStepMethod
   // base class constructors will be inherited.
   using OneStepMethod::OneStepMethod;
 
-  virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &y, FP_Type) override
+  virtual VectorD2
+  increment_function(FP_Type t, const VectorD2 &y) override
   {
     return f(t, y);
   }

@@ -8,7 +8,9 @@
 #include "../base/types.h"
 #include "../base/gnuplot.h"
 #include "../lac/lac_types.h"
-#include "../bvp/linear.h"
+#include "../bvp/boundary.h"
+#include "../bvp/methods.h"
+#include "../bvp/shooting.h"
 #include "../bvp/trajectory.h"
 
 namespace Test
@@ -49,7 +51,7 @@ namespace Test
   };
 
   template <typename DiffMethod>
-  void Stoer_Graph(LinearBVP<DiffMethod> &F, std::string filename)
+  void Stoer_Graph(SingleShooting<DiffMethod> &F, std::string filename)
   {
     VectorD2 s(2);
     s[0] = 4;
@@ -99,9 +101,10 @@ namespace Test
     FP_Type b = 1.0;
 
     // Linear separated BVP
-    std::vector<FP_Type> A = {1, 0, 0, 0};
-    std::vector<FP_Type> B = {0, 0, 1, 0};
-    std::vector<FP_Type> c = {4, 1};
+    MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
+    MatrixD2 B = init_matrix(2, 2, {0, 0, 1, 0});
+    VectorD2 c = init_vector(2, {4, 1});
+    BC_Linear r(A, B, c);
 
     // Initial values s0_1, s0_2 for solutions s1, s2
     std::vector<VectorD2> start;
@@ -117,7 +120,7 @@ namespace Test
 
     // Solve BVP (external differentation)
     std::cout << "Single shooting (Stoer, ext. diff.)" << std::endl;
-    LinearBVP<SF_External> F(rhs, a, b, A, B, c);
+    SingleShooting<SF_External> F(rhs, a, b, r);
     Newton N(F, 2);
 
     for (auto &s : start)
@@ -125,7 +128,7 @@ namespace Test
 
     // Solve BVP (automatic differentation)
     std::cout << "Single shooting (Stoer, aut. diff.)" << std::endl;
-    LinearBVP<SF_Automatic> F_ad(rhs_ad, a, b, A, B, c);
+    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
     Newton N_ad(F_ad, 2);
 
     for (auto &s : start)
@@ -182,18 +185,19 @@ namespace Test
     FP_Type b = 1.0;
 
     // Linear separated BVP
-    std::vector<FP_Type> A = {1, 0, 0, 0};
-    std::vector<FP_Type> B = {0, 0, 1, 0};
-    std::vector<FP_Type> c = {0, 1};
+    MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
+    MatrixD2 B = init_matrix(2, 2, {0, 0, 1, 0});
+    VectorD2 c = init_vector(2, {0, 1});
+    BC_Linear r(A, B, c);
 
     // Solve BVP (external differentation)
     std::cout << "Single shooting (Troesch, ext. diff.)" << std::endl;
-    LinearBVP<SF_External> F(rhs, a, b, A, B, c);
+    SingleShooting<SF_External> F(rhs, a, b, r);
     Newton N(F, 2);
 
     // Solve BVP (automatic differentation)
     std::cout << "Single shooting (Troesch, aut. diff.)" << std::endl;
-    LinearBVP<SF_Automatic> F_ad(rhs_ad, a, b, A, B, c);
+    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
     Newton N_ad(F_ad, 2);
 
     // Left solution

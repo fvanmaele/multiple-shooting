@@ -14,42 +14,41 @@ class ERK : public OneStepMethod
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, dealii::Vector<FP_Type> u0,
-      Curve *u = nullptr) :
+  ERK(TimeFunctor &f, FP_Type t0, VectorD2 u0, Curve *u = nullptr) :
     OneStepMethod(f, t0, u0, u)
   {
     ButcherTableau BTab;
 
-    A  = dealii::FullMatrix(BTab.n, BTab.n, BTab.A.data());
-    b1 = dealii::Vector<FP_Type>(BTab.b_high.begin(), BTab.b_high.end());
-    c  = dealii::Vector<FP_Type>(BTab.c.begin(), BTab.c.end());
+    A  = MatrixD2(BTab.n, BTab.n, BTab.A.data());
+    b1 = VectorD2(BTab.b_high.begin(), BTab.b_high.end());
+    c  = VectorD2(BTab.c.begin(), BTab.c.end());
     order = BTab.p;
 
     if (BTab.b_low.size())
       {
         embedded_method = true;
-        b2 = dealii::Vector<FP_Type>(BTab.b_low.begin(), BTab.b_low.end());
+        b2 = VectorD2(BTab.b_low.begin(), BTab.b_low.end());
         assert(b1.size() == b2.size());
       }
     else
       {
         embedded_method = false;
-        b2 = dealii::Vector<FP_Type>();
+        b2 = VectorD2();
       }
   }
 
-  dealii::Vector<FP_Type>
-  k_increment(FP_Type t, const dealii::Vector<FP_Type> &y,
-              FP_Type h, const dealii::Vector<FP_Type> &b)
+  VectorD2
+  k_increment(FP_Type t, const VectorD2 &y,
+              FP_Type h, const VectorD2 &b)
   {
     size_t s = b.size();
     size_t n = y.size();
-    std::vector<dealii::Vector<FP_Type> > k(s);
+    std::vector<VectorD2> k(s);
     k.at(0) = f(t, y);
 
     for (size_t i = 1; i < s; i++)
       {
-        dealii::Vector<FP_Type> g(y.size());
+        VectorD2 g(y.size());
 
         for (size_t j = 0; j < i; j++)
           g += A(i, j) * k.at(j);
@@ -57,7 +56,7 @@ public:
         k.at(i) = f(t + h*c[i], y + h*g);
       }
 
-    dealii::Vector<FP_Type> u_inc(n);
+    VectorD2 u_inc(n);
 
     for (size_t i = 0; i < s; i++)
       u_inc += b(i) * k.at(i);
@@ -66,11 +65,10 @@ public:
   }
 
 
-  std::pair<dealii::Vector<FP_Type>, dealii::FullMatrix<FP_Type> >
-  k_variational(FP_Type t, const dealii::Vector<FP_Type> &y,
-                FP_Type h, const dealii::Vector<FP_Type> &b,
-                const dealii::FullMatrix<FP_Type> &Y,
-                TimeDivFunctor *F)
+  std::pair<VectorD2, MatrixD2>
+  k_variational(FP_Type t, const VectorD2 &y,
+                FP_Type h, const VectorD2 &b,
+                const MatrixD2 &Y, TimeDivFunctor *F)
   {
     size_t s = b.size();
     size_t n = y.size();
@@ -78,17 +76,17 @@ public:
     assert(Y.n() == n);
 
     // Increments k_1, ..., k_s for solution y(t)
-    std::vector<dealii::Vector<FP_Type> > k(s);
+    std::vector<VectorD2> k(s);
     k.at(0) = (*F)(t, y);
 
     // Increments K_1, ..., K_s for solution Y(t)
-    std::vector<dealii::FullMatrix<FP_Type> > K(s);
+    std::vector<MatrixD2> K(s);
     K.at(0) = (*F).diff(t, y) * Y;
 
     for (size_t i = 1; i < s; i++)
       {
-        dealii::Vector<FP_Type> g(n);
-        dealii::FullMatrix<FP_Type> G(n);
+        VectorD2 g(n);
+        MatrixD2 G(n);
 
         for (size_t j = 0; j < i; j++)
           {
@@ -100,8 +98,8 @@ public:
         K.at(i) = (*F).diff(t + h*c[i], y + h*g) * (Y + h*G);
       }
 
-    dealii::Vector<FP_Type> inc_u(n);
-    dealii::FullMatrix<FP_Type> inc_Y(n, n);
+    VectorD2 inc_u(n);
+    MatrixD2 inc_Y(n, n);
 
     for (size_t i = 0; i < s; i++)
       {
@@ -111,8 +109,8 @@ public:
     return std::make_pair(inc_u, inc_Y);
   }
 
-  virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &y,
+  virtual VectorD2
+  increment_function(FP_Type t, const VectorD2 &y,
                      FP_Type h) override
   {
     // Explicit method of higher order
@@ -124,8 +122,7 @@ public:
     return misfires;
   }
 
-  dealii::FullMatrix<FP_Type>
-  fund_matrix() const
+  MatrixD2 fund_matrix() const
   {
     return Yn;
   }
@@ -143,19 +140,21 @@ public:
     if (fundamental_matrix && f_diff == nullptr)
       throw std::invalid_argument("right-hand side is not differentiable");
 
+    if (t + h0 > t_lim)
+      throw std::invalid_argument("initial step width exceeds interval");
+
     // Dynamic allocation, declare outside loop
-    dealii::Vector<FP_Type> y = u0;
-    dealii::Vector<FP_Type> inc_y1(n);
-    dealii::Vector<FP_Type> inc_y2(n);
+    VectorD2 y = u0;
+    VectorD2 inc_y1(n);
+    VectorD2 inc_y2(n);
 
     // Init output variables
     OneStepMethod::reset();
-    steps = 0;
     misfires = 0;
 
     // Initial value for fundamental matrix Yn(t; t0)
     Yn = dealii::IdentityMatrix(n);
-    dealii::FullMatrix<FP_Type> inc_Yn(n, n);
+    MatrixD2 inc_Yn(n, n);
 
     // Algorithm 2.4.2
     // The step-size is controlled only by the IVP, not the variational equation,
@@ -240,12 +239,12 @@ private:
   // OneStepMethod::uapprox;
 
   // Butcher tableau
-  dealii::FullMatrix<FP_Type> A;
-  dealii::Vector<FP_Type> b1, b2, c;
+  MatrixD2 A;
+  VectorD2 b1, b2, c;
   size_t order;
 
   // Variational equation
-  dealii::FullMatrix<FP_Type> Yn;
+  MatrixD2 Yn;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

@@ -25,14 +25,15 @@ namespace Test
               << "== Exercise Sheet 3 =="
               << std::endl;
     Test::Sheet3();
-    std::cout << std::endl
-              << "== Automatic Differentation =="
-              << std::endl;
+    std::cout << std::endl;
   }
 
   void aut_diff()
   {
+    std::cout << "== Automatic Differentation =="
+              << std::endl;
     Test::FAD();
+    std::cout << std::endl;
   }
 
   void linear_bvp()
@@ -68,6 +69,7 @@ namespace Test
               << "== Variational equation, problem 4 =="
               << std::endl;
     Test::Var4();
+    std::cout << std::endl;
   }
 }
 
