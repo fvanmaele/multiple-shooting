@@ -11,7 +11,7 @@ class Euler : public OneStepMethod
   using OneStepMethod::OneStepMethod;
 
   virtual VectorD2
-  increment_function(FP_Type t, const VectorD2 &y) override
+  increment_function(FP_Type t, const VectorD2 &y, FP_Type h) override
   {
     return f(t, y);
   }

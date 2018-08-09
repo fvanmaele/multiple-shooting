@@ -42,22 +42,26 @@ Vector RHS_ThomasFermi(typename Vector::value_type t, const Vector &u)
 
 void Solve_ThomasFermi(int n_int, bool adaptive)
 {
-  std_tWrapper f(RHS_ThomasFermi<VectorD2>, 2);
+  // Time interval
   const FP_Type a = 0;
   const FP_Type b = 5;
 
-  // Linear separated BVP
+  // RHS of ODE
+  const size_t n = 2;
+  std_tWrapper f(RHS_ThomasFermi<VectorD2>, n);
+
+  // Boundary conditions (linear separated BVP)
   const MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
   const MatrixD2 B = init_matrix(2, 2, {0, 0, 1, 0});
   const VectorD2 c = init_vector(2, {1, 0});
   BC_Linear r(A, B, c);
 
-  // Define approximate solution for BVP
+  // Approximate solution for BVP
   CurveTF* eta = new CurveTF;
   assert((*eta)(0)[0] == c[0]);
   assert((*eta)(5)[0] == c[1]);
 
-  // Subdivide interval a = t0 < ... < t1 = b
+  // 1) Subdivide interval a = t0 < ... < t1 = b
   std::vector<FP_Type> t;
 
   if (adaptive)
@@ -67,29 +71,31 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   else
     t = linspace(a, b, n_int+1);
 
-  assert(t.front() == a);
-  assert(t.back()  == b);
+  if (!(t.front() == a && t.back() == b))
+    throw std::domain_error("subdivision does not match interval boundaries");
 
-  const size_t n = 2;
   const size_t m = t.size();
   std::cout << "Amount of intervals: " << m-1 << std::endl;
 
-  // Starting values s(0)_1 ... s(0)_n
-  std::vector<VectorD2> s0;
+  // 2) Starting values s(0)_1 ... s(0)_n
+  dealii::BlockVector<FP_Type> s0(m, n);
 
-  for (auto &c : t)
-    s0.push_back((*eta)(c));
+  for (size_t i = 0; i < t.size(); i++)
+    s0.block(i) = (*eta)(t.at(i));
+  s0.print(std::cout);
 
-  // Plot trajectory
+  // a) Plot trajectory
   std::ofstream output_file;
   GnuPlot Dat1("TF_trajectory.dat", output_file);
 
   for (size_t i = 0; i < t.size(); i++)
-    output_file << t.at(i) << "\t" << s0.at(i);
+    output_file << t.at(i) << "\t" << s0.block(i);
   Dat1.plot_with_lines(2, "linespoints");
 
-  // Begin multiple shooting method
-  // ...
+  // 3) Begin multiple shooting method
+  MultipleShooting<SF_External> MS(f, t, r);
+//  Newton N(F, ); // dimension?
+//  N.iterate(s0);
 }
 
 void usage()

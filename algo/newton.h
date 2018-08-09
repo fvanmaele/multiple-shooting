@@ -69,11 +69,10 @@ public:
       return x - d;
   }
 
+  // This method assumes f is differentiable, i.e. includes a diff() method.
   dealii::Vector<FP_Type>
   iterate(dealii::Vector<FP_Type> x, size_t step_limit = 25)
   {
-    static_assert(std::is_base_of<DivFunctor, Callable>::value,
-                  "function is not differentiable");
     steps = 0;
     ssc_steps = 0;
 
@@ -103,8 +102,6 @@ public:
   iterate_broyden(dealii::Vector<FP_Type> x, size_t step_limit = 50)
   {
     std::cerr << "Using Broyden method" << std::endl;
-    static_assert(std::is_base_of<DivFunctor, Callable>::value,
-                  "function is not differentiable");
     steps = 0;
     ssc_steps = 0;
 
@@ -129,7 +126,7 @@ public:
             dealii::FullMatrix<FP_Type> V(p.size(), p.size());
             V.outer_product(q - J_prev * p, p);
 
-            // For larger J, use Sherman-Morrison formula to update J^{-1} directly
+            // XXX: for large J, use Sherman-Morrison formula to update J^{-1} directly
             J = J_prev + 1. / p.norm_sqr() * V;
             x = step(J, x);
           }
