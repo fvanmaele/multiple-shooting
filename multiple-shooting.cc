@@ -93,9 +93,9 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   Dat1.plot_with_lines(2, "linespoints");
 
   // 3) Begin multiple shooting method
-  MultipleShooting<SF_External> MS(f, t, r);
-  Newton N(MS, m*n);
-//  N.iterate(s0);
+  MultipleShooting<SF_External> F(f, t, r);
+  Newton N(F, m*n);
+  N.iterate(s0);
 }
 
 void usage()

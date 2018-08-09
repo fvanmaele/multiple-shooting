@@ -26,6 +26,7 @@ namespace Test
     s[0] = 0.5;
     s[1] = 0.5;
 
+    // F: R^2 -> R^2
     FAD_cWrapper F(AutFAD, 2);
     Newton N(F, 2);
 

@@ -59,7 +59,8 @@ public:
   operator()(const dealii::BlockVector<FP_Type> &s)
   {
     size_t m = t.size();
-    size_t n = s.block(0).size(); // assumes all blocks have the same dimension
+    // XXX: assumes all blocks have the same dimension
+    size_t n = s.block(0).size();
     DiffMethod M(f);
 
     // Construct F(s)
@@ -78,7 +79,8 @@ public:
   diff(const dealii::BlockVector<FP_Type> &s)
   {
     size_t m = t.size();
-    size_t n = s.block(0).size(); // assumes all blocks have the same dimension
+    // XXX: assumes all blocks have the same dimension
+    size_t n = s.block(0).size();
     DiffMethod M(f);
 
     // XXX: use TrilinosWrappers::BlockSparseMatrix?

@@ -5,10 +5,7 @@
 #include "../base/forward_ad.h"
 #include "../lac/lac_types.h"
 #include "../lac/matrix_operators.h"
-#include "../lac/lapack_operators.h"
 #include "../lac/vector_operators.h"
-
-typedef dealii::LAPACKFullMatrix<FP_Type> MatrixLA;
 
 // Solve nonlinear root finding problem:
 //    f(x) = 0,   f: R^d -> R^d
@@ -21,40 +18,39 @@ public:
   Newton(Callable _f, size_t _dim, FP_Type _TOL = 1e-6,
          bool _ssc = true, size_t _ssc_lim = 20)
     :
-      f(_f), dim(_dim), y(_dim), y_norm(-1), TOL(_TOL),
+      f(_f), dim(_dim), y_norm(-1), TOL(_TOL),
       steps(0), ssc_steps(0), ssc_lim(_ssc_lim), ssc(_ssc)
   {}
 
   // The Jacobian J is taken as argument to allow using
   // this function for both Newton and quasi-Newton methods.
-  void step(MatrixLA &J, VectorD2 &x)
+  void step(MatrixD2 &J, VectorD2 &x)
   {
     assert(x.size() == dim);
-    y = f(x);
+    VectorD2 y = f(x);
 
     assert(y.size() == dim);
     y_norm = y.l2_norm();
 
     // Solve the linear system in-place.
-    J.compute_lu_factorization();
-    VectorD2 d(y); // copy for step-size-control
-    J.solve(d);
+    J.gauss_jordan();
+    VectorD2 d = J * y;
 
     if (ssc)
-      {
-        // Candidate for next step x_{k+1}
+      { // Candidate for next step x_{k+1}
         VectorD2 x_next(x.size());
 
         // j ist not guaranteed to be bounded (see Remark 4.2.4)
         for (size_t j = 0; j < ssc_lim; j++)
           {
-            x_next = x - std::pow(0.5, j)*d;
+            x_next = x - std::pow(0.5, j) * d;
 
             if (f(x_next).l2_norm() < y_norm)
               break;
             else
               ssc_steps++;
           }
+
         steps++;
         x = x_next;
       }
@@ -71,11 +67,10 @@ public:
     steps = 0;
     ssc_steps = 0;
     VectorD2 x = x0;
+    MatrixD2 J(dim, dim);
 
     for (size_t k = 0; k < step_limit; k++)
       {
-        MatrixLA J(dim, dim);
-
         // Perform step of (quasi-)Newton method
         J = f.diff(x);
         step(J, x);
@@ -86,11 +81,16 @@ public:
               throw std::invalid_argument("norm must be positive");
 
             if (ssc)
-              std::cout << "Solution of F: (" << steps << " steps, "
-                        << ssc_steps << " ssc) " << x;
+              {
+                std::cout << "Solution of F: ("  << steps << " steps, "
+                          << ssc_steps << " ssc) ";
+                x.print(std::cout);
+              }
             else
-              std::cout << "Solution of F: (" << steps << " steps) " << x;
-
+              {
+                std::cout << "Solution of F: (" << steps << " steps) ";
+                x.print(std::cout);
+              }
             return x;
           }
       }
@@ -101,14 +101,12 @@ public:
 
   VectorD2 iterate_broyden(const VectorD2 &x0, size_t step_limit = 50)
   {
-    steps = 0;
-    ssc_steps = 0;
     VectorD2 x = x0;
+    MatrixD2 J = f.diff(x);
+    steps = 1;
+    ssc_steps = 0;
 
-    MatrixLA J = f.diff(x);
-    J = f.diff(x);
-
-    MatrixLA J_prev(J);
+    MatrixD2 J_prev(J);
     VectorD2 x_prev(x);
     step(J, x);
 
@@ -125,11 +123,10 @@ public:
             // Rank-1 updates
             VectorD2 p = x - x_prev;
             VectorD2 q = f(x) - f(x_prev);
-
             MatrixD2 V(p.size(), p.size());
-            V.outer_product(q - J_prev * p, p);
 
             // XXX: for large J, use Sherman-Morrison formula to update J^{-1} directly
+            V.outer_product(q - J_prev * p, p);
             J = J_prev + 1. / p.norm_sqr() * V;
             step(J, x);
           }
@@ -156,8 +153,6 @@ public:
 private:
   Callable f;
   size_t dim;
-
-  VectorD2 y;
   FP_Type y_norm;
   FP_Type TOL;
 

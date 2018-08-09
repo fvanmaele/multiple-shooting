@@ -190,22 +190,21 @@ namespace Test
     VectorD2 c = init_vector(2, {0, 1});
     BC_Linear r(A, B, c);
 
-    // Solve BVP (external differentation)
-    std::cout << "Single shooting (Troesch, ext. diff.)" << std::endl;
-    SingleShooting<SF_External> F(rhs, a, b, r);
-    Newton N(F, 2);
-
-    // Solve BVP (automatic differentation)
-    std::cout << "Single shooting (Troesch, aut. diff.)" << std::endl;
-    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
-    Newton N_ad(F_ad, 2);
-
     // Left solution
     VectorD2 s(2);
     s[0] = 0;
     s[1] = 0.05;
 
+    // Solve BVP (external differentation)
+    std::cout << "Single shooting (Troesch, ext. diff.)" << std::endl;
+    SingleShooting<SF_External> F(rhs, a, b, r);
+    Newton N(F, 2);
     N.iterate(s);
+
+    // Solve BVP (automatic differentation)
+    std::cout << "Single shooting (Troesch, aut. diff.)" << std::endl;
+    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
+    Newton N_ad(F_ad, 2);
     N_ad.iterate(s);
 
     // Find subintervals for multiple shooting method
