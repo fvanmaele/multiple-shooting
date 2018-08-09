@@ -26,10 +26,10 @@ typedef std::vector<NumberAD> VectorAD;
 //
 // supporting evaluation and automatic differentation.
 template <typename Callable>
-class FAD_tWrapper : public TimeDivFunctor
+class FAD_Setup
 {
 public:
-  FAD_tWrapper(Callable _f, size_t _dim) :
+  FAD_Setup(Callable _f, size_t _dim) :
     f(_f), dim(_dim), f_init(false), FAD_t(0), FAD_u(_dim), FAD_y(_dim)
   {}
 
@@ -64,13 +64,6 @@ public:
     return y;
   }
 
-  virtual VectorD2
-  operator()(FP_Type t, const VectorD2 &u) override
-  {
-    init(t, u);
-    return value();
-  }
-
   // Evaluate partial derivatives with respect to u
   MatrixD2 diff() const
   {
@@ -89,13 +82,6 @@ public:
     return J;
   }
 
-  virtual MatrixD2
-  diff(FP_Type t, const VectorD2 &u) override
-  {
-    init(t, u);
-    return diff();
-  }
-
 private:
   Callable f;
   size_t dim;
@@ -104,6 +90,34 @@ private:
   NumberAD FAD_t;
   VectorAD FAD_u;
   VectorAD FAD_y;
+};
+
+// Class which varies t in f(t, u).
+template <typename Callable>
+class FAD_tWrapper : public TimeDivFunctor
+{
+public:
+  FAD_tWrapper(Callable f, size_t dim) :
+    F(f, dim)
+  {}
+
+  virtual VectorD2
+  operator()(FP_Type t, const VectorD2 &u) override
+  {
+    F.init(t, u);
+    return F.value();
+  }
+
+  virtual MatrixD2
+  diff(FP_Type t, const VectorD2 &u) override
+  {
+    F.init(t, u);
+    return F.diff();
+  }
+
+private:
+  FAD_Setup<Callable> F;
+  FP_Type t;
 };
 
 // Class which fixes t in f(t, u).
@@ -130,7 +144,7 @@ public:
   }
 
 private:
-  FAD_tWrapper<Callable> F;
+  FAD_Setup<Callable> F;
   FP_Type t;
 };
 

@@ -94,7 +94,7 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
 
   // 3) Begin multiple shooting method
   MultipleShooting<SF_External> MS(f, t, r);
-//  Newton N(F, ); // dimension?
+  Newton N(MS, m*n);
 //  N.iterate(s0);
 }
 

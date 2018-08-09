@@ -27,10 +27,11 @@ namespace Test
     u[2] = 3;
 
     // Define wrapper object
-    FAD_tWrapper F(FAD_3dim, 3);
+    FAD_Setup F(FAD_3dim, 3);
 
     // Initialize templates and evaluate function
-    VectorD2 y = F(t, u);
+    F.init(t, u);
+    VectorD2 y = F.value();
     std::cout << y << std::endl;
 
     // Evaluate Jacobian
