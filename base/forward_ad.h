@@ -21,110 +21,6 @@ typedef Sacado::Fad::DFad<FP_Type> NumberAD;
 // https://github.com/dealii/dealii/issues/6940
 typedef std::vector<NumberAD> VectorAD;
 
-// Helper functions
-void fad_differentiate(const std::vector<NumberAD> &FAD_y,
-                       dealii::FullMatrix<FP_Type> &J)
-{
-  size_t dim = FAD_y.size();
-
-  for (size_t i = 0; i < dim; i++)
-    if (FAD_y.at(i).hasFastAccess())
-      for (size_t j = 0; j < dim; j++)
-        J.set(i, j, FAD_y.at(i).fastAccessDx(j));
-    else
-      for (size_t j = 0; j < dim; j++)
-        J.set(i, j, FAD_y.at(i).dx(j));
-}
-
-void fad_evaluate(const std::vector<NumberAD> &FAD_y,
-                  dealii::Vector<FP_Type> &y)
-{
-  for (size_t i = 0; i < FAD_y.size(); i++)
-    y(i) = FAD_y.at(i).val();
-}
-
-void fad_set_vars(std::vector<NumberAD> &FAD_u,
-                  const dealii::Vector<FP_Type> &u)
-{
-  size_t dim = FAD_u.size();
-
-  for (size_t i = 0; i < dim; i++)
-    {
-      FAD_u.at(i) = u[i];
-      FAD_u.at(i).diff(i, dim);
-    }
-}
-
-// Class representing the function
-//    f: R^d -> R^d
-//
-// supporting evaluation and automatic differentation.
-template <typename Callable>
-class FAD_cWrapper : public DivFunctor
-{
-public:
-  FAD_cWrapper(Callable _f, size_t _dim) :
-    f(_f), dim(_dim), FAD_u(_dim), FAD_y(_dim)
-  {}
-
-  // Instantiate AD template classes and functions
-  void init(const dealii::Vector<FP_Type> &u)
-  {
-    assert(u.size() == dim);
-
-    // Analytic derivative with respect to u
-    fad_set_vars(FAD_u, u);
-
-    FAD_y = f(FAD_u);
-    FAD_initialized = true;
-  }
-
-  // Evaluate function
-  dealii::Vector<FP_Type>
-  value() const
-  {
-    if (!FAD_initialized)
-      throw std::invalid_argument("FAD must be initialized");
-    dealii::Vector<FP_Type> y(dim);
-
-    fad_evaluate(FAD_y, y);
-    return y;
-  }
-
-  virtual dealii::Vector<FP_Type>
-  operator()(const dealii::Vector<FP_Type> &u) override
-  {
-    init(u);
-    return value();
-  }
-
-  // Evaluate partial derivatives with respect to u
-  dealii::FullMatrix<FP_Type>
-  diff() const
-  {
-    if (!FAD_initialized)
-      throw std::invalid_argument("FAD must be initialized");
-    dealii::FullMatrix<FP_Type> J(dim, dim);
-
-    fad_differentiate(FAD_y, J);
-    return J;
-  }
-
-  virtual dealii::FullMatrix<FP_Type>
-  diff(const dealii::Vector<FP_Type> &u) override
-  {
-    init(u);
-    return diff();
-  }
-
-private:
-  Callable f;
-  size_t dim;
-  std::vector<NumberAD> FAD_u;
-  std::vector<NumberAD> FAD_y;
-  bool FAD_initialized;
-};
-
 // Class representing the function
 //    f: I x R^d -> R^d
 //
@@ -134,10 +30,10 @@ class FAD_tWrapper : public TimeDivFunctor
 {
 public:
   FAD_tWrapper(Callable _f, size_t _dim) :
-    f(_f), FAD_t(0), dim(_dim), FAD_u(_dim), FAD_y(_dim)
+    f(_f), dim(_dim), f_init(false), FAD_t(0), FAD_u(_dim), FAD_y(_dim)
   {}
 
-  void init(FP_Type t, const dealii::Vector<FP_Type> &u)
+  void init(FP_Type t, const VectorD2 &u)
   {
     assert(u.size() == dim);
 
@@ -145,45 +41,56 @@ public:
     FAD_t = t;
 
     // Analytic derivative with respect to u
-    fad_set_vars(FAD_u, u);
+    for (size_t i = 0; i < dim; i++)
+      {
+        FAD_u.at(i) = u[i];
+        FAD_u.at(i).diff(i, dim);
+      }
 
     FAD_y = f(FAD_t, FAD_u);
-    FAD_initialized = true;
+    f_init = true;
   }
 
   // Evaluate function
-  dealii::Vector<FP_Type>
-  value() const
+  VectorD2 value() const
   {
-    if (!FAD_initialized)
+    if (!f_init)
       throw std::invalid_argument("FAD must be initialized");
-    dealii::Vector<FP_Type> y(dim);
+    VectorD2 y(dim);
 
-    fad_evaluate(FAD_y, y);
+    for (size_t i = 0; i < FAD_y.size(); i++)
+      y(i) = FAD_y.at(i).val();
+
     return y;
   }
 
-  virtual dealii::Vector<FP_Type>
-  operator()(FP_Type t, const dealii::Vector<FP_Type> &u) override
+  virtual VectorD2
+  operator()(FP_Type t, const VectorD2 &u) override
   {
     init(t, u);
     return value();
   }
 
   // Evaluate partial derivatives with respect to u
-  dealii::FullMatrix<FP_Type>
-  diff() const
+  MatrixD2 diff() const
   {
-    if (!FAD_initialized)
+    if (!f_init)
       throw std::invalid_argument("FAD must be initialized");
-    dealii::FullMatrix<FP_Type> J(dim, dim);
+    MatrixD2 J(dim, dim);
 
-    fad_differentiate(FAD_y, J);
+    for (size_t i = 0; i < dim; i++)
+      if (FAD_y.at(i).hasFastAccess())
+        for (size_t j = 0; j < dim; j++)
+          J.set(i, j, FAD_y.at(i).fastAccessDx(j));
+      else
+        for (size_t j = 0; j < dim; j++)
+          J.set(i, j, FAD_y.at(i).dx(j));
+
     return J;
   }
 
-  virtual dealii::FullMatrix<FP_Type>
-  diff(FP_Type t, const dealii::Vector<FP_Type> &u) override
+  virtual MatrixD2
+  diff(FP_Type t, const VectorD2 &u) override
   {
     init(t, u);
     return diff();
@@ -191,11 +98,40 @@ public:
 
 private:
   Callable f;
-  NumberAD FAD_t;
   size_t dim;
-  std::vector<NumberAD> FAD_u;
-  std::vector<NumberAD> FAD_y;
-  bool FAD_initialized;
+  bool f_init;
+
+  NumberAD FAD_t;
+  VectorAD FAD_u;
+  VectorAD FAD_y;
+};
+
+// Class which fixes t in f(t, u).
+template <typename Callable>
+class FAD_cWrapper : public DivFunctor
+{
+public:
+  FAD_cWrapper(Callable f, size_t dim, FP_Type _t = 0) :
+    F(f, dim), t(_t)
+  {}
+
+  virtual VectorD2
+  operator()(const VectorD2 &u) override
+  {
+    F.init(t, u);
+    return F.value();
+  }
+
+  virtual MatrixD2
+  diff(const VectorD2 &u) override
+  {
+    F.init(t, u);
+    return F.diff();
+  }
+
+private:
+  FAD_tWrapper<Callable> F;
+  FP_Type t;
 };
 
 #endif // FORWARD_AD_H

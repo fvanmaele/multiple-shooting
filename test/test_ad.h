@@ -8,7 +8,7 @@
 namespace Test
 {
   // f: R^3 -> R^3,  n = m = 3
-  VectorAD FAD_3dim(const VectorAD &u)
+  VectorAD FAD_3dim(NumberAD t, const VectorAD &u)
   {
     VectorAD y(3);
     y[0] = std::pow(u[0], 3) * std::sin(u[1]);
@@ -20,17 +20,17 @@ namespace Test
 
   void FAD()
   {
+    FP_Type t = 0;
     VectorD2 u(3);
     u[0] = 1;
     u[1] = 2;
     u[2] = 3;
 
     // Define wrapper object
-    FAD_cWrapper F(FAD_3dim, 3);
+    FAD_tWrapper F(FAD_3dim, 3);
 
     // Initialize templates and evaluate function
-    F.init(u);
-    VectorD2 y = F.value();
+    VectorD2 y = F(t, u);
     std::cout << y << std::endl;
 
     // Evaluate Jacobian
