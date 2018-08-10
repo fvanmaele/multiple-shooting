@@ -1,7 +1,7 @@
 <map id="Functor" name="Functor">
-<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="164,56,251,83"/>
-<area shape="rect" id="node6" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="120,107,295,133"/>
-<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="355,5,537,32"/>
-<area shape="rect" id="node4" href="$classMultipleShooting.html" title="MultipleShooting\&lt; DiffMethod \&gt;" alt="" coords="343,56,549,83"/>
-<area shape="rect" id="node5" href="$classSingleShooting.html" title="SingleShooting\&lt; DiffMethod \&gt;" alt="" coords="347,107,545,133"/>
+<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="228,80,315,107"/>
+<area shape="rect" id="node6" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="339,80,513,107"/>
+<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="5,155,188,181"/>
+<area shape="rect" id="node4" href="$classMultipleShooting.html" title="MultipleShooting" alt="" coords="212,155,331,181"/>
+<area shape="rect" id="node5" href="$classSingleShooting.html" title="SingleShooting" alt="" coords="355,155,465,181"/>
 </map>

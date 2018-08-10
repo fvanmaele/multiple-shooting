@@ -73,16 +73,19 @@ Inheritance diagram for ShootingFunction:</div>
 <div class="dyncontent">
 <div class="center"><img src="classShootingFunction__inherit__graph.png" border="0" usemap="#ShootingFunction_inherit__map" alt="Inheritance graph"/></div>
 <map name="ShootingFunction_inherit__map" id="ShootingFunction_inherit__map">
-<area shape="rect" id="node2" href="classSF__Automatic.html" title="SF_Automatic" alt="" coords="5,80,111,107"/>
-<area shape="rect" id="node3" href="classSF__External.html" title="SF_External" alt="" coords="135,80,229,107"/>
+<area shape="rect" id="node2" href="classSF__Automatic.html" title="SF_Automatic\&lt; M, M\l_Var \&gt;" alt="" coords="5,80,152,121"/>
+<area shape="rect" id="node3" href="classSF__External.html" title="SF_External\&lt; M \&gt;" alt="" coords="177,87,306,114"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae9f933dcdb1ad7b8bdb753483d3ef206"><td class="memItemLeft" align="right" valign="top"><a id="ae9f933dcdb1ad7b8bdb753483d3ef206"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ShootingFunction</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, bool e=true, FP_Type _h0=1e-1, FP_Type _TOL=1e-4)</td></tr>
-<tr class="separator:ae9f933dcdb1ad7b8bdb753483d3ef206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84f50a64e417a35a9a9c3dc561fbb9a9"><td class="memItemLeft" align="right" valign="top"><a id="a84f50a64e417a35a9a9c3dc561fbb9a9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ShootingFunction</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, bool _ssc=true, FP_Type _h0=1e-1, FP_Type _TOL=1e-4)</td></tr>
+<tr class="separator:a84f50a64e417a35a9a9c3dc561fbb9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39e6d5052e9d73ca3f5d4986752525aa"><td class="memItemLeft" align="right" valign="top"><a id="a39e6d5052e9d73ca3f5d4986752525aa"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_dim</b> () const</td></tr>
+<tr class="separator:a39e6d5052e9d73ca3f5d4986752525aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb29074b32316fdd368d71a775983f81"><td class="memItemLeft" align="right" valign="top"><a id="acb29074b32316fdd368d71a775983f81"></a>
 virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>solve_y</b> (FP_Type t0, FP_Type t1, const VectorD2 &amp;s)=0</td></tr>
 <tr class="separator:acb29074b32316fdd368d71a775983f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -92,15 +95,14 @@ virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight"
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a93dbf39ac4cbbc98d7d42b86d98179eb"><td class="memItemLeft" align="right" valign="top"><a id="a93dbf39ac4cbbc98d7d42b86d98179eb"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SF_External</b></td></tr>
-<tr class="separator:a93dbf39ac4cbbc98d7d42b86d98179eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9857bb910ee9206e4888bdc358f0ecb"><td class="memItemLeft" align="right" valign="top"><a id="ab9857bb910ee9206e4888bdc358f0ecb"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SF_Automatic</b></td></tr>
-<tr class="separator:ab9857bb910ee9206e4888bdc358f0ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf7e9fe888f96c8f5b3243c0848c0fcd"><td class="memItemLeft" align="right" valign="top"><a id="acf7e9fe888f96c8f5b3243c0848c0fcd"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SF_Manual</b></td></tr>
-<tr class="separator:acf7e9fe888f96c8f5b3243c0848c0fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2049a85c938706b17638057b5ead41f5"><td class="memTemplParams" colspan="2"><a id="a2049a85c938706b17638057b5ead41f5"></a>
+template&lt;typename M &gt; </td></tr>
+<tr class="memitem:a2049a85c938706b17638057b5ead41f5"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>SF_External</b></td></tr>
+<tr class="separator:a2049a85c938706b17638057b5ead41f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6140f660d0ec9a35ac0517afe096cc12"><td class="memTemplParams" colspan="2"><a id="a6140f660d0ec9a35ac0517afe096cc12"></a>
+template&lt;typename M , typename N &gt; </td></tr>
+<tr class="memitem:a6140f660d0ec9a35ac0517afe096cc12"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>SF_Automatic</b></td></tr>
+<tr class="separator:a6140f660d0ec9a35ac0517afe096cc12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>bvp/<a class="el" href="shooting_8h_source.html">shooting.h</a></li>
