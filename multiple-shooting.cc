@@ -3,8 +3,6 @@
 #include <getopt.h>
 #include <thread>
 
-#include <deal.II/lac/block_vector.h>
-
 #include "base/types.h"
 #include "bvp/boundary.h"
 #include "bvp/methods.h"
@@ -13,8 +11,7 @@
 #include "ivp/runge_kutta.h"
 #include "test/run_tests.h"
 
-static int n_intervals = 20;
-static bool adaptive_intervals = false;
+static int  n_intervals = 20;
 static bool run_tests = false;
 
 class CurveTF : public Curve
@@ -42,44 +39,48 @@ Vector RHS_ThomasFermi(typename Vector::value_type t, const Vector &u)
   return y;
 }
 
-void Solve_ThomasFermi(int n_int, bool adaptive)
+void Solve_ThomasFermi(int n_int)
 {
-  // Time interval
+  // -------------------------------------------
+  // 0) Linear separated BVP
   const FP_Type a = 0;
   const FP_Type b = 5;
 
-  // RHS of ODE
-  const size_t dim = 2;
-  FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
-
-  // Boundary conditions (linear separated BVP)
+  // Boundary conditions
   const MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
   const MatrixD2 B = init_matrix(2, 2, {0, 0, 1, 0});
   const VectorD2 c = init_vector(2, {1, 0});
   BC_Linear r(A, B, c);
 
-  // Approximate solution for BVP
+  // Approximate solution (starting trajectory)
   CurveTF* eta = new CurveTF(2);
   assert((*eta)(0)[0] == c[0]);
-//  assert((*eta)(5)[0] == c[1]);
+  assert((*eta)(5)[0] == c[1]);
 
+  // RHS of ODE
+  const size_t dim = eta->n_dim();
+  FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
+
+
+  // -------------------------------------------
   // 1) Subdivide interval a = t0 < ... < t1 = b
   std::vector<FP_Type> t;
 
-  if (adaptive)
-    // The TOL chosen here should match the initial step width
-    // chosen for adaptive methods (1e-3)
-    t = trajectory(a, b, f, eta, 1.1, false, 1e-2);
-  else
-    t = linspace(a, b, n_int+1);
+  // a) Find initial subdivision based on starting trajectory
+  t = trajectory(a, b, f, eta, 1.1, false, 1e-2);
 
+  if (t.size() < n_int+1)
+    throw std::invalid_argument("insufficient time points available");
+
+  // b) Interpolate to given interval amount
+  t = interpolate_points(t, n_int+1);
+  std::cout << "Amount of intervals: " << t.size()-1 << std::endl;
+
+  // c) Check boundaries
   if (!(t.front() == a && t.back() == b))
     throw std::domain_error("subdivision does not match interval boundaries");
 
-  const size_t m = t.size();
-  std::cout << "Amount of intervals: " << m-1 << std::endl;
-
-  // a) Plot trajectory
+  // d) Plot trajectory
   std::ofstream output_file;
   GnuPlot Dat1("TF_trajectory.dat", output_file);
 
@@ -87,8 +88,11 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
     output_file << c << "\t" << (*eta)(c);
   Dat1.plot_with_lines(2, "linespoints");
 
+
+  // -------------------------------------------
   // 2) Starting values s(0)_1 ... s(0)_n
-  VectorD2 s0(m*dim);
+  const size_t m = t.size();
+  VectorD2 s0(m * dim);
 
   for (size_t i = 0; i < m; i++)
     { // Extract i-th block of s
@@ -98,19 +102,23 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
         s0[k + i*dim] = s_i[k];
     }
 
+
+  // -------------------------------------------
   // 3) Begin multiple shooting method
   SF_Automatic<KARP> M(f, true, 1e-2);
   MultipleShooting F(M, t, r);
   Newton N(F, m * dim);
   VectorD2 sol = N.iterate(s0);
 
+
+  // -------------------------------------------
   // 4) Plot graph of solution
 
 }
 
 void usage()
 {
-  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>] [--adaptive]"
+  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>]"
             << std::endl;
   std::exit(1);
 }
@@ -141,10 +149,6 @@ int main(int argc, char* argv[])
         {
           waiting_for_int = true;
         }
-      else if (option == "--adaptive")
-        {
-          adaptive_intervals = true;
-        }
       else
         {
           std::cerr << "unknown option" << std::endl;
@@ -167,7 +171,7 @@ int main(int argc, char* argv[])
     }
 
   // Linear separated BVP (::LinearBVP)
-  Solve_ThomasFermi(n_intervals, adaptive_intervals);
+  Solve_ThomasFermi(n_intervals);
 
   return 0;
 }
