@@ -21,23 +21,23 @@ Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classERK_a9616104111b751fee7c46123878275ac}\label{classERK_a9616104111b751fee7c46123878275ac}} 
-{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ u0, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
+\mbox{\Hypertarget{classERK_a74d5ab0d29ab4960d9c571553e91fc76}\label{classERK_a74d5ab0d29ab4960d9c571553e91fc76}} 
+{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, Vector\+D2 u0, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
 \item 
-\mbox{\Hypertarget{classERK_a523fbb19deff344d93dba835c4daf6c0}\label{classERK_a523fbb19deff344d93dba835c4daf6c0}} 
-dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&y, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b)
+\mbox{\Hypertarget{classERK_ab3dcc059386d02ae76f229dba8909ad3}\label{classERK_ab3dcc059386d02ae76f229dba8909ad3}} 
+Vector\+D2 {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b)
 \item 
-\mbox{\Hypertarget{classERK_a55a3f3ae9207da57e0a6aa301a2f4b27}\label{classERK_a55a3f3ae9207da57e0a6aa301a2f4b27}} 
-std\+::pair$<$ dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$, dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ $>$ {\bfseries k\+\_\+variational} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&y, F\+P\+\_\+\+Type h, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&b, const dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$F)
+\mbox{\Hypertarget{classERK_a2793e89d81f0fb7142365fa3960d7ba7}\label{classERK_a2793e89d81f0fb7142365fa3960d7ba7}} 
+std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries k\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b, const Matrix\+D2 \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$F)
 \item 
-\mbox{\Hypertarget{classERK_a11029cb0aa55b9ac17b6c101b8b1a24a}\label{classERK_a11029cb0aa55b9ac17b6c101b8b1a24a}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&y, F\+P\+\_\+\+Type h) override
+\mbox{\Hypertarget{classERK_afdc6a96a8264b23acdeb0d2a31b42f8d}\label{classERK_afdc6a96a8264b23acdeb0d2a31b42f8d}} 
+virtual Vector\+D2 {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h) override
+\item 
+\mbox{\Hypertarget{classERK_af2d1cd4fba0eef09a984b1e58e57715c}\label{classERK_af2d1cd4fba0eef09a984b1e58e57715c}} 
+virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Matrix\+D2 \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$F) override
 \item 
 \mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
 size\+\_\+t {\bfseries n\+\_\+misfires} () const
-\item 
-\mbox{\Hypertarget{classERK_ac8835e6d68d903c7111da0b077821e3b}\label{classERK_ac8835e6d68d903c7111da0b077821e3b}} 
-dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries fund\+\_\+matrix} () const
 \item 
 \mbox{\Hypertarget{classERK_a9537f676f3d8df72748a21e3af707474}\label{classERK_a9537f676f3d8df72748a21e3af707474}} 
 void {\bfseries iterate\+\_\+with\+\_\+ssc} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h0, F\+P\+\_\+\+Type T\+OL, bool fundamental\+\_\+matrix=false, F\+P\+\_\+\+Type C=2)

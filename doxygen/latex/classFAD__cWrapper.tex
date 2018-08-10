@@ -21,23 +21,14 @@ Collaboration diagram for F\+A\+D\+\_\+c\+Wrapper$<$ Callable $>$\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classFAD__cWrapper_a4f9073b7ba4faa9624d2950960d9400d}\label{classFAD__cWrapper_a4f9073b7ba4faa9624d2950960d9400d}} 
-{\bfseries F\+A\+D\+\_\+c\+Wrapper} (Callable \+\_\+f, size\+\_\+t \+\_\+dim)
+\mbox{\Hypertarget{classFAD__cWrapper_aac4ca71e136e781b51d5a0b21c4da73c}\label{classFAD__cWrapper_aac4ca71e136e781b51d5a0b21c4da73c}} 
+{\bfseries F\+A\+D\+\_\+c\+Wrapper} (Callable f, size\+\_\+t dim, F\+P\+\_\+\+Type \+\_\+t=0)
 \item 
-\mbox{\Hypertarget{classFAD__cWrapper_a63579e11de4e55de607a84619ced86e2}\label{classFAD__cWrapper_a63579e11de4e55de607a84619ced86e2}} 
-void {\bfseries init} (const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u)
+\mbox{\Hypertarget{classFAD__cWrapper_a866172a2028651446996452096b2cb24}\label{classFAD__cWrapper_a866172a2028651446996452096b2cb24}} 
+virtual Vector\+D2 {\bfseries operator()} (const Vector\+D2 \&u) override
 \item 
-\mbox{\Hypertarget{classFAD__cWrapper_a3f09fcd9fdb951eae4605cc3f57552cf}\label{classFAD__cWrapper_a3f09fcd9fdb951eae4605cc3f57552cf}} 
-dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries value} () const
-\item 
-\mbox{\Hypertarget{classFAD__cWrapper_a6b167bc4c72bfea7c8690e61c9099652}\label{classFAD__cWrapper_a6b167bc4c72bfea7c8690e61c9099652}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries operator()} (const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u) override
-\item 
-\mbox{\Hypertarget{classFAD__cWrapper_a21ebd0df0ef04881cc2c8f6a45df9a67}\label{classFAD__cWrapper_a21ebd0df0ef04881cc2c8f6a45df9a67}} 
-dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries diff} () const
-\item 
-\mbox{\Hypertarget{classFAD__cWrapper_add022de660756689b756924d5319c9ba}\label{classFAD__cWrapper_add022de660756689b756924d5319c9ba}} 
-virtual dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries diff} (const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u) override
+\mbox{\Hypertarget{classFAD__cWrapper_aba8e02646b286f26ce68c101dc3fe771}\label{classFAD__cWrapper_aba8e02646b286f26ce68c101dc3fe771}} 
+virtual Matrix\+D2 {\bfseries diff} (const Vector\+D2 \&u) override
 \end{DoxyCompactItemize}
 
 

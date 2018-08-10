@@ -30,10 +30,9 @@ public:
 
   // The exact solution may be specified as an optional argument
   // for comparison purposes.
-  OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0,
-                Curve *_u = nullptr)
+  OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0, Curve *_u = nullptr)
     :
-      f(_f), u(_u), t0(_t0), u0(_u0), steps(0), Yn(0),
+      f(_f), u(_u), t0(_t0), u0(_u0), steps(0), Yn(_u0.size()),
       timepoints(1, _t0), uapprox(1, _u0)
   {}
 
@@ -113,6 +112,8 @@ public:
   void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2,
                      bool fundamental_matrix = false)
   {
+    reset(); // init output variables
+
     FP_Type  t = t0;
     VectorD2 y = u0;
     size_t n = u0.size();
@@ -120,13 +121,10 @@ public:
     // Check prerequisites for variational equation
     TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
 
-    if (fundamental_matrix && f_diff == nullptr)
+    if (f_diff == nullptr && fundamental_matrix)
       throw std::invalid_argument("right-hand side is not differentiable");
 
-    // init output variables
-    reset();
-
-    // Initial value for Yn(t; t0)
+    // Initial value for Yn(t; t0, u0)
     Yn = dealii::IdentityMatrix(n);
 
     while (t_lim - t > 0)
@@ -134,16 +132,17 @@ public:
         if (t + 1.1*h >= t_lim)
           h = t_lim - t;
 
-        // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
-        // t_k = t_{k-1} + h
         if (fundamental_matrix)
-          y += h * increment_function(t, y, h);
-        else
           {
             auto U = increment_variational(t, y, h, Yn, f_diff);
             y  += h * U.first;
             Yn.add(1, h * U.second);
           }
+        else
+          { // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
+            y += h * increment_function(t, y, h);
+          }
+        // t_k = t_{k-1} + h
         t += h;
 
         // Add u_k, t_k to result vectors

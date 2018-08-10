@@ -60,7 +60,7 @@ public:
     else
       {
         ERK<RK65> Method(f, t0, s);
-        Method.iterate_up_to(t1, 1e-3); // XXX: variable step width
+        Method.iterate_up_to(t1, h0);
         return Method.approx();
       }
   }
@@ -118,14 +118,14 @@ public:
   {
     if (embedded_method)
       {
-        ERK<KARP> Method(f, t0, s);
+        ERK<RK65> Method(f, t0, s);
         Method.iterate_with_ssc(t1, h0, TOL, false);
         return Method.approx();
       }
     else
       {
-        ERK<RK65> Method(f, t0, s);
-        Method.iterate_up_to(t1, 1e-3); // XXX: variable step width
+        ERK<KARP> Method(f, t0, s);
+        Method.iterate_up_to(t1, h0);
         return Method.approx();
       }
   }
@@ -138,16 +138,25 @@ public:
     if (f_ad == nullptr)
       throw std::invalid_argument("functor is not differentiable");
 
-    ERK<DOPRI87> AdaptiveMethod(f, t0, s);
-    FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
-
     // Compute IVP and variational equation simultaneously.
-    // Step-size is controlled by the IVP only.
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, true); // XXX: disable step control
-    VectorD2 y = AdaptiveMethod.approx();
-    MatrixD2 Z = AdaptiveMethod.fund_matrix();
+    if (embedded_method)
+      { // Note: step-size is controlled by the IVP only.
+        ERK<RK65> Method(f, t0, s);
+        Method.iterate_with_ssc(t1, h0, TOL, true);
 
-    return std::make_pair(y, Z);
+        VectorD2 y = Method.approx();
+        MatrixD2 Z = Method.fund_matrix();
+        return std::make_pair(y, Z);
+      }
+    else
+      {
+        ERK<KARP> Method(f, t0, s);
+        Method.iterate_up_to(t1, h0);
+
+        VectorD2 y = Method.approx();
+        MatrixD2 Z = Method.fund_matrix();
+        return std::make_pair(y, Z);
+      }
   }
 
 private:

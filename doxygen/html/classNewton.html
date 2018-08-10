@@ -73,15 +73,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memItemLeft" align="right" valign="top"><a id="a8271deaf4a7dd62152c126fb506b8d9b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Newton</b> (Callable _f, size_t _dim, FP_Type _TOL=1e-6, bool _ssc=true, size_t _ssc_lim=20)</td></tr>
 <tr class="separator:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1d9bcbab5d492230aa0415c24016640"><td class="memItemLeft" align="right" valign="top"><a id="af1d9bcbab5d492230aa0415c24016640"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (const dealii::FullMatrix&lt; FP_Type &gt; &amp;J, const dealii::Vector&lt; FP_Type &gt; &amp;x)</td></tr>
-<tr class="separator:af1d9bcbab5d492230aa0415c24016640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8f1b8668fcc7de11c3ea3f0887456ef"><td class="memItemLeft" align="right" valign="top"><a id="ab8f1b8668fcc7de11c3ea3f0887456ef"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>iterate</b> (dealii::Vector&lt; FP_Type &gt; x, size_t step_limit=25)</td></tr>
-<tr class="separator:ab8f1b8668fcc7de11c3ea3f0887456ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a324169685445ba3cda382f05fac41aab"><td class="memItemLeft" align="right" valign="top"><a id="a324169685445ba3cda382f05fac41aab"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_broyden</b> (dealii::Vector&lt; FP_Type &gt; x, size_t step_limit=50)</td></tr>
-<tr class="separator:a324169685445ba3cda382f05fac41aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf7592a3f99721b837b11f94f4f39469"><td class="memItemLeft" align="right" valign="top"><a id="aaf7592a3f99721b837b11f94f4f39469"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (MatrixD2 &amp;J, VectorD2 &amp;x)</td></tr>
+<tr class="separator:aaf7592a3f99721b837b11f94f4f39469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a194fe411efb80bb01a215d289509d47a"><td class="memItemLeft" align="right" valign="top"><a id="a194fe411efb80bb01a215d289509d47a"></a>
+VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>iterate</b> (const VectorD2 &amp;x0, size_t step_limit=25)</td></tr>
+<tr class="separator:a194fe411efb80bb01a215d289509d47a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace30992f63ce8b2859bdb6a237040e05"><td class="memItemLeft" align="right" valign="top"><a id="ace30992f63ce8b2859bdb6a237040e05"></a>
+VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_broyden</b> (const VectorD2 &amp;x0, size_t skips=5, size_t step_limit=50)</td></tr>
+<tr class="separator:ace30992f63ce8b2859bdb6a237040e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>algo/<a class="el" href="newton_8h_source.html">newton.h</a></li>

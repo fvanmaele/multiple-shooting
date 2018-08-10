@@ -1,5 +1,6 @@
 <map id="DivFunctor" name="DivFunctor">
-<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="5,155,188,181"/>
-<area shape="rect" id="node4" href="$classLinearBVP.html" title="LinearBVP\&lt; DiffMethod \&gt;" alt="" coords="212,155,384,181"/>
-<area shape="rect" id="node2" href="$classFunctor.html" title="Functor" alt="" coords="163,5,230,32"/>
+<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="267,5,449,32"/>
+<area shape="rect" id="node4" href="$classMultipleShooting.html" title="MultipleShooting\&lt; DiffMethod \&gt;" alt="" coords="255,56,461,83"/>
+<area shape="rect" id="node5" href="$classSingleShooting.html" title="SingleShooting\&lt; DiffMethod \&gt;" alt="" coords="259,107,457,133"/>
+<area shape="rect" id="node2" href="$classFunctor.html" title="Functor" alt="" coords="5,56,72,83"/>
 </map>

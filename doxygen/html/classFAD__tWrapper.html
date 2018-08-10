@@ -88,32 +88,15 @@ Collaboration diagram for FAD_tWrapper&lt; Callable &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6f51a6e3b0d626a2736f8ab7b0b622df"><td class="memItemLeft" align="right" valign="top"><a id="a6f51a6e3b0d626a2736f8ab7b0b622df"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FAD_tWrapper</b> (Callable _f, size_t _dim)</td></tr>
-<tr class="separator:a6f51a6e3b0d626a2736f8ab7b0b622df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a456f9ca36aafe8cd1dae76eeb4b2b120"><td class="memItemLeft" align="right" valign="top"><a id="a456f9ca36aafe8cd1dae76eeb4b2b120"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u)</td></tr>
-<tr class="separator:a456f9ca36aafe8cd1dae76eeb4b2b120"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3c163761c6eaae7a797ec292a41a496"><td class="memItemLeft" align="right" valign="top"><a id="ab3c163761c6eaae7a797ec292a41a496"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> () const</td></tr>
-<tr class="separator:ab3c163761c6eaae7a797ec292a41a496"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d290c497dd611edf4202c6626eafab5"><td class="memItemLeft" align="right" valign="top"><a id="a0d290c497dd611edf4202c6626eafab5"></a>
-virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u) override</td></tr>
-<tr class="separator:a0d290c497dd611edf4202c6626eafab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacbb649228e36aa5c6cd62e942d3b83c"><td class="memItemLeft" align="right" valign="top"><a id="aacbb649228e36aa5c6cd62e942d3b83c"></a>
-dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>diff</b> () const</td></tr>
-<tr class="separator:aacbb649228e36aa5c6cd62e942d3b83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8f08bbac948154e805f2b765dd150d"><td class="memItemLeft" align="right" valign="top"><a id="aec8f08bbac948154e805f2b765dd150d"></a>
-virtual dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>diff</b> (FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;u) override</td></tr>
-<tr class="separator:aec8f08bbac948154e805f2b765dd150d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classTimeDivFunctor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classTimeDivFunctor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a></td></tr>
-<tr class="memitem:acbdba504a35a59e0b6687718b9d7d8ff inherit pub_methods_classTimeDivFunctor"><td class="memItemLeft" align="right" valign="top"><a id="acbdba504a35a59e0b6687718b9d7d8ff"></a>
-virtual MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><b>diff</b> (FP_Type t, const VectorD2 &amp;u)=0</td></tr>
-<tr class="separator:acbdba504a35a59e0b6687718b9d7d8ff inherit pub_methods_classTimeDivFunctor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classTimeFunctor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classTimeFunctor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classTimeFunctor.html">TimeFunctor</a></td></tr>
-<tr class="memitem:a70a13b078de40b96485ee4685d23a63f inherit pub_methods_classTimeFunctor"><td class="memItemLeft" align="right" valign="top"><a id="a70a13b078de40b96485ee4685d23a63f"></a>
-virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (FP_Type t, const VectorD2 &amp;u)=0</td></tr>
-<tr class="separator:a70a13b078de40b96485ee4685d23a63f inherit pub_methods_classTimeFunctor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf109515e54d838f27bc1f523331ac25"><td class="memItemLeft" align="right" valign="top"><a id="adf109515e54d838f27bc1f523331ac25"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>FAD_tWrapper</b> (Callable f, size_t dim)</td></tr>
+<tr class="separator:adf109515e54d838f27bc1f523331ac25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0b635d7fc6f214d870ae4d03762612e"><td class="memItemLeft" align="right" valign="top"><a id="ad0b635d7fc6f214d870ae4d03762612e"></a>
+virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (FP_Type t, const VectorD2 &amp;u) override</td></tr>
+<tr class="separator:ad0b635d7fc6f214d870ae4d03762612e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca8b9ccaf25becd93620776d404f20d8"><td class="memItemLeft" align="right" valign="top"><a id="aca8b9ccaf25becd93620776d404f20d8"></a>
+virtual MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><b>diff</b> (FP_Type t, const VectorD2 &amp;u) override</td></tr>
+<tr class="separator:aca8b9ccaf25becd93620776d404f20d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>base/<a class="el" href="forward__ad_8h_source.html">forward_ad.h</a></li>

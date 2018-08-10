@@ -80,15 +80,15 @@ Inheritance diagram for ShootingFunction:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9621110f76332ab774b15b7574a43c16"><td class="memItemLeft" align="right" valign="top"><a id="a9621110f76332ab774b15b7574a43c16"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ShootingFunction</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f)</td></tr>
-<tr class="separator:a9621110f76332ab774b15b7574a43c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fff86465b3e0ee1e4e29d8691dbd8f5"><td class="memItemLeft" align="right" valign="top"><a id="a2fff86465b3e0ee1e4e29d8691dbd8f5"></a>
-virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>solve_y</b> (FP_Type t0, FP_Type t1, const dealii::Vector&lt; FP_Type &gt; &amp;s)=0</td></tr>
-<tr class="separator:a2fff86465b3e0ee1e4e29d8691dbd8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a679b8e1483215ced4212dd7acb0001f8"><td class="memItemLeft" align="right" valign="top"><a id="a679b8e1483215ced4212dd7acb0001f8"></a>
-virtual dealii::FullMatrix&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>solve_Z</b> (FP_Type t0, FP_Type t1, const dealii::Vector&lt; FP_Type &gt; &amp;s)=0</td></tr>
-<tr class="separator:a679b8e1483215ced4212dd7acb0001f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f933dcdb1ad7b8bdb753483d3ef206"><td class="memItemLeft" align="right" valign="top"><a id="ae9f933dcdb1ad7b8bdb753483d3ef206"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ShootingFunction</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, bool e=true, FP_Type _h0=1e-1, FP_Type _TOL=1e-4)</td></tr>
+<tr class="separator:ae9f933dcdb1ad7b8bdb753483d3ef206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb29074b32316fdd368d71a775983f81"><td class="memItemLeft" align="right" valign="top"><a id="acb29074b32316fdd368d71a775983f81"></a>
+virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>solve_y</b> (FP_Type t0, FP_Type t1, const VectorD2 &amp;s)=0</td></tr>
+<tr class="separator:acb29074b32316fdd368d71a775983f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41360056996ee70c43c4538acd6e28d8"><td class="memItemLeft" align="right" valign="top"><a id="a41360056996ee70c43c4538acd6e28d8"></a>
+virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>solve_Z</b> (FP_Type t0, FP_Type t1, const VectorD2 &amp;s)=0</td></tr>
+<tr class="separator:a41360056996ee70c43c4538acd6e28d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>

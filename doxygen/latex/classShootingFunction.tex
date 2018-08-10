@@ -2,8 +2,7 @@
 \label{classShootingFunction}\index{Shooting\+Function@{Shooting\+Function}}
 
 
-Inheritance diagram for Shooting\+Function\+:
-\nopagebreak
+Inheritance diagram for Shooting\+Function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -13,14 +12,14 @@ Inheritance diagram for Shooting\+Function\+:
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classShootingFunction_a9621110f76332ab774b15b7574a43c16}\label{classShootingFunction_a9621110f76332ab774b15b7574a43c16}} 
-{\bfseries Shooting\+Function} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f)
+\mbox{\Hypertarget{classShootingFunction_ae9f933dcdb1ad7b8bdb753483d3ef206}\label{classShootingFunction_ae9f933dcdb1ad7b8bdb753483d3ef206}} 
+{\bfseries Shooting\+Function} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, bool e=true, F\+P\+\_\+\+Type \+\_\+h0=1e-\/1, F\+P\+\_\+\+Type \+\_\+\+T\+O\+L=1e-\/4)
 \item 
-\mbox{\Hypertarget{classShootingFunction_a2fff86465b3e0ee1e4e29d8691dbd8f5}\label{classShootingFunction_a2fff86465b3e0ee1e4e29d8691dbd8f5}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries solve\+\_\+y} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&s)=0
+\mbox{\Hypertarget{classShootingFunction_acb29074b32316fdd368d71a775983f81}\label{classShootingFunction_acb29074b32316fdd368d71a775983f81}} 
+virtual Vector\+D2 {\bfseries solve\+\_\+y} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
 \item 
-\mbox{\Hypertarget{classShootingFunction_a679b8e1483215ced4212dd7acb0001f8}\label{classShootingFunction_a679b8e1483215ced4212dd7acb0001f8}} 
-virtual dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries solve\+\_\+Z} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&s)=0
+\mbox{\Hypertarget{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}\label{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}} 
+virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries solve\+\_\+Z} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}

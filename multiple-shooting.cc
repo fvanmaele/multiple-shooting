@@ -84,7 +84,9 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
       VectorD2 s_i = (*eta)(t.at(i));
 
       for (size_t k = 0; k < dim; k++)
-        s0[k + i*dim] = s_i[k];
+        {
+          s0[k + i*dim] = s_i[k];
+        }
     }
 
   // a) Plot trajectory

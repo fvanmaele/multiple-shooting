@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['linearbvp',['LinearBVP',['../classLinearBVP.html',1,'']]]
+  ['multipleshooting',['MultipleShooting',['../classMultipleShooting.html',1,'']]]
 ];

@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structKARP.html" title="KARP" alt="" coords="5,5,64,32"/>
+<area shape="rect" id="node1" href="$classFunctor.html" title="Functor" alt="" coords="5,81,72,108"/>
+<area shape="rect" id="node2" href="$classDivFunctor.html" title="DivFunctor" alt="" coords="164,56,251,83"/>
+<area shape="rect" id="node6" href="$classstd__cWrapper.html" title="std_cWrapper\&lt; Callable \&gt;" alt="" coords="120,107,295,133"/>
+<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="355,5,537,32"/>
+<area shape="rect" id="node4" href="$classMultipleShooting.html" title="MultipleShooting\&lt; DiffMethod \&gt;" alt="" coords="343,56,549,83"/>
+<area shape="rect" id="node5" href="$classSingleShooting.html" title="SingleShooting\&lt; DiffMethod \&gt;" alt="" coords="347,107,545,133"/>
 </map>

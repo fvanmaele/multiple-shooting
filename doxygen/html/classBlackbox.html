@@ -91,33 +91,42 @@ Public Member Functions</h2></td></tr>
 virtual dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (const FP_Type t, const dealii::Vector&lt; FP_Type &gt; &amp;y, const FP_Type h) override</td></tr>
 <tr class="separator:a38b421a2cc7fa40d8dadf09f44b9b80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classOneStepMethod"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classOneStepMethod')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classOneStepMethod.html">OneStepMethod</a></td></tr>
-<tr class="memitem:aa29cf55321c2a83634b93ec42a32c500 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="aa29cf55321c2a83634b93ec42a32c500"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OneStepMethod</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, dealii::Vector&lt; FP_Type &gt; _u0, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
-<tr class="separator:aa29cf55321c2a83634b93ec42a32c500 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90a5bfa6317794d9003939e660c48e5d inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a90a5bfa6317794d9003939e660c48e5d"></a>
-dealii::Vector&lt; FP_Type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>approx</b> () const</td></tr>
-<tr class="separator:a90a5bfa6317794d9003939e660c48e5d inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af80b8284dc4c01633056d626e96dcce2 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="af80b8284dc4c01633056d626e96dcce2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>OneStepMethod</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, VectorD2 _u0, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
+<tr class="separator:af80b8284dc4c01633056d626e96dcce2 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f4529edf5aae96d1dd0061b7a798e4f inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a5f4529edf5aae96d1dd0061b7a798e4f"></a>
+VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>approx</b> () const</td></tr>
+<tr class="separator:a5f4529edf5aae96d1dd0061b7a798e4f inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fa1efcb274907b97f31cfbbb0c5dc07 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a5fa1efcb274907b97f31cfbbb0c5dc07"></a>
 FP_Type&#160;</td><td class="memItemRight" valign="bottom"><b>endpoint</b> () const</td></tr>
 <tr class="separator:a5fa1efcb274907b97f31cfbbb0c5dc07 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ae5bcaf0c1e48551456a6f0835414d2 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a7ae5bcaf0c1e48551456a6f0835414d2"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_steps</b> () const</td></tr>
 <tr class="separator:a7ae5bcaf0c1e48551456a6f0835414d2 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad59a0fce9906ba9159da74aea44b3431 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ad59a0fce9906ba9159da74aea44b3431"></a>
+MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix</b> () const</td></tr>
+<tr class="separator:ad59a0fce9906ba9159da74aea44b3431 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="aa3fc1d095086c736ef23c60e56034474"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (std::ostream &amp;out=std::cout) const</td></tr>
 <tr class="separator:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d448dbaafc95b02ce6bc88cc33c8363 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a9d448dbaafc95b02ce6bc88cc33c8363"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>sol_is_nan</b> (const dealii::Vector&lt; FP_Type &gt; &amp;y)</td></tr>
-<tr class="separator:a9d448dbaafc95b02ce6bc88cc33c8363 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5e6154e9cc700056474c1c6128e3e9f inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ad5e6154e9cc700056474c1c6128e3e9f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>sol_is_nan</b> (const VectorD2 &amp;y)</td></tr>
+<tr class="separator:ad5e6154e9cc700056474c1c6128e3e9f inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6743b0343a6c5bb75e423649915b86 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a4e6743b0343a6c5bb75e423649915b86"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
 <tr class="separator:a4e6743b0343a6c5bb75e423649915b86 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3c4a4994e2ce22c43f0d3e6902986a4 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ae3c4a4994e2ce22c43f0d3e6902986a4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const FP_Type &amp;t, const dealii::Vector&lt; FP_Type &gt; &amp;u)</td></tr>
-<tr class="separator:ae3c4a4994e2ce22c43f0d3e6902986a4 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf00efa88d6fb3d1e9f7b3024375a0b4 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="adf00efa88d6fb3d1e9f7b3024375a0b4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, FP_Type C=2)</td></tr>
-<tr class="separator:adf00efa88d6fb3d1e9f7b3024375a0b4 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a511d73f8ac7ba27a4e0289b70be7ffad inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a511d73f8ac7ba27a4e0289b70be7ffad"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const FP_Type &amp;t, const VectorD2 &amp;u)</td></tr>
+<tr class="separator:a511d73f8ac7ba27a4e0289b70be7ffad inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab188f8163d0c424a678f8151c6330439 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ab188f8163d0c424a678f8151c6330439"></a>
+virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type t, const VectorD2 &amp;y, FP_Type h)</td></tr>
+<tr class="separator:ab188f8163d0c424a678f8151c6330439 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5eff75de4c6a05f94e130e1739b9b21 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ae5eff75de4c6a05f94e130e1739b9b21"></a>
+virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_variational</b> (FP_Type t, const VectorD2 &amp;y, FP_Type h, const MatrixD2 &amp;Y, <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a> *F)</td></tr>
+<tr class="separator:ae5eff75de4c6a05f94e130e1739b9b21 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca930b0b14490b0a019958ff3d1d54a0 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="aca930b0b14490b0a019958ff3d1d54a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, FP_Type C=2, bool fundamental_matrix=false)</td></tr>
+<tr class="separator:aca930b0b14490b0a019958ff3d1d54a0 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>

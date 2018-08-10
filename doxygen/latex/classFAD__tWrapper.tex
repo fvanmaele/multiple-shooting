@@ -21,23 +21,14 @@ Collaboration diagram for F\+A\+D\+\_\+t\+Wrapper$<$ Callable $>$\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classFAD__tWrapper_a6f51a6e3b0d626a2736f8ab7b0b622df}\label{classFAD__tWrapper_a6f51a6e3b0d626a2736f8ab7b0b622df}} 
-{\bfseries F\+A\+D\+\_\+t\+Wrapper} (Callable \+\_\+f, size\+\_\+t \+\_\+dim)
+\mbox{\Hypertarget{classFAD__tWrapper_adf109515e54d838f27bc1f523331ac25}\label{classFAD__tWrapper_adf109515e54d838f27bc1f523331ac25}} 
+{\bfseries F\+A\+D\+\_\+t\+Wrapper} (Callable f, size\+\_\+t dim)
 \item 
-\mbox{\Hypertarget{classFAD__tWrapper_a456f9ca36aafe8cd1dae76eeb4b2b120}\label{classFAD__tWrapper_a456f9ca36aafe8cd1dae76eeb4b2b120}} 
-void {\bfseries init} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u)
+\mbox{\Hypertarget{classFAD__tWrapper_ad0b635d7fc6f214d870ae4d03762612e}\label{classFAD__tWrapper_ad0b635d7fc6f214d870ae4d03762612e}} 
+virtual Vector\+D2 {\bfseries operator()} (F\+P\+\_\+\+Type t, const Vector\+D2 \&u) override
 \item 
-\mbox{\Hypertarget{classFAD__tWrapper_ab3c163761c6eaae7a797ec292a41a496}\label{classFAD__tWrapper_ab3c163761c6eaae7a797ec292a41a496}} 
-dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries value} () const
-\item 
-\mbox{\Hypertarget{classFAD__tWrapper_a0d290c497dd611edf4202c6626eafab5}\label{classFAD__tWrapper_a0d290c497dd611edf4202c6626eafab5}} 
-virtual dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ {\bfseries operator()} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u) override
-\item 
-\mbox{\Hypertarget{classFAD__tWrapper_aacbb649228e36aa5c6cd62e942d3b83c}\label{classFAD__tWrapper_aacbb649228e36aa5c6cd62e942d3b83c}} 
-dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries diff} () const
-\item 
-\mbox{\Hypertarget{classFAD__tWrapper_aec8f08bbac948154e805f2b765dd150d}\label{classFAD__tWrapper_aec8f08bbac948154e805f2b765dd150d}} 
-virtual dealii\+::\+Full\+Matrix$<$ F\+P\+\_\+\+Type $>$ {\bfseries diff} (F\+P\+\_\+\+Type t, const dealii\+::\+Vector$<$ F\+P\+\_\+\+Type $>$ \&u) override
+\mbox{\Hypertarget{classFAD__tWrapper_aca8b9ccaf25becd93620776d404f20d8}\label{classFAD__tWrapper_aca8b9ccaf25becd93620776d404f20d8}} 
+virtual Matrix\+D2 {\bfseries diff} (F\+P\+\_\+\+Type t, const Vector\+D2 \&u) override
 \end{DoxyCompactItemize}
 
 
