@@ -8,7 +8,7 @@
 namespace Test
 {
   // f: R^3 -> R^3,  n = m = 3
-  VectorAD FAD_3dim(NumberAD t, const VectorAD &u)
+  VectorAD FAD_3dim(NumberAD, const VectorAD &u)
   {
     VectorAD y(3);
     y[0] = std::pow(u[0], 3) * std::sin(u[1]);

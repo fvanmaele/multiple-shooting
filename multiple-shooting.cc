@@ -162,6 +162,12 @@ int main(int argc, char* argv[])
       usage();
     }
 
+  if (n_intervals < 0)
+    {
+      std::cerr << "interval number must be positive" << std::endl;
+      usage();
+    }
+
   if (run_tests)
     {
       Test::exercise_sheet();

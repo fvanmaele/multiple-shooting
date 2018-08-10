@@ -9,7 +9,7 @@
 
 namespace Test
 {
-  VectorAD AutFAD(NumberAD t, const VectorAD &x)
+  VectorAD AutFAD(NumberAD, const VectorAD &x)
   {
     VectorAD y = {
       std::pow(x[0], 2) + std::pow(x[1], 2) - 1,

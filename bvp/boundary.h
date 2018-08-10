@@ -38,13 +38,13 @@ public:
   }
 
   virtual MatrixD2
-  diff_u(const VectorD2 &u, const VectorD2 &v) override
+  diff_u(const VectorD2&, const VectorD2&) override
   {
     return A;
   }
 
   virtual MatrixD2
-  diff_v(const VectorD2 &u, const VectorD2 &v) override
+  diff_v(const VectorD2&, const VectorD2&) override
   {
     return B;
   }

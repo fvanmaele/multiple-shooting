@@ -94,14 +94,13 @@ public:
   }
 
   virtual VectorD2
-  increment_function(FP_Type t, const VectorD2 &y, FP_Type h)
+  increment_function(FP_Type, const VectorD2&, FP_Type)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
 
   virtual std::pair<VectorD2, MatrixD2>
-  increment_variational(FP_Type t, const VectorD2 &y, FP_Type h,
-                        const MatrixD2 &Y, TimeDivFunctor *F)
+  increment_variational(FP_Type, const VectorD2&, FP_Type, const MatrixD2&, TimeDivFunctor*)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
