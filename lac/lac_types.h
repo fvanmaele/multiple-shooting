@@ -23,86 +23,119 @@ template class dealii::BlockVector<long double>;
 class Curve
 {
 public:
+  Curve(size_t n) : dim(n)
+  {}
+
+  virtual ~Curve() = default;
+
   virtual VectorD2
   operator()(FP_Type t) = 0;
 
-  virtual ~Curve() = default;
+  size_t n_dim() const
+  {
+    return dim;
+  }
+
+private:
+  size_t dim;
+};
+
+class Functor
+{
+public:
+  Functor(size_t n) : dim(n)
+  {}
+
+  virtual ~Functor() = default;
+
+  virtual VectorD2
+  operator()(const VectorD2 &x) = 0;
+
+  size_t n_dim() const
+  {
+    return dim;
+  }
+
+private:
+  size_t dim;
+};
+
+class DivFunctor : public Functor
+{
+public:
+  using Functor::Functor;
+
+  virtual ~DivFunctor() = default;
+
+  virtual MatrixD2
+  diff(const VectorD2 &x) = 0;
 };
 
 class TimeFunctor
 {
 public:
+  TimeFunctor(size_t n) : dim(n)
+  {}
+
+  virtual ~TimeFunctor() = default;
+
   virtual VectorD2
   operator()(FP_Type t, const VectorD2 &u) = 0;
 
-  virtual ~TimeFunctor() = default;
+  size_t n_dim() const
+  {
+    return dim;
+  }
+
+private:
+  size_t dim;
 };
 
 class TimeDivFunctor : public TimeFunctor
 {
 public:
+  using TimeFunctor::TimeFunctor;
+
   virtual MatrixD2
   diff(FP_Type t, const VectorD2 &u) = 0;
 
   virtual ~TimeDivFunctor() = default;
 };
 
-class Functor
-{
-public:
-  virtual VectorD2
-  operator()(const VectorD2 &x) = 0;
-
-  virtual ~Functor() = default;
-};
-
-class DivFunctor : public Functor
-{
-public:
-  virtual MatrixD2
-  diff(const VectorD2 &x) = 0;
-
-  virtual ~DivFunctor() = default;
-};
-
 template <typename Callable>
 class std_cWrapper : public Functor
 {
 public:
-  std_cWrapper(Callable _f, size_t _dim) :
-    f(_f), dim(_dim)
+  std_cWrapper(Callable _f, size_t dim) :
+    Functor(dim), f(_f)
   {}
 
-  virtual dealii::Vector<FP_Type>
-  operator()(const dealii::Vector<FP_Type> &u) override
+  virtual VectorD2
+  operator()(const VectorD2 &u) override
   {
-    assert(u.size() == dim);
     return f(u);
   }
 
 private:
   Callable f;
-  size_t dim;
 };
 
 template <typename Callable>
 class std_tWrapper : public TimeFunctor
 {
 public:
-  std_tWrapper(Callable _f, size_t _dim) :
-    f(_f), dim(_dim)
+  std_tWrapper(Callable _f, size_t dim) :
+    TimeFunctor(dim), f(_f)
   {}
 
-  virtual dealii::Vector<FP_Type>
-  operator()(FP_Type t, const dealii::Vector<FP_Type> &u) override
+  virtual VectorD2
+  operator()(FP_Type t, const VectorD2 &u) override
   {
-    assert(u.size() == dim);
     return f(t, u);
   }
 
 private:
   Callable f;
-  size_t dim;
 };
 
 #endif // LAC_TYPES_H

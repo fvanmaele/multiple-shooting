@@ -10,57 +10,48 @@
 //    y' = f(x,y),  r(y(a), y(b)) = 0
 //
 // See Stoer, Num. Math. 2, pp.195
-template <typename DiffMethod>
 class SingleShooting : public DivFunctor
 {
 public:
-  SingleShooting(TimeFunctor &_f, FP_Type _a, FP_Type _b,
-                 BoundaryCondition &_r) :
-    f(_f), a(_a), b(_b), r(_r)
+  SingleShooting(ShootingFunction &_M, FP_Type _a, FP_Type _b, BoundaryCondition &_r)
+    : DivFunctor(_M.n_dim()), M(_M), a(_a), b(_b), r(_r)
   {}
 
   // Called multiple times per Newton step through step-size control.
-  VectorD2 operator()(const VectorD2 &s) override
+  virtual VectorD2 operator()(const VectorD2 &s) override
   {
-    DiffMethod M(f);
     VectorD2 y = M.solve_y(a, b, s);
+
     return r(s, y);
   }
 
   // Called once per Newton step.
-  MatrixD2 diff(const VectorD2 &s) override
+  virtual MatrixD2 diff(const VectorD2 &s) override
   {
-    DiffMethod M(f);
     auto G = M.solve_Z(a, b, s);
-
     VectorD2 y = G.first;
     MatrixD2 Z = G.second;
+
     return r.diff_u(s, y) + r.diff_v(s, y)*Z;
   }
 
 private:
-  TimeFunctor &f;
+  ShootingFunction &M;
   FP_Type a, b;
   BoundaryCondition &r;
 };
 
-template <typename DiffMethod>
 class MultipleShooting : public DivFunctor
 {
 public:
-  MultipleShooting(TimeFunctor &_f, size_t _dim,
-                   std::vector<FP_Type> _t, BoundaryCondition &_r) :
-    f(_f), dim(_dim), t(_t), r(_r)
-  {
-    assert(t.size());
-    assert(dim);
-  }
+  MultipleShooting(ShootingFunction &_M, std::vector<FP_Type> _t, BoundaryCondition &_r)
+    : DivFunctor(_M.n_dim()), M(_M), t(_t), r(_r), m(t.size())
+  {}
 
-  VectorD2 operator()(const VectorD2 &s) override
+  virtual VectorD2 operator()(const VectorD2 &s) override
   {
-    size_t m = t.size();
+    size_t dim = n_dim();
     assert(s.size() == m * dim);
-    DiffMethod M(f);
     VectorD2 F(s.size());
 
     for (size_t i = 0; i < m; i++)
@@ -100,11 +91,10 @@ public:
     return F;
   }
 
-  MatrixD2 diff(const VectorD2 &s) override
+  virtual MatrixD2 diff(const VectorD2 &s) override
   {
-    size_t m = t.size();
+    size_t dim = n_dim();
     assert(s.size() == m * dim);
-    DiffMethod M(f);
 
     // XXX: use TrilinosWrappers::BlockSparseMatrix?
     MatrixD2 DF(s.size(), s.size());
@@ -145,10 +135,10 @@ public:
   }
 
 private:
-  TimeFunctor &f;
-  size_t dim;
+  ShootingFunction &M;
   std::vector<FP_Type> t;
   BoundaryCondition &r;
+  size_t m;
 };
 
 #endif // METHODS_H

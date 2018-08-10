@@ -98,7 +98,7 @@ class FAD_tWrapper : public TimeDivFunctor
 {
 public:
   FAD_tWrapper(Callable f, size_t dim) :
-    F(f, dim)
+    TimeDivFunctor(dim), F(f, dim)
   {}
 
   virtual VectorD2
@@ -126,7 +126,7 @@ class FAD_cWrapper : public DivFunctor
 {
 public:
   FAD_cWrapper(Callable f, size_t dim, FP_Type _t = 0) :
-    F(f, dim), t(_t)
+    DivFunctor(dim), F(f, dim), t(_t)
   {}
 
   virtual VectorD2

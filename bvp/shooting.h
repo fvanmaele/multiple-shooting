@@ -16,14 +16,21 @@ class ShootingFunction
 {
 public:
   // Implementations for solve_y, solve_Z
+  template <typename M>
   friend class SF_External;   // External differentation
+  template <typename M, typename N>
   friend class SF_Automatic;  // Automatic differentation
-  friend class SF_Manual;     // Use pre-computed fundamental matrix
 
-  ShootingFunction(TimeFunctor &_f, bool e = true,
-                   FP_Type _h0 = 1e-1, FP_Type _TOL = 1e-4) :
-    f(_f), embedded_method(e), h0(_h0), TOL(_TOL)
+  ShootingFunction(TimeFunctor &_f, bool _ssc = true,
+                   FP_Type _h0 = 1e-1, FP_Type _TOL = 1e-4)
+    :
+      f(_f), dim(_f.n_dim()), ssc(_ssc), h0(_h0), TOL(_TOL)
   {}
+
+  size_t n_dim() const
+  {
+    return dim;
+  }
 
   // Compute y(t1; t0, s) by integrating IVP y(t0; s), where s represents
   // the specified initial value.
@@ -39,10 +46,12 @@ public:
 
 private:
   TimeFunctor &f;
-  bool embedded_method;
+  size_t dim;
+  bool ssc;
   FP_Type h0, TOL;
 };
 
+template <typename M>
 class SF_External : public ShootingFunction
 {
 public:
@@ -51,18 +60,14 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    if (embedded_method)
-      {
-        ERK<KARP> Method(f, t0, s);
-        Method.iterate_with_ssc(t1, h0, TOL, false);
-        return Method.approx();
-      }
+    ERK<M> Method(f, t0, s);
+
+    if (ssc)
+      Method.iterate_with_ssc(t1, h0, TOL, false);
     else
-      {
-        ERK<RK65> Method(f, t0, s);
-        Method.iterate_up_to(t1, h0);
-        return Method.approx();
-      }
+      Method.iterate_up_to(t1, h0);
+
+    return Method.approx();
   }
 
   // For the choice of TOL in the adaptive method and constant Epsilon,
@@ -102,12 +107,13 @@ public:
 
 private:
   // ShootingFunction::f
-  // ShootingFunction::embedded_method
+  // ShootingFunction::ssc
   // ShootingFunction::h0
   // ShootingFunction::TOL
 };
 
 // Assumes f is DivFunctor with AD support.
+template <typename M, typename M_Var = M>
 class SF_Automatic : public ShootingFunction
 {
 public:
@@ -116,18 +122,14 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    if (embedded_method)
-      {
-        ERK<RK65> Method(f, t0, s);
-        Method.iterate_with_ssc(t1, h0, TOL, false);
-        return Method.approx();
-      }
+    ERK<M> Method(f, t0, s);
+
+    if (ssc)
+      Method.iterate_with_ssc(t1, h0, TOL, false);
     else
-      {
-        ERK<KARP> Method(f, t0, s);
-        Method.iterate_up_to(t1, h0);
-        return Method.approx();
-      }
+      Method.iterate_up_to(t1, h0);
+
+    return Method.approx();
   }
 
   virtual std::pair<VectorD2, MatrixD2>
@@ -139,29 +141,22 @@ public:
       throw std::invalid_argument("functor is not differentiable");
 
     // Compute IVP and variational equation simultaneously.
-    if (embedded_method)
-      { // Note: step-size is controlled by the IVP only.
-        ERK<RK65> Method(f, t0, s);
-        Method.iterate_with_ssc(t1, h0, TOL, true);
+    ERK<M_Var> Method(f, t0, s);
 
-        VectorD2 y = Method.approx();
-        MatrixD2 Z = Method.fund_matrix();
-        return std::make_pair(y, Z);
-      }
+    if (ssc)
+      // Note: step-size is controlled by the IVP only.
+      Method.iterate_with_ssc(t1, h0, TOL, true);
     else
-      {
-        ERK<KARP> Method(f, t0, s);
-        Method.iterate_up_to(t1, h0);
+      Method.iterate_up_to(t1, h0, true);
 
-        VectorD2 y = Method.approx();
-        MatrixD2 Z = Method.fund_matrix();
-        return std::make_pair(y, Z);
-      }
+    VectorD2 y = Method.approx();
+    MatrixD2 Z = Method.fund_matrix();
+    return std::make_pair(y, Z);
   }
 
 private:
   // ShootingFunction::f
-  // ShootingFunction::embedded_method
+  // ShootingFunction::ssc
   // ShootingFunction::h0
   // ShootingFunction::TOL
 };

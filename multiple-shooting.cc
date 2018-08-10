@@ -20,6 +20,8 @@ static bool run_tests = false;
 class CurveTF : public Curve
 {
 public:
+  using Curve::Curve;
+
   VectorD2 operator()(FP_Type t)
   {
     VectorD2 y(2);
@@ -57,9 +59,9 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   BC_Linear r(A, B, c);
 
   // Approximate solution for BVP
-  CurveTF* eta = new CurveTF;
+  CurveTF* eta = new CurveTF(2);
   assert((*eta)(0)[0] == c[0]);
-  assert((*eta)(5)[0] == c[1]);
+//  assert((*eta)(5)[0] == c[1]);
 
   // 1) Subdivide interval a = t0 < ... < t1 = b
   std::vector<FP_Type> t;
@@ -67,7 +69,7 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   if (adaptive)
     // The TOL chosen here should match the initial step width
     // chosen for adaptive methods (1e-3)
-    t = trajectory(a, b, f, eta, 1e-3, 2, false);
+    t = trajectory(a, b, f, eta, 1.1, false, 1e-2);
   else
     t = linspace(a, b, n_int+1);
 
@@ -77,31 +79,28 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   const size_t m = t.size();
   std::cout << "Amount of intervals: " << m-1 << std::endl;
 
+  // a) Plot trajectory
+  std::ofstream output_file;
+  GnuPlot Dat1("TF_trajectory.dat", output_file);
+
+  for (auto &c : t)
+    output_file << c << "\t" << (*eta)(c);
+  Dat1.plot_with_lines(2, "linespoints");
+
   // 2) Starting values s(0)_1 ... s(0)_n
   VectorD2 s0(m*dim);
+
   for (size_t i = 0; i < m; i++)
     { // Extract i-th block of s
       VectorD2 s_i = (*eta)(t.at(i));
 
       for (size_t k = 0; k < dim; k++)
-        {
-          s0[k + i*dim] = s_i[k];
-        }
+        s0[k + i*dim] = s_i[k];
     }
-
-  // a) Plot trajectory
-  std::ofstream output_file;
-  GnuPlot Dat1("TF_trajectory.dat", output_file);
-
-  for (size_t i = 0; i < t.size(); i++)
-    {
-      VectorD2 s_i = (*eta)(t.at(i));
-      output_file << t.at(i) << "\t" << s_i;
-    }
-  Dat1.plot_with_lines(2, "linespoints");
 
   // 3) Begin multiple shooting method
-  MultipleShooting<SF_External> F(f, dim, t, r);
+  SF_Automatic<KARP> M(f, true, 1e-2);
+  MultipleShooting F(M, t, r);
   Newton N(F, m * dim);
   VectorD2 sol = N.iterate(s0);
 

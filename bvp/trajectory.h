@@ -9,9 +9,11 @@
 
 // Find suitable initial values for subintervals using an approximate
 // solution to the BVP, i.e. a "starting trajectory".
+template <typename M = DOPRI54>
 std::vector<FP_Type>
 trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
-           FP_Type TOL = 1e-3, FP_Type C = 2, bool ssc = false)
+           FP_Type C = 2, bool ssc = true,
+           FP_Type h0 = 1e-1, FP_Type TOL = 1e-4)
 {
   assert(a < b);
   std::vector<FP_Type> T;
@@ -21,16 +23,15 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &f, Curve *eta,
 
   while (t_i < b)
     {
-      // Initial value of eta' = f(t, eta_i)
       VectorD2 eta_i = (*eta)(t_i);
-      ERK<DOPRI87> AdM(f, t_i, eta_i, eta);
+      ERK<M> AdM(f, t_i, eta_i, eta);
 
       try
       {
         if (ssc)
-          AdM.iterate_with_ssc(b, 1e-3, TOL, false, C);
+          AdM.iterate_with_ssc(b, h0, TOL, false, C);
         else
-          AdM.iterate_up_to(b, TOL, C);
+          AdM.iterate_up_to(b, h0, false, C);
 
         t_i = AdM.endpoint();
         t_i < b ? T.push_back(t_i) : T.push_back(b);

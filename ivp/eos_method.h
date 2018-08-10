@@ -109,8 +109,9 @@ public:
   virtual ~OneStepMethod() = default;
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2,
-                     bool fundamental_matrix = false)
+  void iterate_up_to(FP_Type t_lim, FP_Type h,
+                     bool fundamental_matrix = false,
+                     FP_Type C = 2)
   {
     reset(); // init output variables
 
@@ -121,7 +122,7 @@ public:
     // Check prerequisites for variational equation
     TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
 
-    if (f_diff == nullptr && fundamental_matrix)
+    if (fundamental_matrix && f_diff == nullptr)
       throw std::invalid_argument("right-hand side is not differentiable");
 
     // Initial value for Yn(t; t0, u0)
@@ -135,7 +136,7 @@ public:
         if (fundamental_matrix)
           {
             auto U = increment_variational(t, y, h, Yn, f_diff);
-            y  += h * U.first;
+            y += h * U.first;
             Yn.add(1, h * U.second);
           }
         else
@@ -158,9 +159,14 @@ public:
       }
 
     if (timepoints.back() != t_lim)
-      std::cerr << "warning: time step outside interval end ("
-                << timepoints.back() << "; [" << t0 << ", " << t_lim << "])"
-                << std::endl;
+      {
+        std::string err = "time step outside interval end ("
+            + std::to_string(timepoints.back()) + "; ["
+            + std::to_string(t0) + ", "
+            + std::to_string(t_lim) + "])";
+
+        throw std::out_of_range(err.c_str());
+      }
   }
 
 private:

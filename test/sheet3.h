@@ -19,45 +19,35 @@ namespace Test
     u0[1] = 1.0;
 
     // Solve the equations with the Dormand-Prince 87 method
-    ERK<DOPRI> Equidistant(f, t0, u0);
+    ERK<DOPRI54> Equidistant(f, t0, u0);
     Equidistant.iterate_up_to(t1, 1e-3);
     Equidistant.print(output1);
     std::cout << "Amount of steps: (DOPRI54, Equidistant) "
               << Equidistant.n_steps() << std::endl;
 
     // Adaptive method of order 5(4)
-    ERK<DOPRI> Adaptive54(f, t0, u0);
+    ERK<DOPRI54> Adaptive54(f, t0, u0);
     FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
     Adaptive54.iterate_with_ssc(t1, 1e-1, TOL, false);
-
-    // Adaptive method of order 8(7)
-    ERK<DOPRI87> Adaptive87(f, t0, u0);
-    Adaptive87.iterate_with_ssc(t1, 1e-1, TOL, false);
-    Adaptive87.print(output2);
+    Adaptive54.print(output2);
 
     std::cout << "Amount of steps: (DOPRI54, Adaptive) "
               << Adaptive54.n_steps() << std::endl
               << "Amount of misfires: "
               << Adaptive54.n_misfires() << std::endl
               << "Amount of accepted steps: "
-              << Adaptive54.n_steps() - Adaptive54.n_misfires() << std::endl
-              << "Amount of steps: (DOPRI87, Adaptive) "
-              << Adaptive87.n_steps() << std::endl
-              << "Amount of misfires: "
-              << Adaptive87.n_misfires() << std::endl
-              << "Amount of accepted steps: "
-              << Adaptive87.n_steps() - Adaptive87.n_misfires() << std::endl;
+              << Adaptive54.n_steps() - Adaptive54.n_misfires() << std::endl;
 
     // Plot the adaptive step size on the interval I
-    Adaptive87.print_step_size(output3);
+    Adaptive54.print_step_size(output3);
   }
 
   void Sheet3()
   {
     std::ofstream output_file1, output_file2, output_file3;
     GnuPlot Dat1("volterra_dopri54_eq.dat", output_file1);
-    GnuPlot Dat2("volterra_dopri87_ad.dat", output_file2);
-    GnuPlot Dat3("volterra_dopri87_steps.dat", output_file3);
+    GnuPlot Dat2("volterra_dopri54_ad.dat", output_file2);
+    GnuPlot Dat3("volterra_dopri54_steps.dat", output_file3);
 
     Problem_P32(output_file1, output_file2, output_file3);
     Dat1.plot_with_lines(2);

@@ -6,6 +6,8 @@
 #include "../base/forward_ad.h"
 #include "../ivp/runge_kutta.h"
 
+#define VAREQ_METHOD DOPRI54
+
 namespace Test
 {
   VectorAD RHS_Var1(NumberAD, const VectorAD &u)
@@ -54,7 +56,7 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./t1;
 
-    ERK<RK65> Method(f_ad, t0, u0);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
     Method.iterate_with_ssc(t1, 1e-1, TOL, true);
 
     VectorD2 y = Method.approx();
@@ -88,7 +90,7 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./std::pow(t1+1, 2);
 
-    ERK<RK65> Method(f_ad, t0, u0);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
     Method.iterate_with_ssc(t1, 1e-1, TOL, true);
 
     VectorD2 y = Method.approx();
@@ -122,7 +124,7 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = t1*t1 + 1;
 
-    ERK<RK65> Method(f_ad, t0, u0);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
     Method.iterate_with_ssc(t1, 1e-1, TOL, true);
 
     VectorD2 y = Method.approx();
@@ -156,7 +158,7 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./std::pow(t1+1, 1.5);
 
-    ERK<RK65> Method(f_ad, t0, u0);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
     Method.iterate_with_ssc(t1, 1e-1, TOL, true);
 
     VectorD2 y = Method.approx();

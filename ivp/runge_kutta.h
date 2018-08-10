@@ -22,7 +22,7 @@ public:
     A  = MatrixD2(BTab.n, BTab.n, BTab.A.data());
     b1 = VectorD2(BTab.b_high.begin(), BTab.b_high.end());
     c  = VectorD2(BTab.c.begin(), BTab.c.end());
-    order = BTab.p;
+    p = BTab.p;
 
     if (BTab.b_low.size())
       {
@@ -131,9 +131,19 @@ public:
                         FP_Type C = 2)
   {
     assert(embedded_method);
-    FP_Type t = t0;
-    FP_Type h_var = h0;
-    size_t n = u0.size();
+    size_t ad_count = 0;
+
+    // Ensure initial step fits inside interval
+    while (t0 + h0 > t_lim)
+      {
+        std::cerr << "warning: reducing initial step size (" << ad_count << ") ("
+                  << h0 << "-> " << h0*1e-1 << ")" << std::endl;
+        h0 *= 1e-1;
+        ad_count++;
+
+        if (ad_count > 3)
+          throw std::invalid_argument("could not determine initial step size");
+      }
 
     // Check prerequisites for variational equation
     TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
@@ -141,10 +151,12 @@ public:
     if (fundamental_matrix && f_diff == nullptr)
       throw std::invalid_argument("right-hand side is not differentiable");
 
-    if (t + h0 > t_lim)
-      throw std::invalid_argument("initial step width exceeds interval");
+    // Input variables
+    FP_Type t = t0;
+    FP_Type h_var = h0;
+    size_t n = u0.size();
 
-    // Init output variables
+    // Output variables
     OneStepMethod::reset();
     misfires = 0;
 
@@ -182,7 +194,8 @@ public:
 
         // (2) Compute optimal step size.
         FP_Type local_error = (inc_y1 - inc_y2).l2_norm();
-        FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / order);
+        FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / (p+1));
+//        FP_Type h_opt = 0.9 * h_var * std::pow(TOL * std::abs(h_var) / local_error, 1./p);
 
         // (3) Time step is rejected; repeat step with optimal value.
         if (h_opt < h_var)
@@ -217,9 +230,14 @@ public:
       }
 
     if (timepoints.back() != t_lim)
-      std::cerr << "warning: time step outside interval end ("
-                << timepoints.back() << "; [" << t0 << ", " << t_lim << "])"
-                << std::endl;
+      {
+        std::string err = "time step outside interval end ("
+            + std::to_string(timepoints.back()) + "; ["
+            + std::to_string(t0) + ", "
+            + std::to_string(t_lim) + "])";
+
+        throw std::out_of_range(err.c_str());
+      }
   }
 
   void print_step_size(std::ostream &out)
@@ -243,7 +261,7 @@ private:
   // Butcher tableau
   MatrixD2 A;
   VectorD2 b1, b2, c;
-  size_t order;
+  size_t p;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

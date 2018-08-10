@@ -40,6 +40,8 @@ namespace Test
   class CurveStoer : public Curve
   {
   public:
+    using Curve::Curve;
+
     VectorD2 operator()(FP_Type t)
     {
       VectorD2 y(2);
@@ -50,8 +52,7 @@ namespace Test
     }
   };
 
-  template <typename DiffMethod>
-  void Stoer_Graph(SingleShooting<DiffMethod> &F, std::string filename)
+  void Stoer_Graph(SingleShooting &F, std::string filename)
   {
     VectorD2 s(2);
     s[0] = 4;
@@ -74,19 +75,19 @@ namespace Test
 
   void Stoer_Mult(TimeFunctor &rhs, FP_Type a, FP_Type b)
   {
-    CurveStoer* eta = new CurveStoer;
+    CurveStoer* eta = new CurveStoer(2);
     assert((*eta)(0)[0] == 4);
     assert((*eta)(1)[0] == 1);
 
-    std::vector<FP_Type> subint = trajectory(a, b, rhs, eta, 1e-3, 2, false);
-    std::cout << "Amount of intervals: " << subint.size()-1 << std::endl;
-    std::cout << subint;
+    std::vector<FP_Type> t = trajectory(a, b, rhs, eta, 2, false, 1e-3);
+    std::cout << "Amount of intervals: " << t.size()-1 << std::endl;
+    std::cout << t;
 
     // Plot trajectory
     std::ofstream output_file;
     GnuPlot Dat1("Stoer_trajectory.dat", output_file);
 
-    for (auto &c : subint)
+    for (auto &c : t)
       output_file << c << "\t" << (*eta)(c);
     Dat1.plot_with_lines(2, "linespoints");
   }
@@ -94,9 +95,6 @@ namespace Test
   void Stoer()
   {
     // Stoer, Bulirsch, Num. Math 2, pp.192 (problem of 2nd order)
-    std_tWrapper rhs(RHS_Stoer<VectorD2>, 2);
-    FAD_tWrapper rhs_ad(RHS_Stoer<VectorAD>, 2);
-
     FP_Type a = 0.0;
     FP_Type b = 1.0;
 
@@ -118,33 +116,39 @@ namespace Test
     s[1] = -1;
     start.emplace_back(s);
 
-    // Solve BVP (external differentation)
+    // 1. single shooting, external differentation
     std::cout << "Single shooting (Stoer, ext. diff.)" << std::endl;
-    SingleShooting<SF_External> F(rhs, a, b, r);
+    std_tWrapper rhs(RHS_Stoer<VectorD2>, 2);
+    SF_External<DOPRI54> M(rhs, true, 1e-1, 1e-4);
+    SingleShooting F(M, a, b, r);
     Newton N(F, 2);
 
     for (auto &s : start)
       N.iterate(s);
 
-    // Solve BVP (automatic differentation)
+    // 2. single shooting, automatic differentation
     std::cout << "Single shooting (Stoer, aut. diff.)" << std::endl;
-    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
+    FAD_tWrapper rhs_ad(RHS_Stoer<VectorAD>, 2);
+    SF_Automatic<DOPRI54> M_ad(rhs_ad, true, 1e-1, 1e-4);
+    SingleShooting F_ad(M_ad, a, b, r);
     Newton N_ad(F_ad, 2);
 
     for (auto &s : start)
       N_ad.iterate(s);
 
     // Create plot for F(s)
-    Stoer_Graph<SF_External>(F, "bvp_stoer_ed.dat");
-    Stoer_Graph<SF_Automatic>(F_ad, "bvp_stoer_ad.dat");
+    Stoer_Graph(F, "bvp_stoer_ed.dat");
+    Stoer_Graph(F_ad, "bvp_stoer_ad.dat");
 
-    // Find subintervals for multiple shooting method
+    // Interval subdivision
     Stoer_Mult(rhs, a, b);
   }
 
   class CurveTroesch : public Curve
   {
   public:
+    using Curve::Curve;
+
     VectorD2 operator()(FP_Type t)
     {
       VectorD2 y(2);
@@ -155,32 +159,47 @@ namespace Test
     }
   };
 
-  void Troesch_Mult(TimeFunctor &rhs, FP_Type a, FP_Type b)
+  std::pair<std::vector<FP_Type>, VectorD2>
+  Troesch_MS(TimeFunctor &rhs, size_t dim, FP_Type a, FP_Type b)
   {
-    // Interval subdivision for multiple shooting method
-    CurveTroesch* eta = new CurveTroesch;
+    // Approximate to BVP solution
+    CurveTroesch* eta = new CurveTroesch(2);
     assert((*eta)(0)[0] == 0);
     assert((*eta)(1)[0] == 1);
 
-    std::vector<FP_Type> subint = trajectory(a, b, rhs, eta, 1e-3, 2, false);
-    std::cout << "Amount of intervals: " << subint.size()-1 << std::endl;
-    std::cout << subint;
+    // Interval subdivision
+    std::vector<FP_Type> t = trajectory(a, b, rhs, eta, 2, false, 1e-3);
+
+    if (!(t.front() == a && t.back() == b))
+      throw std::domain_error("subdivision does not match interval boundaries");
+
+    size_t m = t.size();
+    std::cout << "Amount of intervals: " << m-1 << std::endl;
 
     // Plot trajectory
     std::ofstream output_file;
     GnuPlot Dat1("Troesch_trajectory.dat", output_file);
 
-    for (auto &c : subint)
+    for (auto &c : t)
       output_file << c << "\t" << (*eta)(c);
     Dat1.plot_with_lines(2, "linespoints");
+
+    // Starting values for Newton iteration
+    VectorD2 s0(m*dim);
+
+    for (size_t i = 0; i < m; i++)
+      {
+        VectorD2 s_i = (*eta)(t.at(i));
+
+        for (size_t k = 0; k < dim; k++)
+          s0[k + i*dim] = s_i[k];
+      }
+    return std::make_pair(t, s0);
   }
 
   void Troesch()
   {
     // Troesch BVP, see Num. Math. 2, 7.4.3.8
-    std_tWrapper rhs(RHS_Troesch<VectorD2>, 2);
-    FAD_tWrapper rhs_ad(RHS_Troesch<VectorAD>, 2);
-
     FP_Type a = 0.0;
     FP_Type b = 1.0;
 
@@ -195,20 +214,45 @@ namespace Test
     s[0] = 0;
     s[1] = 0.05;
 
-    // Solve BVP (external differentation)
-    std::cout << "Single shooting (Troesch, ext. diff.)" << std::endl;
-    SingleShooting<SF_External> F(rhs, a, b, r);
+    // 1. single shooting, external differentiation
+    std::cout << "Single shooting (Troesch, ext. diff.)"
+              << std::endl;
+
+    std_tWrapper rhs(RHS_Troesch<VectorD2>, 2);
+    SF_External<DOPRI54> M(rhs, true, 1e-3, 1e-4);
+
+    SingleShooting F(M, a, b, r);
     Newton N(F, 2);
     N.iterate(s);
 
-    // Solve BVP (automatic differentation)
-    std::cout << "Single shooting (Troesch, aut. diff.)" << std::endl;
-    SingleShooting<SF_Automatic> F_ad(rhs_ad, a, b, r);
+    // 2. single shooting, automatic differentation
+    std::cout << "Single shooting (Troesch, aut. diff.)"
+              << std::endl;
+
+    FAD_tWrapper rhs_ad(RHS_Troesch<VectorAD>, 2);
+    SF_Automatic<DOPRI54> M_ad(rhs_ad, true, 1e-3, 1e-4);
+
+    SingleShooting F_ad(M_ad, a, b, r);
     Newton N_ad(F_ad, 2);
     N_ad.iterate(s);
 
-    // Find subintervals for multiple shooting method
-    Troesch_Mult(rhs, a, b);
+    // 3. multiple shooting, external differentation
+    auto T = Troesch_MS(rhs, 2, a, b);
+    size_t m = T.first.size();
+    std::cout << "Multiple shooting (Troesch, ext. diff.)"
+              << std::endl;
+
+    MultipleShooting G(M, T.first, r);
+    Newton O(G, 2*m);
+    O.iterate(T.second);
+
+    // 4. multiple shooting, automatic differentiation
+    std::cout << "Multiple shooting (Troesch, aut. diff.)"
+              << std::endl;
+
+    MultipleShooting G_ad(M_ad, T.first, r);
+    Newton O_ad(G_ad, 2*m);
+    O_ad.iterate(T.second);
   }
 }
 

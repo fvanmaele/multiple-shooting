@@ -42,13 +42,13 @@ namespace Test
               << "OOC: (Blackbox, h = " << h << ") "
               << OOC << std::endl;
 
-    ERK<DOPRI> Method2(f, t0, u0);
+    ERK<DOPRI54> Method2(f, t0, u0);
     FP_Type EOC2 = eoc_1step(Method2, t1, h);
     FP_Type OOC2 = ooc_1step(Method2, t1, h, u);
 
-    std::cout << "EOC: (DOPRI, h = " << h << ") "
+    std::cout << "EOC: (DOPRI54, h = " << h << ") "
               << EOC2 << std::endl
-              << "OOC: (DOPRI, h = " << h << ") "
+              << "OOC: (DOPRI54, h = " << h << ") "
               << OOC2 << std::endl;
   }
 
