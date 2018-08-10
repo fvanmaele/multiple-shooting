@@ -99,7 +99,8 @@ public:
     return x;
   }
 
-  VectorD2 iterate_broyden(const VectorD2 &x0, size_t step_limit = 50)
+  VectorD2 iterate_broyden(const VectorD2 &x0, size_t skips = 5,
+                           size_t step_limit = 50)
   {
     VectorD2 x = x0;
     MatrixD2 J = f.diff(x);
@@ -113,7 +114,7 @@ public:
     for (size_t k = 1; k < step_limit; k++)
       {
         // Full computation of Jacobian every 4 steps
-        if (k % 4 == 0)
+        if (k % skips == 0)
           {
             J = f.diff(x);
             step(J, x);

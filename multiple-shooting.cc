@@ -47,8 +47,8 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   const FP_Type b = 5;
 
   // RHS of ODE
-  const size_t n = 2;
-  std_tWrapper f(RHS_ThomasFermi<VectorD2>, n);
+  const size_t dim = 2;
+  FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
 
   // Boundary conditions (linear separated BVP)
   const MatrixD2 A = init_matrix(2, 2, {1, 0, 0, 0});
@@ -78,24 +78,33 @@ void Solve_ThomasFermi(int n_int, bool adaptive)
   std::cout << "Amount of intervals: " << m-1 << std::endl;
 
   // 2) Starting values s(0)_1 ... s(0)_n
-  dealii::BlockVector<FP_Type> s0(m, n);
+  VectorD2 s0(m*dim);
+  for (size_t i = 0; i < m; i++)
+    { // Extract i-th block of s
+      VectorD2 s_i = (*eta)(t.at(i));
 
-  for (size_t i = 0; i < t.size(); i++)
-    s0.block(i) = (*eta)(t.at(i));
-  s0.print(std::cout);
+      for (size_t k = 0; k < dim; k++)
+        s0[k + i*dim] = s_i[k];
+    }
 
   // a) Plot trajectory
   std::ofstream output_file;
   GnuPlot Dat1("TF_trajectory.dat", output_file);
 
   for (size_t i = 0; i < t.size(); i++)
-    output_file << t.at(i) << "\t" << s0.block(i);
+    {
+      VectorD2 s_i = (*eta)(t.at(i));
+      output_file << t.at(i) << "\t" << s_i;
+    }
   Dat1.plot_with_lines(2, "linespoints");
 
   // 3) Begin multiple shooting method
-  MultipleShooting<SF_External> F(f, t, r);
-  Newton N(F, m*n);
-  N.iterate(s0);
+  MultipleShooting<SF_External> F(f, dim, t, r);
+  Newton N(F, m * dim);
+  VectorD2 sol = N.iterate(s0);
+
+  // 4) Plot graph of solution
+
 }
 
 void usage()

@@ -4,8 +4,6 @@
 #include <vector>
 #include <iostream>
 
-#include <deal.II/base/data_out_base.h>
-
 #include "../base/types.h"
 #include "../lac/lac_types.h"
 #include "../lac/vector_operators.h"
@@ -32,15 +30,15 @@ public:
 
   // The exact solution may be specified as an optional argument
   // for comparison purposes.
-  OneStepMethod(TimeFunctor &_f, FP_Type _t0, dealii::Vector<FP_Type> _u0,
+  OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0,
                 Curve *_u = nullptr)
     :
-      f(_f), u(_u), t0(_t0), u0(_u0), steps(0),
+      f(_f), u(_u), t0(_t0), u0(_u0), steps(0), Yn(0),
       timepoints(1, _t0), uapprox(1, _u0)
   {}
 
   // Access functions
-  dealii::Vector<FP_Type> approx() const
+  VectorD2 approx() const
   {
     return uapprox.back();
   }
@@ -55,6 +53,11 @@ public:
     return steps;
   }
 
+  MatrixD2 fund_matrix() const
+  {
+    return Yn;
+  }
+
   // Print approximation at each step in a tabular format
   void print(std::ostream &out = std::cout) const
   {
@@ -66,7 +69,7 @@ public:
       }
   }
 
-  bool sol_is_nan(const dealii::Vector<FP_Type> &y)
+  bool sol_is_nan(const VectorD2 &y)
   {
     for (size_t i = 0; i < y.size(); i++)
       {
@@ -85,14 +88,21 @@ public:
     steps = 0;
   }
 
-  void save_step(const FP_Type &t, const dealii::Vector<FP_Type> &u)
+  void save_step(const FP_Type &t, const VectorD2 &u)
   {
     timepoints.push_back(t);
     uapprox.push_back(u);
   }
 
-  virtual dealii::Vector<FP_Type>
-  increment_function(FP_Type t, const dealii::Vector<FP_Type> &y, FP_Type h)
+  virtual VectorD2
+  increment_function(FP_Type t, const VectorD2 &y, FP_Type h)
+  {
+    throw std::invalid_argument("Please specify the step procedure in a child class");
+  }
+
+  virtual std::pair<VectorD2, MatrixD2>
+  increment_variational(FP_Type t, const VectorD2 &y, FP_Type h,
+                        const MatrixD2 &Y, TimeDivFunctor *F)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
@@ -100,14 +110,24 @@ public:
   virtual ~OneStepMethod() = default;
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2)
+  void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2,
+                     bool fundamental_matrix = false)
   {
-    // init input variables
-    FP_Type t = t0;
-    dealii::Vector<FP_Type> y = u0;
+    FP_Type  t = t0;
+    VectorD2 y = u0;
+    size_t n = u0.size();
+
+    // Check prerequisites for variational equation
+    TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
+
+    if (fundamental_matrix && f_diff == nullptr)
+      throw std::invalid_argument("right-hand side is not differentiable");
 
     // init output variables
     reset();
+
+    // Initial value for Yn(t; t0)
+    Yn = dealii::IdentityMatrix(n);
 
     while (t_lim - t > 0)
       { // Avoid rounding errors (Rem. 2.4.3)
@@ -116,7 +136,14 @@ public:
 
         // y_k = y_{k-1} + h*F(t_{k-1}, y_{k-1})
         // t_k = t_{k-1} + h
-        y += h * increment_function(t, y, h);
+        if (fundamental_matrix)
+          y += h * increment_function(t, y, h);
+        else
+          {
+            auto U = increment_variational(t, y, h, Yn, f_diff);
+            y  += h * U.first;
+            Yn.add(1, h * U.second);
+          }
         t += h;
 
         // Add u_k, t_k to result vectors
@@ -138,15 +165,16 @@ public:
   }
 
 private:
-  TimeFunctor &f;             // rhs of ODE in standard form
-  Curve *u;                   // exact solution
-  FP_Type t0;                 // initial time value
-  dealii::Vector<FP_Type> u0; // initial value
-  size_t steps;               // amount of integration steps
+  TimeFunctor &f;  // rhs of ODE in standard form
+  Curve *u;        // exact solution
+  FP_Type t0;      // initial time value
+  VectorD2 u0;     // initial value
+  size_t steps;    // amount of integration steps
+  MatrixD2 Yn;     // fundamental matrix
 
   // Result vectors for the IVP
   std::vector<FP_Type> timepoints;
-  std::vector<dealii::Vector<FP_Type> > uapprox;
+  std::vector<VectorD2> uapprox;
 };
 
 #endif // EOS_METHOD_H

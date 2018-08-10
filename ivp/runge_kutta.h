@@ -37,9 +37,8 @@ public:
       }
   }
 
-  VectorD2
-  k_increment(FP_Type t, const VectorD2 &y,
-              FP_Type h, const VectorD2 &b)
+  VectorD2 k_increment(FP_Type t, const VectorD2 &y,
+                       FP_Type h, const VectorD2 &b)
   {
     size_t s = b.size();
     size_t n = y.size();
@@ -110,11 +109,16 @@ public:
   }
 
   virtual VectorD2
-  increment_function(FP_Type t, const VectorD2 &y,
-                     FP_Type h) override
-  {
-    // Explicit method of higher order
+  increment_function(FP_Type t, const VectorD2 &y, FP_Type h) override
+  { // Explicit method of higher order
     return k_increment(t, y, h, b1);
+  }
+
+  virtual std::pair<VectorD2, MatrixD2>
+  increment_variational(FP_Type t, const VectorD2 &y, FP_Type h,
+                        const MatrixD2 &Y, TimeDivFunctor *F) override
+  {
+    return k_variational(t, y, h, b1, Y, F);
   }
 
   size_t n_misfires() const
@@ -122,51 +126,48 @@ public:
     return misfires;
   }
 
-  MatrixD2 fund_matrix() const
-  {
-    return Yn;
-  }
-
   void iterate_with_ssc(FP_Type t_lim, FP_Type h0, FP_Type TOL,
                         bool fundamental_matrix = false,
                         FP_Type C = 2)
   {
     assert(embedded_method);
-    FP_Type t = t0;     // start time
-    FP_Type h_var = h0; // initial step size
+    FP_Type t = t0;
+    FP_Type h_var = h0;
     size_t n = u0.size();
 
+    // Check prerequisites for variational equation
     TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
+
     if (fundamental_matrix && f_diff == nullptr)
       throw std::invalid_argument("right-hand side is not differentiable");
 
     if (t + h0 > t_lim)
       throw std::invalid_argument("initial step width exceeds interval");
 
+    // Init output variables
+    OneStepMethod::reset();
+    misfires = 0;
+
     // Dynamic allocation, declare outside loop
     VectorD2 y = u0;
     VectorD2 inc_y1(n);
     VectorD2 inc_y2(n);
 
-    // Init output variables
-    OneStepMethod::reset();
-    misfires = 0;
-
-    // Initial value for fundamental matrix Yn(t; t0)
+    // Initial value for Yn(t; t0)
     Yn = dealii::IdentityMatrix(n);
     MatrixD2 inc_Yn(n, n);
 
     // Algorithm 2.4.2
-    // The step-size is controlled only by the IVP, not the variational equation,
-    // to avoid recomputing the Jacobian on a rejected time step.
     while (t_lim - t > 0)
       { // (1) Candidates for u_k, v_k with time step h_k
         if (fundamental_matrix)
           {
+            // The step-size is controlled only by the IVP, not the variational equation,
+            // to avoid recomputing the Jacobian on a rejected time step.
             auto U = k_variational(t, y, h_var, b1, Yn, f_diff);
 
-            inc_y1 = y + h_var * U.first;
-            inc_y2 = y + h_var * k_increment(t, y, h_var, b2);
+            inc_y1 = y  + h_var * U.first;
+            inc_y2 = y  + h_var * k_increment(t, y, h_var, b2);
             inc_Yn = Yn + h_var * U.second;
           }
         else
@@ -235,6 +236,7 @@ private:
   // OneStepMethod::t0;
   // OneStepMethod::u0;
   // OneStepMethod::steps;
+  // OneStepMethod::Yn
   // OneStepMethod::timepoints;
   // OneStepMethod::uapprox;
 
@@ -242,9 +244,6 @@ private:
   MatrixD2 A;
   VectorD2 b1, b2, c;
   size_t order;
-
-  // Variational equation
-  MatrixD2 Yn;
 
   // Adaptive step-size plot
   std::vector<FP_Type> step_sizes;

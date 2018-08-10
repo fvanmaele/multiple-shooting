@@ -29,7 +29,6 @@ namespace Test
     // F: R^2 -> R^2
     FAD_cWrapper F(AutFAD, 2);
     Newton N(F, 2);
-
     N.iterate(s);
   }
 }

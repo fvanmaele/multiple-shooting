@@ -20,7 +20,9 @@ public:
   friend class SF_Automatic;  // Automatic differentation
   friend class SF_Manual;     // Use pre-computed fundamental matrix
 
-  ShootingFunction(TimeFunctor &_f) : f(_f)
+  ShootingFunction(TimeFunctor &_f, bool e = true,
+                   FP_Type _h0 = 1e-1, FP_Type _TOL = 1e-4) :
+    f(_f), embedded_method(e), h0(_h0), TOL(_TOL)
   {}
 
   // Compute y(t1; t0, s) by integrating IVP y(t0; s), where s represents
@@ -37,6 +39,8 @@ public:
 
 private:
   TimeFunctor &f;
+  bool embedded_method;
+  FP_Type h0, TOL;
 };
 
 class SF_External : public ShootingFunction
@@ -47,11 +51,18 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    ERK<DOPRI87> AdaptiveMethod(f, t0, s);
-    FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
-
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, false);
-    return AdaptiveMethod.approx();
+    if (embedded_method)
+      {
+        ERK<KARP> Method(f, t0, s);
+        Method.iterate_with_ssc(t1, h0, TOL, false);
+        return Method.approx();
+      }
+    else
+      {
+        ERK<RK65> Method(f, t0, s);
+        Method.iterate_up_to(t1, 1e-3); // XXX: variable step width
+        return Method.approx();
+      }
   }
 
   // For the choice of TOL in the adaptive method and constant Epsilon,
@@ -91,6 +102,9 @@ public:
 
 private:
   // ShootingFunction::f
+  // ShootingFunction::embedded_method
+  // ShootingFunction::h0
+  // ShootingFunction::TOL
 };
 
 // Assumes f is DivFunctor with AD support.
@@ -102,18 +116,25 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    ERK<DOPRI87> AdaptiveMethod(f, t0, s);
-    FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
-
-    // Compute solution of IVP
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, false);
-    return AdaptiveMethod.approx();
+    if (embedded_method)
+      {
+        ERK<KARP> Method(f, t0, s);
+        Method.iterate_with_ssc(t1, h0, TOL, false);
+        return Method.approx();
+      }
+    else
+      {
+        ERK<RK65> Method(f, t0, s);
+        Method.iterate_up_to(t1, 1e-3); // XXX: variable step width
+        return Method.approx();
+      }
   }
 
   virtual std::pair<VectorD2, MatrixD2>
   solve_Z(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
     TimeDivFunctor* f_ad = dynamic_cast<TimeDivFunctor*>(&f);
+
     if (f_ad == nullptr)
       throw std::invalid_argument("functor is not differentiable");
 
@@ -122,7 +143,7 @@ public:
 
     // Compute IVP and variational equation simultaneously.
     // Step-size is controlled by the IVP only.
-    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, true);
+    AdaptiveMethod.iterate_with_ssc(t1, 1e-3, TOL, true); // XXX: disable step control
     VectorD2 y = AdaptiveMethod.approx();
     MatrixD2 Z = AdaptiveMethod.fund_matrix();
 
@@ -131,8 +152,9 @@ public:
 
 private:
   // ShootingFunction::f
-  // ShootingFunction::t0
-  // ShootingFunction::t1
+  // ShootingFunction::embedded_method
+  // ShootingFunction::h0
+  // ShootingFunction::TOL
 };
 
 #endif // SHOOTING_H
