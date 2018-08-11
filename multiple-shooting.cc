@@ -11,7 +11,7 @@
 #include "ivp/runge_kutta.h"
 #include "test/run_tests.h"
 
-static int  n_intervals = 20;
+static int n_intervals = 20;
 static bool run_tests = false;
 
 class CurveTF : public Curve
@@ -69,23 +69,24 @@ void Solve_ThomasFermi(int n_int)
   // a) Find initial subdivision based on starting trajectory
   t = trajectory(a, b, f, eta, 1.1, false, 1e-2);
 
-  if (t.size() < n_int+1)
+  if (t.size() < (size_t)(n_int+1))
     throw std::invalid_argument("insufficient time points available");
 
   // b) Interpolate to given interval amount
   t = interpolate_points(t, n_int+1);
   std::cout << "Amount of intervals: " << t.size()-1 << std::endl;
+  std::cout << t;
 
   // c) Check boundaries
   if (!(t.front() == a && t.back() == b))
     throw std::domain_error("subdivision does not match interval boundaries");
 
   // d) Plot trajectory
-  std::ofstream output_file;
-  GnuPlot Dat1("TF_trajectory.dat", output_file);
+  std::ofstream output_file1;
+  GnuPlot Dat1("TF_trajectory.dat", output_file1);
 
   for (auto &c : t)
-    output_file << c << "\t" << (*eta)(c);
+    output_file1 << c << "\t" << (*eta)(c);
   Dat1.plot_with_lines(2, "linespoints");
 
 
@@ -105,7 +106,7 @@ void Solve_ThomasFermi(int n_int)
 
   // -------------------------------------------
   // 3) Begin multiple shooting method
-  SF_Automatic<KARP> M(f, true, 1e-2);
+  SF_Automatic<KARP> M(f, true, 1e-2, 1e-4);
   MultipleShooting F(M, t, r);
   Newton N(F, m * dim);
   VectorD2 sol = N.iterate(s0);
@@ -113,7 +114,24 @@ void Solve_ThomasFermi(int n_int)
 
   // -------------------------------------------
   // 4) Plot graph of solution
+  std::ofstream output_file2;
+  GnuPlot Dat2("TF_solution.dat", output_file2);
 
+  for (size_t i = 0; i < t.size()-1; i++)
+    {
+      VectorD2 s_i(dim);
+
+      for (size_t k = 0; k < dim; k++)
+        s_i[k] = sol[k + i*dim];
+
+      // Solve u' = f(t_{i+1}; t_i, s_i)
+      ERK<KARP> M_i(f, t[i], s_i);
+      M_i.iterate_with_ssc(t[i+1], 1e-2, 1e-7);
+      M_i.print(output_file2);
+    }
+
+  Dat2.plot_with_lines(2, "linespoints");
+  Dat2.plot_with_lines(2, "lines", true);
 }
 
 void usage()

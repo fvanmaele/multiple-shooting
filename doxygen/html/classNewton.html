@@ -67,22 +67,227 @@ $(function() {
 <div class="title">Newton&lt; Callable &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> method with globalization and rank-1 updates.  
+ <a href="classNewton.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="newton_8h_source.html">newton.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memItemLeft" align="right" valign="top"><a id="a8271deaf4a7dd62152c126fb506b8d9b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Newton</b> (Callable _f, size_t _dim, FP_Type _TOL=1e-6, bool _ssc=true, size_t _ssc_lim=20)</td></tr>
+<tr class="memitem:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNewton.html#a8271deaf4a7dd62152c126fb506b8d9b">Newton</a> (Callable _f, size_t _dim, FP_Type _TOL=1e-6, bool _ssc=true, size_t _ssc_lim=20)</td></tr>
+<tr class="memdesc:a8271deaf4a7dd62152c126fb506b8d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. Initialize the method with a function <img class="formulaInl" alt="$f:\mathbb{R}^d \rightarrow \mathbb{R}^d$" src="form_0.png"/> of dimension <img class="formulaInl" alt="$d$" src="form_1.png"/>.  <a href="#a8271deaf4a7dd62152c126fb506b8d9b">More...</a><br /></td></tr>
 <tr class="separator:a8271deaf4a7dd62152c126fb506b8d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf7592a3f99721b837b11f94f4f39469"><td class="memItemLeft" align="right" valign="top"><a id="aaf7592a3f99721b837b11f94f4f39469"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (MatrixD2 &amp;J, VectorD2 &amp;x)</td></tr>
-<tr class="separator:aaf7592a3f99721b837b11f94f4f39469"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a194fe411efb80bb01a215d289509d47a"><td class="memItemLeft" align="right" valign="top"><a id="a194fe411efb80bb01a215d289509d47a"></a>
-VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>iterate</b> (const VectorD2 &amp;x0, size_t step_limit=25)</td></tr>
-<tr class="separator:a194fe411efb80bb01a215d289509d47a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace30992f63ce8b2859bdb6a237040e05"><td class="memItemLeft" align="right" valign="top"><a id="ace30992f63ce8b2859bdb6a237040e05"></a>
-VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_broyden</b> (const VectorD2 &amp;x0, size_t skips=5, size_t step_limit=50)</td></tr>
-<tr class="separator:ace30992f63ce8b2859bdb6a237040e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6331f82a3fb26379f95ac4dc82b2305f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNewton.html#a6331f82a3fb26379f95ac4dc82b2305f">step</a> (const MatrixD2 &amp;J_inv, VectorD2 &amp;x)</td></tr>
+<tr class="memdesc:a6331f82a3fb26379f95ac4dc82b2305f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> step.  <a href="#a6331f82a3fb26379f95ac4dc82b2305f">More...</a><br /></td></tr>
+<tr class="separator:a6331f82a3fb26379f95ac4dc82b2305f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f58ddb9692d7eed4127e2d6f4616f3"><td class="memItemLeft" align="right" valign="top">VectorD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNewton.html#a39f58ddb9692d7eed4127e2d6f4616f3">iterate</a> (const VectorD2 &amp;x0, size_t step_limit=25)</td></tr>
+<tr class="memdesc:a39f58ddb9692d7eed4127e2d6f4616f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> steps until <img class="formulaInl" alt="$\|f(s)\| &lt; TOL$" src="form_4.png"/>.  <a href="#a39f58ddb9692d7eed4127e2d6f4616f3">More...</a><br /></td></tr>
+<tr class="separator:a39f58ddb9692d7eed4127e2d6f4616f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8040c553c7cb3adf19eba02a5afabdb0"><td class="memItemLeft" align="right" valign="top">VectorD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNewton.html#a8040c553c7cb3adf19eba02a5afabdb0">iterate_broyden</a> (const VectorD2 &amp;x0, size_t skips=5, size_t step_limit=50)</td></tr>
+<tr class="memdesc:a8040c553c7cb3adf19eba02a5afabdb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use rank-1 updates during iteration.  <a href="#a8040c553c7cb3adf19eba02a5afabdb0">More...</a><br /></td></tr>
+<tr class="separator:a8040c553c7cb3adf19eba02a5afabdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename Callable&gt;<br />
+class Newton&lt; Callable &gt;</h3>
+
+<p><a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> method with globalization and rank-1 updates. </p>
+<p>This class implements the <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> method for finding the root of a non-linear equation <img class="formulaInl" alt="$f:\mathbb{R}^d \rightarrow \mathbb{R}^d$" src="form_0.png"/>. Step size control is available as globalization strategy (Def 4.2.3) in case a good intial guess of the root is not available. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8271deaf4a7dd62152c126fb506b8d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8271deaf4a7dd62152c126fb506b8d9b">&#9670;&nbsp;</a></span>Newton()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Callable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNewton.html">Newton</a>&lt; Callable &gt;::<a class="el" href="classNewton.html">Newton</a> </td>
+          <td>(</td>
+          <td class="paramtype">Callable&#160;</td>
+          <td class="paramname"><em>_f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>_TOL</em> = <code>1e-6</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_ssc</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>_ssc_lim</em> = <code>20</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. Initialize the method with a function <img class="formulaInl" alt="$f:\mathbb{R}^d \rightarrow \mathbb{R}^d$" src="form_0.png"/> of dimension <img class="formulaInl" alt="$d$" src="form_1.png"/>. </p>
+<p>The TOL parameter specifies when a root <img class="formulaInl" alt="$s$" src="form_2.png"/> is accepted. Step size control is activated by default; as the value <img class="formulaInl" alt="$j$" src="form_3.png"/> used within need not be bounded, the maximum may be set here (Remark 4.2.4). </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a39f58ddb9692d7eed4127e2d6f4616f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f58ddb9692d7eed4127e2d6f4616f3">&#9670;&nbsp;</a></span>iterate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Callable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNewton.html">Newton</a>&lt; Callable &gt;::iterate </td>
+          <td>(</td>
+          <td class="paramtype">const VectorD2 &amp;&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>step_limit</em> = <code>25</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> steps until <img class="formulaInl" alt="$\|f(s)\| &lt; TOL$" src="form_4.png"/>. </p>
+<p>As the Jacobian is computed in this function, we assume that <img class="formulaInl" alt="$f$" src="form_5.png"/> is differentiable, i.e. has an available <code>diff()</code> method.</p>
+<p>The maximum amount of steps may be specified, defaulting to 25. In our context, exceeding this limit has indicated either a program error or an unsuitably chosen method. Should this occur, the function therefore exits with an exception.</p>
+<p>To solve the resulting linear systems, LU decomposition is used via dealii and LAPACK. The Jacobian that results from the multiple shooting method is sparse, but of small dimension in the problems we consider. (In particular, the Thomas-Fermi problem with 20 subintervals results in a 40 x 40 Jacobian.) </p>
+
+</div>
+</div>
+<a id="a8040c553c7cb3adf19eba02a5afabdb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8040c553c7cb3adf19eba02a5afabdb0">&#9670;&nbsp;</a></span>iterate_broyden()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Callable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNewton.html">Newton</a>&lt; Callable &gt;::iterate_broyden </td>
+          <td>(</td>
+          <td class="paramtype">const VectorD2 &amp;&#160;</td>
+          <td class="paramname"><em>x0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>skips</em> = <code>5</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>step_limit</em> = <code>50</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Use rank-1 updates during iteration. </p>
+<p>The Jacobian is computed periodicially, as specified trough the <code>skips</code> parameter. This method converges slower, with the default step limit is chosen accordingly.</p>
+<p>For <b>small</b> <b>problems</b> such as the Thomas-Fermi problem, the slow convergence rate was more expensive than computing the Jacobian in each step.</p>
+<p>For <b>large</b> <b>problems</b>, the Sherman-Morrison formula may be used to update <img class="formulaInl" alt="$J^{-1}$" src="form_6.png"/> directly, instead of performing an LU decomposition. Due to lower relevance for small problems, this is not implemented here. </p>
+
+</div>
+</div>
+<a id="a6331f82a3fb26379f95ac4dc82b2305f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6331f82a3fb26379f95ac4dc82b2305f">&#9670;&nbsp;</a></span>step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Callable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNewton.html">Newton</a>&lt; Callable &gt;::step </td>
+          <td>(</td>
+          <td class="paramtype">const MatrixD2 &amp;&#160;</td>
+          <td class="paramname"><em>J_inv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorD2 &amp;&#160;</td>
+          <td class="paramname"><em>x</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform a <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> step. </p>
+<p>The Jacobian <em>inverse</em> is specifically taken as argument, to allow use of this function for both <a class="el" href="classNewton.html" title="Newton method with globalization and rank-1 updates. ">Newton</a> and quasi-Newton methods. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>algo/<a class="el" href="newton_8h_source.html">newton.h</a></li>
 </ul>

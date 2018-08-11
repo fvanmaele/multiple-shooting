@@ -63,9 +63,7 @@ public:
     assert(timepoints.size() == uapprox.size());
 
     for (size_t i = 0; i < timepoints.size(); i++)
-      {
-        out << timepoints[i] << "\t" << uapprox[i];
-      }
+      out << timepoints[i] << "\t" << uapprox[i];
   }
 
   bool sol_is_nan(const VectorD2 &y)

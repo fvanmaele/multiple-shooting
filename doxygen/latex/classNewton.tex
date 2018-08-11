@@ -1,21 +1,92 @@
 \hypertarget{classNewton}{}\section{Newton$<$ Callable $>$ Class Template Reference}
 \label{classNewton}\index{Newton$<$ Callable $>$@{Newton$<$ Callable $>$}}
+
+
+\hyperlink{classNewton}{Newton} method with globalization and rank-\/1 updates.  
+
+
+
+
+{\ttfamily \#include $<$newton.\+h$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classNewton_a8271deaf4a7dd62152c126fb506b8d9b}\label{classNewton_a8271deaf4a7dd62152c126fb506b8d9b}} 
-{\bfseries Newton} (Callable \+\_\+f, size\+\_\+t \+\_\+dim, F\+P\+\_\+\+Type \+\_\+\+T\+OL=1e-\/6, bool \+\_\+ssc=true, size\+\_\+t \+\_\+ssc\+\_\+lim=20)
-\item 
-\mbox{\Hypertarget{classNewton_aaf7592a3f99721b837b11f94f4f39469}\label{classNewton_aaf7592a3f99721b837b11f94f4f39469}} 
-void {\bfseries step} (Matrix\+D2 \&J, Vector\+D2 \&x)
-\item 
-\mbox{\Hypertarget{classNewton_a194fe411efb80bb01a215d289509d47a}\label{classNewton_a194fe411efb80bb01a215d289509d47a}} 
-Vector\+D2 {\bfseries iterate} (const Vector\+D2 \&x0, size\+\_\+t step\+\_\+limit=25)
-\item 
-\mbox{\Hypertarget{classNewton_ace30992f63ce8b2859bdb6a237040e05}\label{classNewton_ace30992f63ce8b2859bdb6a237040e05}} 
-Vector\+D2 {\bfseries iterate\+\_\+broyden} (const Vector\+D2 \&x0, size\+\_\+t skips=5, size\+\_\+t step\+\_\+limit=50)
-\end{DoxyCompactItemize}
+\hyperlink{classNewton_a8271deaf4a7dd62152c126fb506b8d9b}{Newton} (Callable \+\_\+f, size\+\_\+t \+\_\+dim, F\+P\+\_\+\+Type \+\_\+\+T\+OL=1e-\/6, bool \+\_\+ssc=true, size\+\_\+t \+\_\+ssc\+\_\+lim=20)
+\begin{DoxyCompactList}\small\item\em Constructor. Initialize the method with a function $f:\mathbb{R}^d \rightarrow \mathbb{R}^d$ of dimension $d$. \end{DoxyCompactList}\item 
+void \hyperlink{classNewton_a6331f82a3fb26379f95ac4dc82b2305f}{step} (const Matrix\+D2 \&J\+\_\+inv, Vector\+D2 \&x)
+\begin{DoxyCompactList}\small\item\em Perform a \hyperlink{classNewton}{Newton} step. \end{DoxyCompactList}\item 
+Vector\+D2 \hyperlink{classNewton_a39f58ddb9692d7eed4127e2d6f4616f3}{iterate} (const Vector\+D2 \&x0, size\+\_\+t step\+\_\+limit=25)
+\begin{DoxyCompactList}\small\item\em Perform \hyperlink{classNewton}{Newton} steps until $\|f(s)\| < TOL$. \end{DoxyCompactList}\item 
+Vector\+D2 \hyperlink{classNewton_a8040c553c7cb3adf19eba02a5afabdb0}{iterate\+\_\+broyden} (const Vector\+D2 \&x0, size\+\_\+t skips=5, size\+\_\+t step\+\_\+limit=50)
+\begin{DoxyCompactList}\small\item\em Use rank-\/1 updates during iteration. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Callable$>$\newline
+class Newton$<$ Callable $>$}
+
+\hyperlink{classNewton}{Newton} method with globalization and rank-\/1 updates. 
+
+This class implements the \hyperlink{classNewton}{Newton} method for finding the root of a non-\/linear equation $f:\mathbb{R}^d \rightarrow \mathbb{R}^d$. Step size control is available as globalization strategy (Def 4.\+2.\+3) in case a good intial guess of the root is not available. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classNewton_a8271deaf4a7dd62152c126fb506b8d9b}\label{classNewton_a8271deaf4a7dd62152c126fb506b8d9b}} 
+\index{Newton@{Newton}!Newton@{Newton}}
+\index{Newton@{Newton}!Newton@{Newton}}
+\subsubsection{\texorpdfstring{Newton()}{Newton()}}
+{\footnotesize\ttfamily template$<$typename Callable $>$ \\
+\hyperlink{classNewton}{Newton}$<$ Callable $>$\+::\hyperlink{classNewton}{Newton} (\begin{DoxyParamCaption}\item[{Callable}]{\+\_\+f,  }\item[{size\+\_\+t}]{\+\_\+dim,  }\item[{F\+P\+\_\+\+Type}]{\+\_\+\+T\+OL = {\ttfamily 1e-\/6},  }\item[{bool}]{\+\_\+ssc = {\ttfamily true},  }\item[{size\+\_\+t}]{\+\_\+ssc\+\_\+lim = {\ttfamily 20} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. Initialize the method with a function $f:\mathbb{R}^d \rightarrow \mathbb{R}^d$ of dimension $d$. 
+
+The T\+OL parameter specifies when a root $s$ is accepted. Step size control is activated by default; as the value $j$ used within need not be bounded, the maximum may be set here (Remark 4.\+2.\+4). 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classNewton_a39f58ddb9692d7eed4127e2d6f4616f3}\label{classNewton_a39f58ddb9692d7eed4127e2d6f4616f3}} 
+\index{Newton@{Newton}!iterate@{iterate}}
+\index{iterate@{iterate}!Newton@{Newton}}
+\subsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily template$<$typename Callable $>$ \\
+\hyperlink{classNewton}{Newton}$<$ Callable $>$\+::iterate (\begin{DoxyParamCaption}\item[{const Vector\+D2 \&}]{x0,  }\item[{size\+\_\+t}]{step\+\_\+limit = {\ttfamily 25} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Perform \hyperlink{classNewton}{Newton} steps until $\|f(s)\| < TOL$. 
+
+As the Jacobian is computed in this function, we assume that $f$ is differentiable, i.\+e. has an available {\ttfamily diff()} method.
+
+The maximum amount of steps may be specified, defaulting to 25. In our context, exceeding this limit has indicated either a program error or an unsuitably chosen method. Should this occur, the function therefore exits with an exception.
+
+To solve the resulting linear systems, LU decomposition is used via dealii and L\+A\+P\+A\+CK. The Jacobian that results from the multiple shooting method is sparse, but of small dimension in the problems we consider. (In particular, the Thomas-\/\+Fermi problem with 20 subintervals results in a 40 x 40 Jacobian.) \mbox{\Hypertarget{classNewton_a8040c553c7cb3adf19eba02a5afabdb0}\label{classNewton_a8040c553c7cb3adf19eba02a5afabdb0}} 
+\index{Newton@{Newton}!iterate\+\_\+broyden@{iterate\+\_\+broyden}}
+\index{iterate\+\_\+broyden@{iterate\+\_\+broyden}!Newton@{Newton}}
+\subsubsection{\texorpdfstring{iterate\+\_\+broyden()}{iterate\_broyden()}}
+{\footnotesize\ttfamily template$<$typename Callable $>$ \\
+\hyperlink{classNewton}{Newton}$<$ Callable $>$\+::iterate\+\_\+broyden (\begin{DoxyParamCaption}\item[{const Vector\+D2 \&}]{x0,  }\item[{size\+\_\+t}]{skips = {\ttfamily 5},  }\item[{size\+\_\+t}]{step\+\_\+limit = {\ttfamily 50} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Use rank-\/1 updates during iteration. 
+
+The Jacobian is computed periodicially, as specified trough the {\ttfamily skips} parameter. This method converges slower, with the default step limit is chosen accordingly.
+
+For {\bfseries small} {\bfseries problems} such as the Thomas-\/\+Fermi problem, the slow convergence rate was more expensive than computing the Jacobian in each step.
+
+For {\bfseries large} {\bfseries problems}, the Sherman-\/\+Morrison formula may be used to update $J^{-1}$ directly, instead of performing an LU decomposition. Due to lower relevance for small problems, this is not implemented here. \mbox{\Hypertarget{classNewton_a6331f82a3fb26379f95ac4dc82b2305f}\label{classNewton_a6331f82a3fb26379f95ac4dc82b2305f}} 
+\index{Newton@{Newton}!step@{step}}
+\index{step@{step}!Newton@{Newton}}
+\subsubsection{\texorpdfstring{step()}{step()}}
+{\footnotesize\ttfamily template$<$typename Callable $>$ \\
+\hyperlink{classNewton}{Newton}$<$ Callable $>$\+::step (\begin{DoxyParamCaption}\item[{const Matrix\+D2 \&}]{J\+\_\+inv,  }\item[{Vector\+D2 \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Perform a \hyperlink{classNewton}{Newton} step. 
+
+The Jacobian {\itshape inverse} is specifically taken as argument, to allow use of this function for both \hyperlink{classNewton}{Newton} and quasi-\/\+Newton methods. 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

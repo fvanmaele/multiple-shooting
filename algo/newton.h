@@ -7,14 +7,26 @@
 #include "../lac/matrix_operators.h"
 #include "../lac/vector_operators.h"
 
-// Solve nonlinear root finding problem:
-//    f(x) = 0,   f: R^d -> R^d
+/*! \class Newton
+ *  \brief Newton method with globalization and rank-1 updates.
+ *
+ * This class implements the Newton method for finding the root of a
+ * non-linear equation \f$f:\mathbb{R}^d \rightarrow \mathbb{R}^d\f$.
+ * Step size control is available as globalization strategy (Def 4.2.3)
+ * in case a good intial guess of the root is not available.
+ */
 template <typename Callable>
 class Newton
 {
 public:
-  // Step-size control requires that f is callable, since
-  // new values of y are computed for varying x.
+  /*! \fn Newton
+   *  \brief Constructor. Initialize the method with a function
+   * \f$f:\mathbb{R}^d \rightarrow \mathbb{R}^d\f$ of dimension \f$d\f$.
+   *
+   * The TOL parameter specifies when a root \f$s\f$ is accepted. Step size control
+   * is activated by default; as the value \f$j\f$ used within need not be
+   * bounded, the maximum may be set here (Remark 4.2.4).
+   */
   Newton(Callable _f, size_t _dim, FP_Type _TOL = 1e-6,
          bool _ssc = true, size_t _ssc_lim = 20)
     :
@@ -22,9 +34,13 @@ public:
       steps(0), ssc_steps(0), ssc_lim(_ssc_lim), ssc(_ssc)
   {}
 
-  // The Jacobian J is taken as argument to allow using
-  // this function for both Newton and quasi-Newton methods.
-  void step(MatrixD2 &J, VectorD2 &x)
+  /*! \fn step
+   *  \brief Perform a Newton step.
+   *
+   * The Jacobian \a inverse is specifically taken as argument, to allow use of
+   * this function for both Newton and quasi-Newton methods.
+   */
+  void step(const MatrixD2 &J_inv, VectorD2 &x)
   {
     assert(x.size() == dim);
     VectorD2 y = f(x);
@@ -32,9 +48,8 @@ public:
     assert(y.size() == dim);
     y_norm = y.l2_norm();
 
-    // Solve the linear system in-place.
-    J.gauss_jordan();
-    VectorD2 d = J * y;
+    // Solution of the linear system
+    VectorD2 d = J_inv * y;
 
     if (ssc)
       { // Candidate for next step x_{k+1}
@@ -61,7 +76,22 @@ public:
       }
   }
 
-  // This method assumes f is differentiable, i.e. includes a diff() method.
+  /*! \fn iterate
+   *  \brief Perform Newton steps until \f$\|f(s)\| < TOL\f$.
+   *
+   * As the Jacobian is computed in this function, we assume that \f$f\f$
+   * is differentiable, i.e. has an available \c diff() method.
+   *
+   * The maximum amount of steps may be specified, defaulting to 25. In our context,
+   * exceeding this limit has indicated either a program error or an unsuitably
+   * chosen method. Should this occur, the function therefore exits with an exception.
+   *
+   * To solve the resulting linear systems, LU decomposition is used
+   * via dealii and LAPACK. The Jacobian that results from the multiple
+   * shooting method is sparse, but of small dimension in the problems we
+   * consider. (In particular, the Thomas-Fermi problem with 20 subintervals
+   * results in a 40 x 40 Jacobian.)
+   */
   VectorD2 iterate(const VectorD2 &x0, size_t step_limit = 25)
   {
     steps = 0;
@@ -71,9 +101,9 @@ public:
 
     for (size_t k = 0; k < step_limit; k++)
       {
-        // Perform step of (quasi-)Newton method
-        J = f.diff(x);
-        step(J, x);
+        J = f.diff(x);    // Jacobian J
+        J.gauss_jordan(); // Inverse J^{-1}
+        step(J, x);       // Newton step
 
         if (y_norm < TOL)
           {
@@ -95,10 +125,23 @@ public:
           }
       }
 
-    std::cerr << "Warning: step limit exceeded" << std::endl;
-    return x;
+    throw std::invalid_argument("step limit exceeded");
   }
 
+  /*! \fn iterate_broyden
+   *  \brief Use rank-1 updates during iteration.
+   *
+   * The Jacobian is computed periodicially, as specified trough the \c skips
+   * parameter. This method converges slower, with the default step limit is
+   * chosen accordingly.
+   *
+   * For \b small \b problems such as the Thomas-Fermi problem, the slow convergence
+   * rate was more expensive than computing the Jacobian in each step.
+   *
+   * For \b large \b problems, the Sherman-Morrison formula may be used to update
+   * \f$J^{-1}\f$ directly, instead of performing an LU decomposition. Due to
+   * lower relevance for small problems, this is not implemented here.
+   */
   VectorD2 iterate_broyden(const VectorD2 &x0, size_t skips = 5,
                            size_t step_limit = 50)
   {
@@ -113,10 +156,10 @@ public:
 
     for (size_t k = 1; k < step_limit; k++)
       {
-        // Full computation of Jacobian every 4 steps
         if (k % skips == 0)
           {
             J = f.diff(x);
+            J.gauss_jordan();
             step(J, x);
           }
         else
@@ -126,9 +169,11 @@ public:
             VectorD2 q = f(x) - f(x_prev);
             MatrixD2 V(p.size(), p.size());
 
-            // XXX: for large J, use Sherman-Morrison formula to update J^{-1} directly
             V.outer_product(q - J_prev * p, p);
             J = J_prev + 1. / p.norm_sqr() * V;
+
+            // large J: use Sherman-Morrison formula to update J^{-1} directly
+            J.gauss_jordan();
             step(J, x);
           }
 
@@ -147,8 +192,7 @@ public:
           }
       }
 
-    std::cerr << "Warning: step limit exceeded" << std::endl;
-    return x;
+    throw std::invalid_argument("step limit exceeded");
   }
 
 private:

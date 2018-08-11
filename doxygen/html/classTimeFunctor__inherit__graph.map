@@ -1,5 +1,5 @@
 <map id="TimeFunctor" name="TimeFunctor">
 <area shape="rect" id="node2" href="$classstd__tWrapper.html" title="std_tWrapper\&lt; Callable \&gt;" alt="" coords="5,80,176,107"/>
 <area shape="rect" id="node3" href="$classTimeDivFunctor.html" title="TimeDivFunctor" alt="" coords="200,80,315,107"/>
-<area shape="rect" id="node4" href="$classFAD__tWrapper.html" title="FAD_tWrapper\&lt; Callable \&gt;" alt="" coords="167,155,347,181"/>
+<area shape="rect" id="node4" href="$classFAD__tWrapper.html" title="Class for equidimensional, time&#45;dependent problems &#160;using AD. " alt="" coords="167,155,347,181"/>
 </map>

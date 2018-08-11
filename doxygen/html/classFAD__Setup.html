@@ -67,22 +67,82 @@ $(function() {
 <div class="title">FAD_Setup&lt; Callable &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_11.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_12.png"/>.  
+ <a href="classFAD__Setup.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="forward__ad_8h_source.html">forward_ad.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a56e892cf0bf3e45b4e876358ead86eab"><td class="memItemLeft" align="right" valign="top"><a id="a56e892cf0bf3e45b4e876358ead86eab"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FAD_Setup</b> (Callable _f, size_t _dim)</td></tr>
-<tr class="separator:a56e892cf0bf3e45b4e876358ead86eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad74e04fc77c2c71cb148fb6c0669ec4c"><td class="memItemLeft" align="right" valign="top"><a id="ad74e04fc77c2c71cb148fb6c0669ec4c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (FP_Type t, const VectorD2 &amp;u)</td></tr>
-<tr class="separator:ad74e04fc77c2c71cb148fb6c0669ec4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb22c26fbf5fa230ece2015c67c43739"><td class="memItemLeft" align="right" valign="top"><a id="acb22c26fbf5fa230ece2015c67c43739"></a>
-VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> () const</td></tr>
-<tr class="separator:acb22c26fbf5fa230ece2015c67c43739"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2a3397c412aa928a7c3227023e9bc04"><td class="memItemLeft" align="right" valign="top"><a id="ac2a3397c412aa928a7c3227023e9bc04"></a>
-MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><b>diff</b> () const</td></tr>
-<tr class="separator:ac2a3397c412aa928a7c3227023e9bc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ae46102439eb707618da04507437fd"><td class="memItemLeft" align="right" valign="top"><a id="ae0ae46102439eb707618da04507437fd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>FAD_Setup</b> (Callable _f, size_t _m, size_t _n)</td></tr>
+<tr class="separator:ae0ae46102439eb707618da04507437fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e72ff87bdaee5d3d00a5f8a93628d2"><td class="memItemLeft" align="right" valign="top"><a id="a22e72ff87bdaee5d3d00a5f8a93628d2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>FAD_Setup</b> (Callable _f, size_t _d)</td></tr>
+<tr class="separator:a22e72ff87bdaee5d3d00a5f8a93628d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac373589f0ea65f0d7f53e9770926e836"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#ac373589f0ea65f0d7f53e9770926e836">init</a> (FP_Type t, const VectorD2 &amp;u)</td></tr>
+<tr class="memdesc:ac373589f0ea65f0d7f53e9770926e836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods.  <a href="#ac373589f0ea65f0d7f53e9770926e836">More...</a><br /></td></tr>
+<tr class="separator:ac373589f0ea65f0d7f53e9770926e836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="memItemLeft" align="right" valign="top"><a id="a0aab26eb92ab9fc32e6dd642b2d70a5e"></a>
+VectorD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e">value</a> () const</td></tr>
+<tr class="memdesc:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the value <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> as a <code>dealii</code> vector. <br /></td></tr>
+<tr class="separator:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8e45825152e0ea2465e1ff17cab7d34"><td class="memItemLeft" align="right" valign="top"><a id="ae8e45825152e0ea2465e1ff17cab7d34"></a>
+MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34">diff</a> () const</td></tr>
+<tr class="memdesc:ae8e45825152e0ea2465e1ff17cab7d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the partial derivatives <img class="formulaInl" alt="$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$" src="form_14.png"/> as a <code>dealii</code> matrix. <br /></td></tr>
+<tr class="separator:ae8e45825152e0ea2465e1ff17cab7d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename Callable&gt;<br />
+class FAD_Setup&lt; Callable &gt;</h3>
+
+<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_11.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_12.png"/>. </p>
+<p>Both evaluation and automatic differentation (using the Sacado package from the Trilinos library) are supported.</p>
+<p>For general information, see SESS 2007, E. Phipps:</p>
+<p><a href="https://software.sandia.gov/SESS/past_seminars/111307_Phipps.html">https://software.sandia.gov/SESS/past_seminars/111307_Phipps.html</a> </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac373589f0ea65f0d7f53e9770926e836"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac373589f0ea65f0d7f53e9770926e836">&#9670;&nbsp;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Callable &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFAD__Setup.html">FAD_Setup</a>&lt; Callable &gt;::init </td>
+          <td>(</td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VectorD2 &amp;&#160;</td>
+          <td class="paramname"><em>u</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods. </p>
+<p><img class="formulaInl" alt="$u_1,\cdots,u_m$" src="form_13.png"/> are set as independent variables. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>base/<a class="el" href="forward__ad_8h_source.html">forward_ad.h</a></li>
 </ul>

@@ -1,0 +1,15 @@
+\form#0:$f:\mathbb{R}^d \rightarrow \mathbb{R}^d$
+\form#1:$d$
+\form#2:$s$
+\form#3:$j$
+\form#4:$\|f(s)\| < TOL$
+\form#5:$f$
+\form#6:$J^{-1}$
+\form#7:$f:I\times\mathbb{R}^d \rightarrow \mathbb{R}^d$
+\form#8:$(t, u)$
+\form#9:$u_1,\cdots,u_d$
+\form#10:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_n}$
+\form#11:$n$
+\form#12:$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$
+\form#13:$u_1,\cdots,u_m$
+\form#14:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$

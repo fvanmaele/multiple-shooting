@@ -1,5 +1,5 @@
 <map id="DivFunctor" name="DivFunctor">
-<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="FAD_cWrapper\&lt; Callable \&gt;" alt="" coords="5,155,188,181"/>
+<area shape="rect" id="node3" href="$classFAD__cWrapper.html" title="Class for equidimensional problems &#160;using AD. " alt="" coords="5,155,188,181"/>
 <area shape="rect" id="node4" href="$classMultipleShooting.html" title="MultipleShooting" alt="" coords="212,155,331,181"/>
 <area shape="rect" id="node5" href="$classSingleShooting.html" title="SingleShooting" alt="" coords="355,155,465,181"/>
 <area shape="rect" id="node2" href="$classFunctor.html" title="Functor" alt="" coords="238,5,305,32"/>

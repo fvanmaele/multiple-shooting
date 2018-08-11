@@ -2,6 +2,15 @@
 \label{classFAD__cWrapper}\index{F\+A\+D\+\_\+c\+Wrapper$<$ Callable $>$@{F\+A\+D\+\_\+c\+Wrapper$<$ Callable $>$}}
 
 
+Class for equidimensional problems $f:\mathbb{R}^d \rightarrow \mathbb{R}^d$ using AD.  
+
+
+
+
+{\ttfamily \#include $<$forward\+\_\+ad.\+h$>$}
+
+
+
 Inheritance diagram for F\+A\+D\+\_\+c\+Wrapper$<$ Callable $>$\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -31,6 +40,14 @@ virtual Vector\+D2 {\bfseries operator()} (const Vector\+D2 \&u) override
 virtual Matrix\+D2 {\bfseries diff} (const Vector\+D2 \&u) override
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Callable$>$\newline
+class F\+A\+D\+\_\+c\+Wrapper$<$ Callable $>$}
+
+Class for equidimensional problems $f:\mathbb{R}^d \rightarrow \mathbb{R}^d$ using AD. 
+
+Adapter for {\ttfamily \hyperlink{classDivFunctor}{Div\+Functor}}. 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

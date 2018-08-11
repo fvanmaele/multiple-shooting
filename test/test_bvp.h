@@ -219,7 +219,7 @@ namespace Test
               << std::endl;
 
     std_tWrapper rhs(RHS_Troesch<VectorD2>, 2);
-    SF_External<DOPRI54> M(rhs, true, 1e-3, 1e-4);
+    SF_External<DOPRI54> M(rhs, true, 1e-3, 1e-7);
 
     SingleShooting F(M, a, b, r);
     Newton N(F, 2);
@@ -238,13 +238,33 @@ namespace Test
 
     // 3. multiple shooting, external differentation
     auto T = Troesch_MS(rhs, 2, a, b);
-    size_t m = T.first.size();
+    std::vector<FP_Type> t = T.first;
+    VectorD2 s0 = T.second;
+    size_t m = t.size();
+
     std::cout << "Multiple shooting (Troesch, ext. diff.)"
               << std::endl;
 
-    MultipleShooting G(M, T.first, r);
+    MultipleShooting G(M, t, r);
     Newton O(G, 2*m);
-    O.iterate(T.second);
+    VectorD2 sol = O.iterate(s0);
+
+    std::ofstream output_file1;
+    GnuPlot Dat1("Troesch_solution_ed.dat", output_file1);
+
+    for (size_t i = 0; i < t.size()-1; i++)
+      {
+        VectorD2 s_i(2);
+
+        for (size_t k = 0; k < 2; k++)
+          s_i[k] = sol[k + i*2];
+
+        // Solve u' = f(t_{i+1}; t_i, s_i)
+        ERK<DOPRI54> M_i(rhs, t[i], s_i);
+        M_i.iterate_with_ssc(t[i+1], 1e-3, 1e-7);
+        M_i.print(output_file1);
+      }
+    Dat1.plot_with_lines(2, "linespoints");
 
     // 4. multiple shooting, automatic differentiation
     std::cout << "Multiple shooting (Troesch, aut. diff.)"
@@ -252,7 +272,24 @@ namespace Test
 
     MultipleShooting G_ad(M_ad, T.first, r);
     Newton O_ad(G_ad, 2*m);
-    O_ad.iterate(T.second);
+    VectorD2 sol_ad = O_ad.iterate(T.second);
+
+    std::ofstream output_file2;
+    GnuPlot Dat2("Troesch_solution_ad.dat", output_file2);
+
+    for (size_t i = 0; i < t.size()-1; i++)
+      {
+        VectorD2 s_i(2);
+
+        for (size_t k = 0; k < 2; k++)
+          s_i[k] = sol_ad[k + i*2];
+
+        // Solve u' = f(t_{i+1}; t_i, s_i)
+        ERK<DOPRI54> M_i(rhs_ad, t[i], s_i);
+        M_i.iterate_with_ssc(t[i+1], 1e-3, 1e-7);
+        M_i.print(output_file2);
+      }
+    Dat2.plot_with_lines(2, "linespoints");
   }
 }
 

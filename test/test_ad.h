@@ -7,13 +7,15 @@
 
 namespace Test
 {
-  // f: R^3 -> R^3,  n = m = 3
-  VectorAD FAD_3dim(NumberAD, const VectorAD &u)
+  // f: R^2 -> R^3,  m = 2, n = 3
+  VectorAD FAD_23dim(NumberAD, const VectorAD &u)
   {
+    assert(u.size() == 2);
     VectorAD y(3);
+
     y[0] = std::pow(u[0], 3) * std::sin(u[1]);
     y[1] = std::cos(u[0]) * std::sin(u[1]);
-    y[2] = std::exp(u[2]);
+    y[2] = std::exp(u[1]);
 
     return y;
   }
@@ -21,13 +23,12 @@ namespace Test
   void FAD()
   {
     FP_Type t = 0;
-    VectorD2 u(3);
+    VectorD2 u(2);
     u[0] = 1;
     u[1] = 2;
-    u[2] = 3;
 
     // Define wrapper object
-    FAD_Setup F(FAD_3dim, 3);
+    FAD_Setup F(FAD_23dim, 2, 3);
 
     // Initialize templates and evaluate function
     F.init(t, u);
