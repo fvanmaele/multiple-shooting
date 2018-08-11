@@ -2,6 +2,10 @@
 \label{classSingleShooting}\index{Single\+Shooting@{Single\+Shooting}}
 
 
+{\ttfamily \#include $<$methods.\+h$>$}
+
+
+
 Inheritance diagram for Single\+Shooting\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -22,14 +26,42 @@ Collaboration diagram for Single\+Shooting\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{classSingleShooting_ad9dc199aea00e22bcbeb4e92a256ad4f}\label{classSingleShooting_ad9dc199aea00e22bcbeb4e92a256ad4f}} 
-{\bfseries Single\+Shooting} (\hyperlink{classShootingFunction}{Shooting\+Function} \&\+\_\+M, F\+P\+\_\+\+Type \+\_\+a, F\+P\+\_\+\+Type \+\_\+b, \hyperlink{classBoundaryCondition}{Boundary\+Condition} \&\+\_\+r)
-\item 
+\hyperlink{classSingleShooting_ad9dc199aea00e22bcbeb4e92a256ad4f}{Single\+Shooting} (\hyperlink{classShootingFunction}{Shooting\+Function} \&\+\_\+M, F\+P\+\_\+\+Type \+\_\+a, F\+P\+\_\+\+Type \+\_\+b, \hyperlink{classBoundaryCondition}{Boundary\+Condition} \&\+\_\+r)
+\begin{DoxyCompactList}\small\item\em Constructor for the single shooting method. Accepts any valid boundary condition $r$ on a time interval $[a, b]$. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classSingleShooting_a6ffb84c5c62c86691154d41f67ff303a}\label{classSingleShooting_a6ffb84c5c62c86691154d41f67ff303a}} 
-virtual Vector\+D2 {\bfseries operator()} (const Vector\+D2 \&s) override
-\item 
+virtual Vector\+D2 \hyperlink{classSingleShooting_a6ffb84c5c62c86691154d41f67ff303a}{operator()} (const Vector\+D2 \&s) override
+\begin{DoxyCompactList}\small\item\em Retrieve $F(s)$ by solving the I\+VP $y(b; s)$. \end{DoxyCompactList}\item 
+virtual Matrix\+D2 \hyperlink{classSingleShooting_a29ada16c267ba2658c991092b59ce49d}{diff} (const Vector\+D2 \&s) override
+\begin{DoxyCompactList}\small\item\em Retrieve $DF(s)$. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Single shooting method for boundary value problems. Represented as a differentiable function $F: \mathbb{R}^d \rightarrow \mathbb{R}^d$.
+
+See Stoer, Num. Math. 2, pp. 195. 
+
+\subsection{Member Function Documentation}
 \mbox{\Hypertarget{classSingleShooting_a29ada16c267ba2658c991092b59ce49d}\label{classSingleShooting_a29ada16c267ba2658c991092b59ce49d}} 
-virtual Matrix\+D2 {\bfseries diff} (const Vector\+D2 \&s) override
-\end{DoxyCompactItemize}
+\index{Single\+Shooting@{Single\+Shooting}!diff@{diff}}
+\index{diff@{diff}!Single\+Shooting@{Single\+Shooting}}
+\subsubsection{\texorpdfstring{diff()}{diff()}}
+{\footnotesize\ttfamily virtual Matrix\+D2 Single\+Shooting\+::diff (\begin{DoxyParamCaption}\item[{const Vector\+D2 \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Retrieve $DF(s)$. 
+
+$DF$ may be derived in several ways\+:
+\begin{DoxyItemize}
+\item Automatic differentation
+\item Internal differentation
+\item External differentation
+\end{DoxyItemize}
+
+Automatic and internal differentation imply solving the {\itshape variational} {\itshape equation}. See {\ttfamily \hyperlink{classShootingFunction}{Shooting\+Function}} for implemented methods. 
+
+Implements \hyperlink{classDivFunctor}{Div\+Functor}.
+
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

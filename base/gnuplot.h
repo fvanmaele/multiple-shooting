@@ -5,6 +5,11 @@
 #include <fstream>
 #include <string>
 
+/*! \class GnuPlot
+ * \brief Plot output data with Gnuplot.
+ *
+ * This class constructs a command line and passes it to gnuplot via \c std::system.
+ */
 class GnuPlot
 {
 public:
@@ -12,7 +17,9 @@ public:
     filename(_filename), output_file(_output_file)
   {
     output_file.open(filename);
-    assert(output_file.is_open());
+
+    if (!output_file.is_open())
+      throw std::runtime_error("file could not be opened");
   }
 
   ~GnuPlot()

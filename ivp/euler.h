@@ -4,6 +4,9 @@
 
 #include "eos_method.h"
 
+/*! \class Euler
+ * \brief Classic Euler method of order 1.
+ */
 class Euler : public OneStepMethod
 {
   // For base-class constructors, C++11 allows a class to specify that

@@ -1,23 +1,30 @@
 #ifndef METHODS_H
 #define METHODS_H
 
-#include <algorithm> // std::iota
-
 #include "shooting.h"
 #include "boundary.h"
 
-// Single shooting method for BVPs
-//    y' = f(x,y),  r(y(a), y(b)) = 0
-//
-// See Stoer, Num. Math. 2, pp.195
+/*!
+ * Single shooting method for boundary value problems. Represented
+ * as a differentiable function \f$F: \mathbb{R}^d \rightarrow \mathbb{R}^d\f$.
+ *
+ * See Stoer, Num. Math. 2, pp. 195.
+ */
 class SingleShooting : public DivFunctor
 {
 public:
+  /*!
+   * \brief Constructor for the single shooting method.
+   * Accepts any valid boundary condition \f$r\f$ on a time interval \f$[a, b]\f$.
+   *
+   */
   SingleShooting(ShootingFunction &_M, FP_Type _a, FP_Type _b, BoundaryCondition &_r)
     : DivFunctor(_M.n_dim()), M(_M), a(_a), b(_b), r(_r)
   {}
 
-  // Called multiple times per Newton step through step-size control.
+  /*!
+   * \brief Retrieve \f$F(s)\f$ by solving the IVP \f$y(b; s)\f$.
+   */
   virtual VectorD2 operator()(const VectorD2 &s) override
   {
     VectorD2 y = M.solve_y(a, b, s);
@@ -25,7 +32,17 @@ public:
     return r(s, y);
   }
 
-  // Called once per Newton step.
+  /*!
+   * \brief Retrieve \f$DF(s)\f$.
+   *
+   * \f$DF\f$ may be derived in several ways:
+   * - Automatic differentation
+   * - Internal differentation
+   * - External differentation
+   *
+   * Automatic and internal differentation imply solving the \e variational \e equation.
+   * See \c ShootingFunction for implemented methods.
+   */
   virtual MatrixD2 diff(const VectorD2 &s) override
   {
     auto G = M.solve_Z(a, b, s);
@@ -41,13 +58,29 @@ private:
   BoundaryCondition &r;
 };
 
+/*!
+ * \brief Multiple shooting method for boundary value problems. Represented
+ * as a differentiable function \f$F: \mathbb{R}^d \rightarrow \mathbb{R}^d\f$.
+ *
+ * See Stoer, Num. Math. 2, pp. 215.
+ */
 class MultipleShooting : public DivFunctor
 {
 public:
+  /*!
+   * Constructor. As \c SingleShooting, but a series of time points
+   * (interval subdivision) must be supplied.
+   */
   MultipleShooting(ShootingFunction &_M, std::vector<FP_Type> _t, BoundaryCondition &_r)
     : DivFunctor(_M.n_dim()), M(_M), t(_t), r(_r), m(t.size())
   {}
 
+  /*!
+   * \brief Retrieve \f$F_1(s_1, s_2),\cdots, F_{m-1}(s_{m-1},s_m), F_m(s_1,s_m)\f$
+   * for the vector \f$s = (s_1,\cdots,s_m)\f$.
+   *
+   * Vector "blocks" are implemented manually.
+   */
   virtual VectorD2 operator()(const VectorD2 &s) override
   {
     size_t dim = n_dim();
@@ -91,6 +124,11 @@ public:
     return F;
   }
 
+  /*!
+   * \brief Retrieve the matrix \f$DF(s)\f$ for the vector \f$s = (s_1,\cdots,s_m)\f$.
+   *
+   * Blocks are implemented manually and through \c dealii::FullMatrix::add.
+   */
   virtual MatrixD2 diff(const VectorD2 &s) override
   {
     size_t dim = n_dim();

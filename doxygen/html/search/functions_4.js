@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['value',['value',['../classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e',1,'FAD_Setup']]]
+  ['n_5fdim',['n_dim',['../classShootingFunction.html#a39e6d5052e9d73ca3f5d4986752525aa',1,'ShootingFunction']]],
+  ['newton',['Newton',['../classNewton.html#a8271deaf4a7dd62152c126fb506b8d9b',1,'Newton']]]
 ];

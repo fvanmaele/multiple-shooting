@@ -13,3 +13,45 @@
 \form#12:$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$
 \form#13:$u_1,\cdots,u_m$
 \form#14:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$
+\form#15:$r(u,v)$
+\form#16:$u$
+\form#17:$v$
+\form#18:$u' = f(t, u)$
+\form#19:$r(u,v) = Au + Bv - c$
+\form#20:$A$
+\form#21:$B$
+\form#22:$n^2$
+\form#23:$I = [a,b]$
+\form#24:$r(u(a), u(b)) = 0$
+\form#25:$n = 2$
+\form#26:$A_{1}y(a) = c_1$
+\form#27:$B_{2}y(b) = c_2$
+\form#28:$F_1(s_1, s_2),\cdots, F_{m-1}(s_{m-1},s_m), F_m(s_1,s_m)$
+\form#29:$s = (s_1,\cdots,s_m)$
+\form#30:$DF(s)$
+\form#31:$F: \mathbb{R}^d \rightarrow \mathbb{R}^d$
+\form#32:$r$
+\form#33:$[a, b]$
+\form#34:$F(s)$
+\form#35:$DF$
+\form#36:$y(b; s)$
+\form#37:$[t_0, t_1]$
+\form#38:$s = u(t_0)$
+\form#39:$f(t, u(t; s))$
+\form#40:$y(t; t_0, s)$
+\form#41:$\frac{\partial f}{\partial s}$
+\form#42:$Y' = \nabla_u f(t, u(t)) Y$
+\form#43:$h_0$
+\form#44:$1e-3$
+\form#45:$TOL$
+\form#46:$F$
+\form#47:$t = t1$
+\form#48:$D_s f(t, u(t; s))$
+\form#49:$D_s$
+\form#50:$D_s f$
+\form#51:$eps$
+\form#52:$D_f s$
+\form#53:$D_s f = \frac{\partial f}{\partial s}$
+\form#54:$t = t_1$
+\form#55:$D_s y(t; t_0, s)$
+\form#56:$N$

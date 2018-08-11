@@ -9,8 +9,10 @@
 #include "../lac/lac_types.h"
 #include "../ivp/runge_kutta.h"
 
-// Find suitable initial values for subintervals using an approximate
-// solution to the BVP, i.e. a "starting trajectory".
+/*!
+ * \brief Find suitable initial values for subintervals, using an approximate
+ * solution to the BVP (a \e starting \e trajectory).
+ */
 template <typename M = DOPRI54>
 std::vector<FP_Type>
 trajectory(FP_Type a, FP_Type b, TimeFunctor &rhs, Curve *eta,
@@ -51,7 +53,11 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &rhs, Curve *eta,
   return T;
 }
 
-// Create vector of equidistant points
+/*!
+ * \brief Create a vector of equally spaced points.
+ *
+ * Based on MATLAB linspace.
+ */
 std::vector<FP_Type>
 linspace(FP_Type a, FP_Type b, int n = 100)
 {
@@ -68,6 +74,12 @@ linspace(FP_Type a, FP_Type b, int n = 100)
   return v;
 }
 
+/*!
+ * \brief Interpolate a set of intervals to a given amount \f$N\f$
+ * using Spline interpolation.
+ *
+ * Requires GSL support.
+ */
 std::vector<FP_Type>
 interpolate_points(const std::vector<FP_Type> &t, size_t N)
 {

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['init',['init',['../classFAD__Setup.html#ac373589f0ea65f0d7f53e9770926e836',1,'FAD_Setup']]],
-  ['iterate',['iterate',['../classNewton.html#a39f58ddb9692d7eed4127e2d6f4616f3',1,'Newton']]],
-  ['iterate_5fbroyden',['iterate_broyden',['../classNewton.html#a8040c553c7cb3adf19eba02a5afabdb0',1,'Newton']]]
+  ['diff',['diff',['../classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34',1,'FAD_Setup::diff()'],['../classSingleShooting.html#a29ada16c267ba2658c991092b59ce49d',1,'SingleShooting::diff()'],['../classMultipleShooting.html#a83febb68d789d4343811eb8ffa75bbf8',1,'MultipleShooting::diff()']]]
 ];

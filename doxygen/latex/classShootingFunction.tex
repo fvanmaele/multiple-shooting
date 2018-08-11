@@ -2,6 +2,15 @@
 \label{classShootingFunction}\index{Shooting\+Function@{Shooting\+Function}}
 
 
+Integrate an I\+VP $u' = f(t, u)$ on a given time interval $[t_0, t_1]$ dependent on the initial value $s = u(t_0)$.  
+
+
+
+
+{\ttfamily \#include $<$shooting.\+h$>$}
+
+
+
 Inheritance diagram for Shooting\+Function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -12,18 +21,16 @@ Inheritance diagram for Shooting\+Function\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classShootingFunction_a84f50a64e417a35a9a9c3dc561fbb9a9}\label{classShootingFunction_a84f50a64e417a35a9a9c3dc561fbb9a9}} 
-{\bfseries Shooting\+Function} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, bool \+\_\+ssc=true, F\+P\+\_\+\+Type \+\_\+h0=1e-\/1, F\+P\+\_\+\+Type \+\_\+\+T\+O\+L=1e-\/4)
-\item 
+\hyperlink{classShootingFunction_a84f50a64e417a35a9a9c3dc561fbb9a9}{Shooting\+Function} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, bool \+\_\+ssc=true, F\+P\+\_\+\+Type \+\_\+h0=1e-\/1, F\+P\+\_\+\+Type \+\_\+\+T\+O\+L=1e-\/4)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classShootingFunction_a39e6d5052e9d73ca3f5d4986752525aa}\label{classShootingFunction_a39e6d5052e9d73ca3f5d4986752525aa}} 
-size\+\_\+t {\bfseries n\+\_\+dim} () const
-\item 
+size\+\_\+t \hyperlink{classShootingFunction_a39e6d5052e9d73ca3f5d4986752525aa}{n\+\_\+dim} () const
+\begin{DoxyCompactList}\small\item\em Return the dimension of $F(s)$. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classShootingFunction_acb29074b32316fdd368d71a775983f81}\label{classShootingFunction_acb29074b32316fdd368d71a775983f81}} 
-virtual Vector\+D2 {\bfseries solve\+\_\+y} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
-\item 
-\mbox{\Hypertarget{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}\label{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}} 
-virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries solve\+\_\+Z} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
-\end{DoxyCompactItemize}
+virtual Vector\+D2 \hyperlink{classShootingFunction_acb29074b32316fdd368d71a775983f81}{solve\+\_\+y} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
+\begin{DoxyCompactList}\small\item\em Solve $y(t; t_0, s)$ in $t = t_1$. \end{DoxyCompactList}\item 
+virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ \hyperlink{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}{solve\+\_\+Z} (F\+P\+\_\+\+Type t0, F\+P\+\_\+\+Type t1, const Vector\+D2 \&s)=0
+\begin{DoxyCompactList}\small\item\em Solve $D_s y(t; t_0, s)$ in $t = t_1$. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
@@ -33,6 +40,45 @@ virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries solve\+\_\+Z} (F\+P
 \mbox{\Hypertarget{classShootingFunction_a6140f660d0ec9a35ac0517afe096cc12}\label{classShootingFunction_a6140f660d0ec9a35ac0517afe096cc12}} 
 {\footnotesize template$<$typename M , typename N $>$ }\\class {\bfseries S\+F\+\_\+\+Automatic}
 \end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Integrate an I\+VP $u' = f(t, u)$ on a given time interval $[t_0, t_1]$ dependent on the initial value $s = u(t_0)$. 
+
+{\bfseries Notation\+:} $f(t, u(t; s))$ or $y(t; t_0, s)$.
+
+The partial derivatives $D_s f = \frac{\partial f}{\partial s}$ are computed approximatively ({\itshape external} {\itshape differentation}) or by solving the variational equation $Y' = \nabla_u f(t, u(t)) Y$. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classShootingFunction_a84f50a64e417a35a9a9c3dc561fbb9a9}\label{classShootingFunction_a84f50a64e417a35a9a9c3dc561fbb9a9}} 
+\index{Shooting\+Function@{Shooting\+Function}!Shooting\+Function@{Shooting\+Function}}
+\index{Shooting\+Function@{Shooting\+Function}!Shooting\+Function@{Shooting\+Function}}
+\subsubsection{\texorpdfstring{Shooting\+Function()}{ShootingFunction()}}
+{\footnotesize\ttfamily Shooting\+Function\+::\+Shooting\+Function (\begin{DoxyParamCaption}\item[{\hyperlink{classTimeFunctor}{Time\+Functor} \&}]{\+\_\+f,  }\item[{bool}]{\+\_\+ssc = {\ttfamily true},  }\item[{F\+P\+\_\+\+Type}]{\+\_\+h0 = {\ttfamily 1e-\/1},  }\item[{F\+P\+\_\+\+Type}]{\+\_\+\+T\+OL = {\ttfamily 1e-\/4} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+When disabling step-\/size control, the intial step width $h_0$ should be set to a smaller value, for example $1e-3$.
+
+The appropriate value for $TOL$ depends on the chosen method for differentiating $F$. For example, when computing $DF$ with external differentation, $F$ should be integrated as accurately as possible. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}\label{classShootingFunction_a41360056996ee70c43c4538acd6e28d8}} 
+\index{Shooting\+Function@{Shooting\+Function}!solve\+\_\+Z@{solve\+\_\+Z}}
+\index{solve\+\_\+Z@{solve\+\_\+Z}!Shooting\+Function@{Shooting\+Function}}
+\subsubsection{\texorpdfstring{solve\+\_\+\+Z()}{solve\_Z()}}
+{\footnotesize\ttfamily virtual std\+::pair$<$Vector\+D2, Matrix\+D2$>$ Shooting\+Function\+::solve\+\_\+Z (\begin{DoxyParamCaption}\item[{F\+P\+\_\+\+Type}]{t0,  }\item[{F\+P\+\_\+\+Type}]{t1,  }\item[{const Vector\+D2 \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Solve $D_s y(t; t_0, s)$ in $t = t_1$. 
+
+As solving $D_s$ typically involves solving $f$, a pair of solutions is returned. 
+
+Implemented in \hyperlink{classSF__Automatic_a42df8fe14e093057d2fe40cb42a0460e}{S\+F\+\_\+\+Automatic$<$ M, M\+\_\+\+Var $>$}, and \hyperlink{classSF__External_a72c762001bc0a4bc43ac82aba45ad3ba}{S\+F\+\_\+\+External$<$ M $>$}.
+
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

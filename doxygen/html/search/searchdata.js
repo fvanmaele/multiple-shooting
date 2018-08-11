@@ -2,7 +2,7 @@ var indexSectionsWithContent =
 {
   0: "bcdefgikmnorstv",
   1: "bcdefgkmnorst",
-  2: "dinsv"
+  2: "bdimnosv"
 };
 
 var indexSectionNames =

@@ -12,6 +12,16 @@
 #include "../lac/vector_operators.h"
 #include "../ivp/runge_kutta.h"
 
+/*!
+ * \brief Integrate an IVP \f$u' = f(t, u)\f$ on a given time interval \f$[t_0, t_1]\f$
+ * dependent on the initial value \f$s = u(t_0)\f$.
+ *
+ * \b Notation: \f$f(t, u(t; s))\f$ or \f$y(t; t_0, s)\f$.
+ *
+ * The partial derivatives \f$D_s f = \frac{\partial f}{\partial s}\f$ are computed
+ * approximatively (\e external \e differentation) or by solving the variational
+ * equation \f$Y' = \nabla_u f(t, u(t)) Y\f$.
+ */
 class ShootingFunction
 {
 public:
@@ -21,24 +31,43 @@ public:
   template <typename M, typename N>
   friend class SF_Automatic;  // Automatic differentation
 
+  /*!
+   * \brief Constructor.
+   *
+   * When disabling step-size control, the intial step width \f$h_0\f$
+   * should be set to a smaller value, for example \f$1e-3\f$.
+   *
+   * The appropriate value for \f$TOL\f$ depends on the chosen method
+   * for differentiating \f$F\f$. For example, when computing \f$DF\f$
+   * with external differentation, \f$F\f$ should be integrated as
+   * accurately as possible.
+   */
   ShootingFunction(TimeFunctor &_f, bool _ssc = true,
                    FP_Type _h0 = 1e-1, FP_Type _TOL = 1e-4)
     :
       f(_f), dim(_f.n_dim()), ssc(_ssc), h0(_h0), TOL(_TOL)
   {}
 
+  /*!
+   * \brief Return the dimension of \f$F(s)\f$.
+   */
   size_t n_dim() const
   {
     return dim;
   }
 
-  // Compute y(t1; t0, s) by integrating IVP y(t0; s), where s represents
-  // the specified initial value.
+  /*!
+   * \brief Solve \f$y(t; t_0, s)\f$ in \f$t = t_1\f$.
+   */
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) = 0;
 
-  // Compute D_s(y(t1; t0, s)) by external or exact differentation.
-  // Return a pair of solutions, for solving Z typically involves solving y.
+  /*!
+   * \brief Solve \f$D_s y(t; t_0, s)\f$ in \f$t = t_1\f$.
+   *
+   * As solving \f$D_s\f$ typically involves solving \f$f\f$, a pair of
+   * solutions is returned.
+   */
   virtual std::pair<VectorD2, MatrixD2>
   solve_Z(FP_Type t0, FP_Type t1, const VectorD2 &s) = 0;
 
@@ -70,8 +99,12 @@ public:
     return Method.approx();
   }
 
-  // For the choice of TOL in the adaptive method and constant Epsilon,
-  // see Stoer, Num. Math. 2, pp.192.
+  /*!
+   * \brief Solve \f$D_s y(t; t_0, s)\f$ in \f$t = t_1\f$ by external differentation.
+   *
+   * For the choice of \f$TOL\f$ in the adaptive method and the constant
+   * \f$eps\f$, see Stoer, Num. Math. 2, pp. 192.
+   */
   virtual std::pair<VectorD2, MatrixD2>
   solve_Z(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
@@ -79,8 +112,7 @@ public:
     VectorD2 y = solve_y(t0, t1, s);
 
     for (size_t j = 0; j < s.size(); j++)
-      {
-        // Choice of delta
+      { // Choice of delta
         FP_Type delta = std::sqrt(std::numeric_limits<FP_Type>::epsilon()) * s[j];
 
         // Use machine epsilon if j-th component is 0
@@ -132,6 +164,9 @@ public:
     return Method.approx();
   }
 
+  /*!
+   * \brief Solve \f$D_s y(t; t_0, s)\f$ in \f$t = t_1\f$ by automatic differentation.
+   */
   virtual std::pair<VectorD2, MatrixD2>
   solve_Z(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {

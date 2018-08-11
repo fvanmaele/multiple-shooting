@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['diff',['diff',['../classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34',1,'FAD_Setup']]]
+  ['bc_5flinear',['BC_Linear',['../classBC__Linear.html#aaf6acbb563402c281a76c7809c5a9a8e',1,'BC_Linear']]]
 ];

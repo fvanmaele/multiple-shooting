@@ -1,5 +1,14 @@
 \hypertarget{classGnuPlot}{}\section{Gnu\+Plot Class Reference}
 \label{classGnuPlot}\index{Gnu\+Plot@{Gnu\+Plot}}
+
+
+Plot output data with Gnuplot.  
+
+
+
+
+{\ttfamily \#include $<$gnuplot.\+h$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -10,6 +19,11 @@
 void {\bfseries plot\+\_\+with\+\_\+lines} (size\+\_\+t dim, std\+::string style=\char`\"{}lines\char`\"{}, bool plot\+\_\+3d=false)
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Plot output data with Gnuplot. 
+
+This class constructs a command line and passes it to gnuplot via {\ttfamily std\+::system}. 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

@@ -5,7 +5,9 @@
 
 #include "../base/types.h"
 
-// Classic Range-Kutta method
+/*! \struct ERK_04
+ * \brief Butcher Tableau for the classic Runge-Kutta method.
+ */
 struct ERK_04
 {
   const size_t n = 4; // dimension
@@ -29,7 +31,14 @@ struct ERK_04
   const std::array<FP_Type, 0> b_low = {};
 };
 
-// Cash-Karp method
+/*! \struct KARP
+ * \brief Butcher Tableau for the Cash-Karp method of order 5(4).
+ *
+ * Ddetails on this method and its lower order variants are available
+ * in the original paper:
+ *
+ * http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf
+ */
 struct KARP
 {
   const size_t n = 6;
@@ -57,7 +66,9 @@ struct KARP
   };
 };
 
-// Dormand-Prince method
+/*! struct DOPRI54
+ * \brief Butcher Tableau for the Dormand-Prince method of order 5(4).
+ */
 struct DOPRI54
 {
   const size_t n = 7;

@@ -2,6 +2,15 @@
 \label{classBoundaryCondition}\index{Boundary\+Condition@{Boundary\+Condition}}
 
 
+Abstract base class for boundary conditions $r(u,v)$ in boundary value problems.  
+
+
+
+
+{\ttfamily \#include $<$boundary.\+h$>$}
+
+
+
 Inheritance diagram for Boundary\+Condition\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -22,6 +31,11 @@ virtual Matrix\+D2 {\bfseries diff\+\_\+u} (const Vector\+D2 \&u, const Vector\+
 virtual Matrix\+D2 {\bfseries diff\+\_\+v} (const Vector\+D2 \&u, const Vector\+D2 \&v)=0
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Abstract base class for boundary conditions $r(u,v)$ in boundary value problems. 
+
+Supports evaluation and differentation over $u$ and $v$. 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

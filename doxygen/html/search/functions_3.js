@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['step',['step',['../classNewton.html#a6331f82a3fb26379f95ac4dc82b2305f',1,'Newton']]]
+  ['multipleshooting',['MultipleShooting',['../classMultipleShooting.html#a3a9dba24831825aca548c7f4e6e0f4f8',1,'MultipleShooting']]]
 ];

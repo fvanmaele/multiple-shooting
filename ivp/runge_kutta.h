@@ -195,7 +195,7 @@ public:
         // (2) Compute optimal step size.
         FP_Type local_error = (inc_y1 - inc_y2).l2_norm();
         FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / (p+1));
-//        FP_Type h_opt = 0.9 * h_var * std::pow(TOL * std::abs(h_var) / local_error, 1./p);
+        // FP_Type h_opt = 0.9 * h_var * std::pow(TOL * std::abs(h_var) / local_error, 1./p);
 
         // (3) Time step is rejected; repeat step with optimal value.
         if (h_opt < h_var)
