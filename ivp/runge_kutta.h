@@ -142,9 +142,9 @@ public:
   /*!
    * \brief iterate_with_ssc
    * \param t_lim
-   * \param h0
-   * \param TOL
-   * \param C
+   * \param h0 Initial time step width.
+   * \param TOL Threshold for the local error at each time step.
+   * \param C Threshold for the global error at each time step.
    *
    * Iteration function with support for step-size control. In each step, two
    * solutions are computed, for order \f$p+1\f$ and \f$p\f$ respectively.
@@ -254,7 +254,7 @@ public:
             // Comparison to exact solution
             if (u != nullptr)
               if (y.l2_norm() >= C*(*u)(t).l2_norm())
-                throw std::domain_error("global error too large");
+                throw std::range_error("global error too large");
           }
       }
 

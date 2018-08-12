@@ -92,13 +92,15 @@ iterate\+\_\+with\+\_\+ssc
 \begin{DoxyParams}{Parameters}
 {\em t\+\_\+lim} & \\
 \hline
-{\em h0} & \\
+{\em h0} & Initial time step width. \\
 \hline
-{\em T\+OL} & \\
+{\em T\+OL} & Threshold for the local error at each time step. \\
 \hline
-{\em C} & Iteration function with support for step-\/size control. In each step, two solutions are computed, for order $p+1$ and $p$ respectively. Whether a step is accepted is then decided by computing an \char`\"{}optimal\char`\"{} step width. If the optimal width is smaller than the current value, the step is repeated using the new width.\\
+{\em C} & Threshold for the global error at each time step.\\
 \hline
 \end{DoxyParams}
+Iteration function with support for step-\/size control. In each step, two solutions are computed, for order $p+1$ and $p$ respectively. Whether a step is accepted is then decided by computing an \char`\"{}optimal\char`\"{} step width. If the optimal width is smaller than the current value, the step is repeated using the new width.
+
 More complex algorithms which choose method order dynamically (for example the \hyperlink{structKARP}{K\+A\+RP} method for orders 1 to 5) are not implemented, but may be more suitable for discontinuous or rapidly changing O\+D\+Es. See the paper by Cash-\/\+Karp for details.
 
 \href{http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf}{\tt http\+://www.\+elegio.\+it/mc2/rk/doc/p201-\/cash-\/karp.\+pdf}

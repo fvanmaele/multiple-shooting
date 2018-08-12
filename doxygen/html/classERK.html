@@ -267,12 +267,13 @@ template&lt;typename ButcherTableau &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">t_lim</td><td></td></tr>
-    <tr><td class="paramname">h0</td><td></td></tr>
-    <tr><td class="paramname">TOL</td><td></td></tr>
-    <tr><td class="paramname">C</td><td>Iteration function with support for step-size control. In each step, two solutions are computed, for order <img class="formulaInl" alt="$p+1$" src="form_61.png"/> and <img class="formulaInl" alt="$p$" src="form_62.png"/> respectively. Whether a step is accepted is then decided by computing an "optimal" step width. If the optimal width is smaller than the current value, the step is repeated using the new width.</td></tr>
+    <tr><td class="paramname">h0</td><td>Initial time step width. </td></tr>
+    <tr><td class="paramname">TOL</td><td>Threshold for the local error at each time step. </td></tr>
+    <tr><td class="paramname">C</td><td>Threshold for the global error at each time step.</td></tr>
   </table>
   </dd>
 </dl>
+<p>Iteration function with support for step-size control. In each step, two solutions are computed, for order <img class="formulaInl" alt="$p+1$" src="form_61.png"/> and <img class="formulaInl" alt="$p$" src="form_62.png"/> respectively. Whether a step is accepted is then decided by computing an "optimal" step width. If the optimal width is smaller than the current value, the step is repeated using the new width.</p>
 <p>More complex algorithms which choose method order dynamically (for example the <a class="el" href="structKARP.html" title="Butcher Tableau for the Cash-Karp method of order 5(4). ">KARP</a> method for orders 1 to 5) are not implemented, but may be more suitable for discontinuous or rapidly changing ODEs. See the paper by Cash-Karp for details.</p>
 <p><a href="http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf">http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf</a></p>
 <p>When solving the variational equation, the step width is <em>only</em> determined by the initial-value problem. This approach may be improved by first solving the IVP with a <em>continuous</em> Runge-Kutta method. See the paper by L. Rández, 1990.</p>
