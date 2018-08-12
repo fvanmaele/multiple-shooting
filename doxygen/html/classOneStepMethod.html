@@ -68,6 +68,11 @@ $(function() {
 <div class="title">OneStepMethod Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using a one-step method.  
+ <a href="classOneStepMethod.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="eos__method_8h_source.html">eos_method.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for OneStepMethod:</div>
 <div class="dyncontent">
@@ -82,9 +87,9 @@ Inheritance diagram for OneStepMethod:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af80b8284dc4c01633056d626e96dcce2"><td class="memItemLeft" align="right" valign="top"><a id="af80b8284dc4c01633056d626e96dcce2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OneStepMethod</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, VectorD2 _u0, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
-<tr class="separator:af80b8284dc4c01633056d626e96dcce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a513ea3b2bd015bd266f9cb3e69e00327"><td class="memItemLeft" align="right" valign="top"><a id="a513ea3b2bd015bd266f9cb3e69e00327"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>OneStepMethod</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, VectorD2 _u0, bool _var_eq=false, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
+<tr class="separator:a513ea3b2bd015bd266f9cb3e69e00327"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f4529edf5aae96d1dd0061b7a798e4f"><td class="memItemLeft" align="right" valign="top"><a id="a5f4529edf5aae96d1dd0061b7a798e4f"></a>
 VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>approx</b> () const</td></tr>
 <tr class="separator:a5f4529edf5aae96d1dd0061b7a798e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -112,12 +117,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const 
 <tr class="memitem:aee957997a620c414ebb999df49debf5b"><td class="memItemLeft" align="right" valign="top"><a id="aee957997a620c414ebb999df49debf5b"></a>
 virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>increment_function</b> (FP_Type, const VectorD2 &amp;, FP_Type)</td></tr>
 <tr class="separator:aee957997a620c414ebb999df49debf5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac567c56e09ebb6c8800349eb4d21f966"><td class="memItemLeft" align="right" valign="top"><a id="ac567c56e09ebb6c8800349eb4d21f966"></a>
-virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_variational</b> (FP_Type, const VectorD2 &amp;, FP_Type, const MatrixD2 &amp;, <a class="el" href="classTimeDivFunctor.html">TimeDivFunctor</a> *)</td></tr>
-<tr class="separator:ac567c56e09ebb6c8800349eb4d21f966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafded57f36af4edf0840cb747dbdc5ea"><td class="memItemLeft" align="right" valign="top"><a id="aafded57f36af4edf0840cb747dbdc5ea"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, bool fundamental_matrix=false, FP_Type C=2)</td></tr>
-<tr class="separator:aafded57f36af4edf0840cb747dbdc5ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa599262a475dd7f837600093a00b70d3"><td class="memItemLeft" align="right" valign="top"><a id="aa599262a475dd7f837600093a00b70d3"></a>
+virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>increment_variational</b> (FP_Type, const VectorD2 &amp;, FP_Type, const MatrixD2 &amp;)</td></tr>
+<tr class="separator:aa599262a475dd7f837600093a00b70d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf00efa88d6fb3d1e9f7b3024375a0b4"><td class="memItemLeft" align="right" valign="top"><a id="adf00efa88d6fb3d1e9f7b3024375a0b4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, FP_Type C=2)</td></tr>
+<tr class="separator:adf00efa88d6fb3d1e9f7b3024375a0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -135,7 +140,10 @@ template&lt;typename BTab &gt; </td></tr>
 <tr class="memitem:a55adbdc4c0fea0e770e4d18b0379d490"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ERK</b></td></tr>
 <tr class="separator:a55adbdc4c0fea0e770e4d18b0379d490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using a one-step method. </p>
+<p>The common wrapped functionality includes collecting of intermediary computation results. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>ivp/<a class="el" href="eos__method_8h_source.html">eos_method.h</a></li>
 </ul>
 </div><!-- contents -->

@@ -14,8 +14,9 @@ class ERK : public OneStepMethod
 {
 public:
   // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, VectorD2 u0, Curve *u = nullptr) :
-    OneStepMethod(f, t0, u0, u)
+  ERK(TimeFunctor &f, FP_Type t0, VectorD2 u0,
+      bool var_eq = false, Curve *u = nullptr) :
+    OneStepMethod(f, t0, u0, var_eq, u)
   {
     ButcherTableau BTab;
 
@@ -66,8 +67,7 @@ public:
 
   std::pair<VectorD2, MatrixD2>
   k_variational(FP_Type t, const VectorD2 &y,
-                FP_Type h, const VectorD2 &b,
-                const MatrixD2 &Y, TimeDivFunctor *F)
+                FP_Type h, const VectorD2 &b, const MatrixD2 &Y)
   {
     size_t s = b.size();
     size_t n = y.size();
@@ -76,11 +76,11 @@ public:
 
     // Increments k_1, ..., k_s for solution y(t)
     std::vector<VectorD2> k(s);
-    k.at(0) = (*F)(t, y);
+    k.at(0) = (*f_div)(t, y);
 
     // Increments K_1, ..., K_s for solution Y(t)
     std::vector<MatrixD2> K(s);
-    K.at(0) = (*F).diff(t, y) * Y;
+    K.at(0) = (*f_div).diff(t, y) * Y;
 
     for (size_t i = 1; i < s; i++)
       {
@@ -93,8 +93,8 @@ public:
             G.add(1, A(i, j) * K.at(j));
           }
 
-        k.at(i) = (*F)(t + h*c[i], y + h*g);
-        K.at(i) = (*F).diff(t + h*c[i], y + h*g) * (Y + h*G);
+        k.at(i) = (*f_div)(t + h*c[i], y + h*g);
+        K.at(i) = (*f_div).diff(t + h*c[i], y + h*g) * (Y + h*G);
       }
 
     VectorD2 inc_u(n);
@@ -116,9 +116,9 @@ public:
 
   virtual std::pair<VectorD2, MatrixD2>
   increment_variational(FP_Type t, const VectorD2 &y, FP_Type h,
-                        const MatrixD2 &Y, TimeDivFunctor *F) override
+                        const MatrixD2 &Y) override
   {
-    return k_variational(t, y, h, b1, Y, F);
+    return k_variational(t, y, h, b1, Y);
   }
 
   size_t n_misfires() const
@@ -126,9 +126,7 @@ public:
     return misfires;
   }
 
-  void iterate_with_ssc(FP_Type t_lim, FP_Type h0, FP_Type TOL,
-                        bool fundamental_matrix = false,
-                        FP_Type C = 2)
+  void iterate_with_ssc(FP_Type t_lim, FP_Type h0, FP_Type TOL, FP_Type C = 2)
   {
     assert(embedded_method);
     size_t ad_count = 0;
@@ -145,12 +143,6 @@ public:
           throw std::invalid_argument("could not determine initial step size");
       }
 
-    // Check prerequisites for variational equation
-    TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
-
-    if (fundamental_matrix && f_diff == nullptr)
-      throw std::invalid_argument("right-hand side is not differentiable");
-
     // Input variables
     FP_Type t = t0;
     FP_Type h_var = h0;
@@ -164,19 +156,16 @@ public:
     VectorD2 y = u0;
     VectorD2 inc_y1(n);
     VectorD2 inc_y2(n);
-
-    // Initial value for Yn(t; t0)
-    Yn = dealii::IdentityMatrix(n);
     MatrixD2 inc_Yn(n, n);
 
     // Algorithm 2.4.2
     while (t_lim - t > 0)
       { // (1) Candidates for u_k, v_k with time step h_k
-        if (fundamental_matrix)
+        if (var_eq)
           {
             // The step-size is controlled only by the IVP, not the variational equation,
             // to avoid recomputing the Jacobian on a rejected time step.
-            auto U = k_variational(t, y, h_var, b1, Yn, f_diff);
+            auto U = k_variational(t, y, h_var, b1, Yn);
 
             inc_y1 = y  + h_var * U.first;
             inc_y2 = y  + h_var * k_increment(t, y, h_var, b2);
@@ -195,7 +184,7 @@ public:
         // (2) Compute optimal step size.
         FP_Type local_error = (inc_y1 - inc_y2).l2_norm();
         FP_Type h_opt = h_var * std::pow(TOL / local_error, 1. / (p+1));
-        // FP_Type h_opt = 0.9 * h_var * std::pow(TOL * std::abs(h_var) / local_error, 1./p);
+        //FP_Type h_opt = 0.9 * h_var * std::pow(TOL * std::abs(h_var) / local_error, 1./p);
 
         // (3) Time step is rejected; repeat step with optimal value.
         if (h_opt < h_var)
@@ -255,6 +244,7 @@ private:
   // OneStepMethod::u0;
   // OneStepMethod::steps;
   // OneStepMethod::Yn
+  // OneStepMethod::f_div;
   // OneStepMethod::timepoints;
   // OneStepMethod::uapprox;
 

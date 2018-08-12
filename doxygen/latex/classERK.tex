@@ -2,7 +2,8 @@
 \label{classERK}\index{E\+R\+K$<$ Butcher\+Tableau $>$@{E\+R\+K$<$ Butcher\+Tableau $>$}}
 
 
-Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
+Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -11,7 +12,8 @@ Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \end{figure}
 
 
-Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
+Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -21,26 +23,26 @@ Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classERK_a74d5ab0d29ab4960d9c571553e91fc76}\label{classERK_a74d5ab0d29ab4960d9c571553e91fc76}} 
-{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, Vector\+D2 u0, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
+\mbox{\Hypertarget{classERK_a354218adfe6be3dd211d263524cdda94}\label{classERK_a354218adfe6be3dd211d263524cdda94}} 
+{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, Vector\+D2 u0, bool var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
 \item 
 \mbox{\Hypertarget{classERK_ab3dcc059386d02ae76f229dba8909ad3}\label{classERK_ab3dcc059386d02ae76f229dba8909ad3}} 
 Vector\+D2 {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b)
 \item 
-\mbox{\Hypertarget{classERK_a2793e89d81f0fb7142365fa3960d7ba7}\label{classERK_a2793e89d81f0fb7142365fa3960d7ba7}} 
-std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries k\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b, const Matrix\+D2 \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$F)
+\mbox{\Hypertarget{classERK_a93428c63320ddc6ec072eb737bf57ba3}\label{classERK_a93428c63320ddc6ec072eb737bf57ba3}} 
+std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries k\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b, const Matrix\+D2 \&Y)
 \item 
 \mbox{\Hypertarget{classERK_afdc6a96a8264b23acdeb0d2a31b42f8d}\label{classERK_afdc6a96a8264b23acdeb0d2a31b42f8d}} 
 virtual Vector\+D2 {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h) override
 \item 
-\mbox{\Hypertarget{classERK_af2d1cd4fba0eef09a984b1e58e57715c}\label{classERK_af2d1cd4fba0eef09a984b1e58e57715c}} 
-virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Matrix\+D2 \&Y, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$F) override
+\mbox{\Hypertarget{classERK_adac215657421b485e20292f0793b8611}\label{classERK_adac215657421b485e20292f0793b8611}} 
+virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+variational} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Matrix\+D2 \&Y) override
 \item 
 \mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
 size\+\_\+t {\bfseries n\+\_\+misfires} () const
 \item 
-\mbox{\Hypertarget{classERK_a9537f676f3d8df72748a21e3af707474}\label{classERK_a9537f676f3d8df72748a21e3af707474}} 
-void {\bfseries iterate\+\_\+with\+\_\+ssc} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h0, F\+P\+\_\+\+Type T\+OL, bool fundamental\+\_\+matrix=false, F\+P\+\_\+\+Type C=2)
+\mbox{\Hypertarget{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}\label{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}} 
+void {\bfseries iterate\+\_\+with\+\_\+ssc} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h0, F\+P\+\_\+\+Type T\+OL, F\+P\+\_\+\+Type C=2)
 \item 
 \mbox{\Hypertarget{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}\label{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}} 
 void {\bfseries print\+\_\+step\+\_\+size} (std\+::ostream \&out)

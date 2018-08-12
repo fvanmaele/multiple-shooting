@@ -28,7 +28,7 @@ namespace Test
     // Adaptive method of order 5(4)
     ERK<DOPRI54> Adaptive54(f, t0, u0);
     FP_Type TOL = std::sqrt(std::numeric_limits<FP_Type>::epsilon());
-    Adaptive54.iterate_with_ssc(t1, 1e-1, TOL, false);
+    Adaptive54.iterate_with_ssc(t1, 1e-1, TOL);
     Adaptive54.print(output2);
 
     std::cout << "Amount of steps: (DOPRI54, Adaptive) "

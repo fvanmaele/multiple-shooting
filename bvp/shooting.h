@@ -89,10 +89,10 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    ERK<M> Method(f, t0, s);
+    ERK<M> Method(f, t0, s, false);
 
     if (ssc)
-      Method.iterate_with_ssc(t1, h0, TOL, false);
+      Method.iterate_with_ssc(t1, h0, TOL);
     else
       Method.iterate_up_to(t1, h0);
 
@@ -154,10 +154,10 @@ public:
   virtual VectorD2
   solve_y(FP_Type t0, FP_Type t1, const VectorD2 &s) override
   {
-    ERK<M> Method(f, t0, s);
+    ERK<M> Method(f, t0, s, false);
 
     if (ssc)
-      Method.iterate_with_ssc(t1, h0, TOL, false);
+      Method.iterate_with_ssc(t1, h0, TOL);
     else
       Method.iterate_up_to(t1, h0);
 
@@ -176,13 +176,13 @@ public:
       throw std::invalid_argument("functor is not differentiable");
 
     // Compute IVP and variational equation simultaneously.
-    ERK<M_Var> Method(f, t0, s);
+    ERK<M_Var> Method(f, t0, s, true);
 
     if (ssc)
       // Note: step-size is controlled by the IVP only.
-      Method.iterate_with_ssc(t1, h0, TOL, true);
+      Method.iterate_with_ssc(t1, h0, TOL);
     else
-      Method.iterate_up_to(t1, h0, true);
+      Method.iterate_up_to(t1, h0);
 
     VectorD2 y = Method.approx();
     MatrixD2 Z = Method.fund_matrix();

@@ -9,14 +9,13 @@
 #include "../lac/vector_operators.h"
 #include "../lac/matrix_operators.h"
 
-/* This class solves an IVP of shape
- *     u'(t) = f(t, u(t));  u(t_0) = u_0
- *
- * using an explicit one-step method.
+/*!
+ * \brief Solve an IVP of shape \f$u'(t) = f(t, u(t)), u(t_0) = u_0\f$
+ * using a one-step method.
  *
  * The common wrapped functionality includes collecting of intermediary
  * computation results.
-*/
+ */
 class OneStepMethod
 {
 public:
@@ -30,11 +29,23 @@ public:
 
   // The exact solution may be specified as an optional argument
   // for comparison purposes.
-  OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0, Curve *_u = nullptr)
+  OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0,
+                bool _var_eq = false, Curve *_u = nullptr)
     :
-      f(_f), u(_u), t0(_t0), u0(_u0), steps(0), Yn(_u0.size()),
+      f(_f), u(_u), t0(_t0), u0(_u0), steps(0), f_div(nullptr), var_eq(_var_eq),
       timepoints(1, _t0), uapprox(1, _u0)
-  {}
+  {
+    if (var_eq)
+      { // Check prerequisites for variational equation
+        f_div = dynamic_cast<TimeDivFunctor*>(&f);
+
+        if (f_div == nullptr)
+          throw std::invalid_argument("right-hand side is not differentiable");
+
+        // Initial value for Yn(t; t0, u0)
+        Yn = dealii::IdentityMatrix(u0.size());
+      }
+  }
 
   // Access functions
   VectorD2 approx() const
@@ -98,7 +109,7 @@ public:
   }
 
   virtual std::pair<VectorD2, MatrixD2>
-  increment_variational(FP_Type, const VectorD2&, FP_Type, const MatrixD2&, TimeDivFunctor*)
+  increment_variational(FP_Type, const VectorD2&, FP_Type, const MatrixD2&)
   {
     throw std::invalid_argument("Please specify the step procedure in a child class");
   }
@@ -106,33 +117,22 @@ public:
   virtual ~OneStepMethod() = default;
 
   // Execute the iteration over the given time interval [t0, t_limit].
-  void iterate_up_to(FP_Type t_lim, FP_Type h,
-                     bool fundamental_matrix = false,
-                     FP_Type C = 2)
+  void iterate_up_to(FP_Type t_lim, FP_Type h, FP_Type C = 2)
   {
     reset(); // init output variables
 
     FP_Type  t = t0;
     VectorD2 y = u0;
-    size_t n = u0.size();
-
-    // Check prerequisites for variational equation
-    TimeDivFunctor* f_diff = dynamic_cast<TimeDivFunctor*>(&f);
-
-    if (fundamental_matrix && f_diff == nullptr)
-      throw std::invalid_argument("right-hand side is not differentiable");
-
-    // Initial value for Yn(t; t0, u0)
-    Yn = dealii::IdentityMatrix(n);
 
     while (t_lim - t > 0)
       { // Avoid rounding errors (Rem. 2.4.3)
         if (t + 1.1*h >= t_lim)
           h = t_lim - t;
 
-        if (fundamental_matrix)
+        if (var_eq)
           {
-            auto U = increment_variational(t, y, h, Yn, f_diff);
+            auto U = increment_variational(t, y, h, Yn);
+
             y += h * U.first;
             Yn.add(1, h * U.second);
           }
@@ -150,9 +150,8 @@ public:
         if (sol_is_nan(y))
           throw std::overflow_error("global error too large (NaN)");
 
-        if (u != nullptr)
-          if (y.l2_norm() >= C*(*u)(t).l2_norm())
-            throw std::domain_error("global error too large");
+        if (u != nullptr && y.l2_norm() >= C*(*u)(t).l2_norm())
+          throw std::domain_error("global error too large");
       }
 
     if (timepoints.back() != t_lim)
@@ -167,12 +166,17 @@ public:
   }
 
 private:
+  // Initial value problem
   TimeFunctor &f;  // rhs of ODE in standard form
   Curve *u;        // exact solution
   FP_Type t0;      // initial time value
   VectorD2 u0;     // initial value
   size_t steps;    // amount of integration steps
-  MatrixD2 Yn;     // fundamental matrix
+
+  // Variational equation
+  TimeDivFunctor* f_div;
+  MatrixD2 Yn;
+  bool var_eq;
 
   // Result vectors for the IVP
   std::vector<FP_Type> timepoints;

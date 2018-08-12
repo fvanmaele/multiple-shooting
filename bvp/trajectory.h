@@ -28,14 +28,14 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &rhs, Curve *eta,
   while (t_i < b)
     {
       VectorD2 eta_i = (*eta)(t_i);
-      ERK<M> AdM(rhs, t_i, eta_i, eta);
+      ERK<M> AdM(rhs, t_i, eta_i, false, eta);
 
       try
       {
         if (ssc)
-          AdM.iterate_with_ssc(b, h0, TOL, false, C);
+          AdM.iterate_with_ssc(b, h0, TOL, C);
         else
-          AdM.iterate_up_to(b, h0, false, C);
+          AdM.iterate_up_to(b, h0, C);
 
         t_i = AdM.endpoint();
         t_i < b ? T.push_back(t_i) : T.push_back(b);

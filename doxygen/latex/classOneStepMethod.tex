@@ -2,6 +2,15 @@
 \label{classOneStepMethod}\index{One\+Step\+Method@{One\+Step\+Method}}
 
 
+Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using a one-\/step method.  
+
+
+
+
+{\ttfamily \#include $<$eos\+\_\+method.\+h$>$}
+
+
+
 Inheritance diagram for One\+Step\+Method\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -12,8 +21,8 @@ Inheritance diagram for One\+Step\+Method\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classOneStepMethod_af80b8284dc4c01633056d626e96dcce2}\label{classOneStepMethod_af80b8284dc4c01633056d626e96dcce2}} 
-{\bfseries One\+Step\+Method} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, Vector\+D2 \+\_\+u0, \hyperlink{classCurve}{Curve} $\ast$\+\_\+u=nullptr)
+\mbox{\Hypertarget{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}\label{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}} 
+{\bfseries One\+Step\+Method} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, Vector\+D2 \+\_\+u0, bool \+\_\+var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$\+\_\+u=nullptr)
 \item 
 \mbox{\Hypertarget{classOneStepMethod_a5f4529edf5aae96d1dd0061b7a798e4f}\label{classOneStepMethod_a5f4529edf5aae96d1dd0061b7a798e4f}} 
 Vector\+D2 {\bfseries approx} () const
@@ -42,11 +51,11 @@ void {\bfseries save\+\_\+step} (const F\+P\+\_\+\+Type \&t, const Vector\+D2 \&
 \mbox{\Hypertarget{classOneStepMethod_aee957997a620c414ebb999df49debf5b}\label{classOneStepMethod_aee957997a620c414ebb999df49debf5b}} 
 virtual Vector\+D2 {\bfseries increment\+\_\+function} (F\+P\+\_\+\+Type, const Vector\+D2 \&, F\+P\+\_\+\+Type)
 \item 
-\mbox{\Hypertarget{classOneStepMethod_ac567c56e09ebb6c8800349eb4d21f966}\label{classOneStepMethod_ac567c56e09ebb6c8800349eb4d21f966}} 
-virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+variational} (F\+P\+\_\+\+Type, const Vector\+D2 \&, F\+P\+\_\+\+Type, const Matrix\+D2 \&, \hyperlink{classTimeDivFunctor}{Time\+Div\+Functor} $\ast$)
+\mbox{\Hypertarget{classOneStepMethod_aa599262a475dd7f837600093a00b70d3}\label{classOneStepMethod_aa599262a475dd7f837600093a00b70d3}} 
+virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+variational} (F\+P\+\_\+\+Type, const Vector\+D2 \&, F\+P\+\_\+\+Type, const Matrix\+D2 \&)
 \item 
-\mbox{\Hypertarget{classOneStepMethod_aafded57f36af4edf0840cb747dbdc5ea}\label{classOneStepMethod_aafded57f36af4edf0840cb747dbdc5ea}} 
-void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h, bool fundamental\+\_\+matrix=false, F\+P\+\_\+\+Type C=2)
+\mbox{\Hypertarget{classOneStepMethod_adf00efa88d6fb3d1e9f7b3024375a0b4}\label{classOneStepMethod_adf00efa88d6fb3d1e9f7b3024375a0b4}} 
+void {\bfseries iterate\+\_\+up\+\_\+to} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h, F\+P\+\_\+\+Type C=2)
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -64,6 +73,11 @@ class {\bfseries E\+R\+K\+\_\+\+Test\+\_\+04}
 {\footnotesize template$<$typename B\+Tab $>$ }\\class {\bfseries E\+RK}
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using a one-\/step method. 
+
+The common wrapped functionality includes collecting of intermediary computation results. 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

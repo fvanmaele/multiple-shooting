@@ -56,8 +56,8 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./t1;
 
-    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
-    Method.iterate_with_ssc(t1, 1e-1, TOL, true);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0, true);
+    Method.iterate_with_ssc(t1, 1e-1, TOL);
 
     VectorD2 y = Method.approx();
     MatrixD2 phi_y = Method.fund_matrix();
@@ -90,8 +90,8 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./std::pow(t1+1, 2);
 
-    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
-    Method.iterate_with_ssc(t1, 1e-1, TOL, true);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0, true);
+    Method.iterate_with_ssc(t1, 1e-1, TOL);
 
     VectorD2 y = Method.approx();
     MatrixD2 phi_y = Method.fund_matrix();
@@ -124,8 +124,8 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = t1*t1 + 1;
 
-    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
-    Method.iterate_with_ssc(t1, 1e-1, TOL, true);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0, true);
+    Method.iterate_with_ssc(t1, 1e-1, TOL);
 
     VectorD2 y = Method.approx();
     MatrixD2 phi_y = Method.fund_matrix();
@@ -158,8 +158,8 @@ namespace Test
     MatrixD2 phi(1, 1);
     phi(0, 0) = 1./std::pow(t1+1, 1.5);
 
-    ERK<VAREQ_METHOD> Method(f_ad, t0, u0);
-    Method.iterate_with_ssc(t1, 1e-1, TOL, true);
+    ERK<VAREQ_METHOD> Method(f_ad, t0, u0, true);
+    Method.iterate_with_ssc(t1, 1e-1, TOL);
 
     VectorD2 y = Method.approx();
     MatrixD2 phi_y = Method.fund_matrix();
