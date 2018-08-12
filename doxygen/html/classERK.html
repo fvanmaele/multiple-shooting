@@ -67,6 +67,11 @@ $(function() {
 <div class="title">ERK&lt; ButcherTableau &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using an explicit Runge-Kutta method.  
+ <a href="classERK.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="runge__kutta_8h_source.html">runge_kutta.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ERK&lt; ButcherTableau &gt;:</div>
 <div class="dyncontent">
@@ -86,8 +91,8 @@ Collaboration diagram for ERK&lt; ButcherTableau &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a354218adfe6be3dd211d263524cdda94"><td class="memItemLeft" align="right" valign="top"><a id="a354218adfe6be3dd211d263524cdda94"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ERK</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f, FP_Type t0, VectorD2 u0, bool var_eq=false, <a class="el" href="classCurve.html">Curve</a> *u=nullptr)</td></tr>
+<tr class="memitem:a354218adfe6be3dd211d263524cdda94"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classERK.html#a354218adfe6be3dd211d263524cdda94">ERK</a> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;f, FP_Type t0, VectorD2 u0, bool var_eq=false, <a class="el" href="classCurve.html">Curve</a> *u=nullptr)</td></tr>
+<tr class="memdesc:a354218adfe6be3dd211d263524cdda94"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classERK.html" title="Solve an IVP of shape  using an explicit Runge-Kutta method. ">ERK</a>.  <a href="#a354218adfe6be3dd211d263524cdda94">More...</a><br /></td></tr>
 <tr class="separator:a354218adfe6be3dd211d263524cdda94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3dcc059386d02ae76f229dba8909ad3"><td class="memItemLeft" align="right" valign="top"><a id="ab3dcc059386d02ae76f229dba8909ad3"></a>
 VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>k_increment</b> (FP_Type t, const VectorD2 &amp;y, FP_Type h, const VectorD2 &amp;b)</td></tr>
@@ -104,15 +109,15 @@ virtual std::pair&lt; VectorD2, MatrixD2 &gt;&#160;</td><td class="memItemRight"
 <tr class="memitem:ae3f71b3f5364ffcab63a715d95adb911"><td class="memItemLeft" align="right" valign="top"><a id="ae3f71b3f5364ffcab63a715d95adb911"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_misfires</b> () const</td></tr>
 <tr class="separator:ae3f71b3f5364ffcab63a715d95adb911"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f4ae1888656dbbf03f3cc9d22177f7e"><td class="memItemLeft" align="right" valign="top"><a id="a4f4ae1888656dbbf03f3cc9d22177f7e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_with_ssc</b> (FP_Type t_lim, FP_Type h0, FP_Type TOL, FP_Type C=2)</td></tr>
+<tr class="memitem:a4f4ae1888656dbbf03f3cc9d22177f7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classERK.html#a4f4ae1888656dbbf03f3cc9d22177f7e">iterate_with_ssc</a> (FP_Type t_lim, FP_Type h0, FP_Type TOL, FP_Type C=2)</td></tr>
+<tr class="memdesc:a4f4ae1888656dbbf03f3cc9d22177f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">iterate_with_ssc  <a href="#a4f4ae1888656dbbf03f3cc9d22177f7e">More...</a><br /></td></tr>
 <tr class="separator:a4f4ae1888656dbbf03f3cc9d22177f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memItemLeft" align="right" valign="top"><a id="a6057b70fbd97bbe2e5b2d0233aef46a4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print_step_size</b> (std::ostream &amp;out)</td></tr>
 <tr class="separator:a6057b70fbd97bbe2e5b2d0233aef46a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classOneStepMethod"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classOneStepMethod')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classOneStepMethod.html">OneStepMethod</a></td></tr>
-<tr class="memitem:a513ea3b2bd015bd266f9cb3e69e00327 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a513ea3b2bd015bd266f9cb3e69e00327"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OneStepMethod</b> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, VectorD2 _u0, bool _var_eq=false, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
+<tr class="memitem:a513ea3b2bd015bd266f9cb3e69e00327 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOneStepMethod.html#a513ea3b2bd015bd266f9cb3e69e00327">OneStepMethod</a> (<a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;_f, FP_Type _t0, VectorD2 _u0, bool _var_eq=false, <a class="el" href="classCurve.html">Curve</a> *_u=nullptr)</td></tr>
+<tr class="memdesc:a513ea3b2bd015bd266f9cb3e69e00327 inherit pub_methods_classOneStepMethod"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classOneStepMethod.html" title="Solve an IVP of shape  using a one-step method. ">OneStepMethod</a>.  <a href="classOneStepMethod.html#a513ea3b2bd015bd266f9cb3e69e00327">More...</a><br /></td></tr>
 <tr class="separator:a513ea3b2bd015bd266f9cb3e69e00327 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f4529edf5aae96d1dd0061b7a798e4f inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a5f4529edf5aae96d1dd0061b7a798e4f"></a>
 VectorD2&#160;</td><td class="memItemRight" valign="bottom"><b>approx</b> () const</td></tr>
@@ -126,11 +131,12 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_steps</b> () cons
 <tr class="memitem:ad59a0fce9906ba9159da74aea44b3431 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ad59a0fce9906ba9159da74aea44b3431"></a>
 MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><b>fund_matrix</b> () const</td></tr>
 <tr class="separator:ad59a0fce9906ba9159da74aea44b3431 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="aa3fc1d095086c736ef23c60e56034474"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (std::ostream &amp;out=std::cout) const</td></tr>
+<tr class="memitem:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOneStepMethod.html#aa3fc1d095086c736ef23c60e56034474">print</a> (std::ostream &amp;out=std::cout) const</td></tr>
+<tr class="memdesc:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the approximate solution at each time step in a tabular format.  <a href="classOneStepMethod.html#aa3fc1d095086c736ef23c60e56034474">More...</a><br /></td></tr>
 <tr class="separator:aa3fc1d095086c736ef23c60e56034474 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5e6154e9cc700056474c1c6128e3e9f inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="ad5e6154e9cc700056474c1c6128e3e9f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>sol_is_nan</b> (const VectorD2 &amp;y)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOneStepMethod.html#ad5e6154e9cc700056474c1c6128e3e9f">sol_is_nan</a> (const VectorD2 &amp;y)</td></tr>
+<tr class="memdesc:ad5e6154e9cc700056474c1c6128e3e9f inherit pub_methods_classOneStepMethod"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if an a ::Vector element is NaN (<code>std::isnan</code>) <br /></td></tr>
 <tr class="separator:ad5e6154e9cc700056474c1c6128e3e9f inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6743b0343a6c5bb75e423649915b86 inherit pub_methods_classOneStepMethod"><td class="memItemLeft" align="right" valign="top"><a id="a4e6743b0343a6c5bb75e423649915b86"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
@@ -142,6 +148,138 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>save_step</b> (const 
 void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP_Type t_lim, FP_Type h, FP_Type C=2)</td></tr>
 <tr class="separator:adf00efa88d6fb3d1e9f7b3024375a0b4 inherit pub_methods_classOneStepMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename ButcherTableau&gt;<br />
+class ERK&lt; ButcherTableau &gt;</h3>
+
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using an explicit Runge-Kutta method. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a354218adfe6be3dd211d263524cdda94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a354218adfe6be3dd211d263524cdda94">&#9670;&nbsp;</a></span>ERK()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ButcherTableau &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classERK.html">ERK</a>&lt; ButcherTableau &gt;::<a class="el" href="classERK.html">ERK</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classTimeFunctor.html">TimeFunctor</a> &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>t0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">VectorD2&#160;</td>
+          <td class="paramname"><em>u0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>var_eq</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCurve.html">Curve</a> *&#160;</td>
+          <td class="paramname"><em>u</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classERK.html" title="Solve an IVP of shape  using an explicit Runge-Kutta method. ">ERK</a>. </p>
+<p>This constructor follows <code><a class="el" href="classOneStepMethod.html" title="Solve an IVP of shape  using a one-step method. ">OneStepMethod</a></code>. The used Butcher tableau is specified via a template parameter. Whether a method is embedded (for step-size control) is determined by checking if lower-order weights are available in the Butcher tableau.</p>
+<p>Only fixed order methods or methods of order <img class="formulaInl" alt="$p+1, p$" src="form_60.png"/> are supported. See <code>iterate_with_ssc</code> for details. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4f4ae1888656dbbf03f3cc9d22177f7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f4ae1888656dbbf03f3cc9d22177f7e">&#9670;&nbsp;</a></span>iterate_with_ssc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ButcherTableau &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classERK.html">ERK</a>&lt; ButcherTableau &gt;::iterate_with_ssc </td>
+          <td>(</td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>t_lim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>h0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>TOL</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FP_Type&#160;</td>
+          <td class="paramname"><em>C</em> = <code>2</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>iterate_with_ssc </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t_lim</td><td></td></tr>
+    <tr><td class="paramname">h0</td><td></td></tr>
+    <tr><td class="paramname">TOL</td><td></td></tr>
+    <tr><td class="paramname">C</td><td>Iteration function with support for step-size control. In each step, two solutions are computed, for order <img class="formulaInl" alt="$p+1$" src="form_61.png"/> and <img class="formulaInl" alt="$p$" src="form_62.png"/> respectively. Whether a step is accepted is then decided by computing an "optimal" step width. If the optimal width is smaller than the current value, the step is repeated using the new width.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>More complex algorithms which choose method order dynamically (for example the <a class="el" href="structKARP.html" title="Butcher Tableau for the Cash-Karp method of order 5(4). ">KARP</a> method for orders 1 to 5) are not implemented, but may be more suitable for discontinuous or rapidly changing ODEs. See the paper by Cash-Karp for details.</p>
+<p><a href="http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf">http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf</a></p>
+<p>When solving the variational equation, the step width is <em>only</em> determined by the initial-value problem. This approach may be improved by first solving the IVP with a <em>continuous</em> Runge-Kutta method. See the paper by L. Rández, 1990.</p>
+<p><a href="https://www.sciencedirect.com/science/article/pii/037704279290226N">https://www.sciencedirect.com/science/article/pii/037704279290226N</a> </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>ivp/<a class="el" href="runge__kutta_8h_source.html">runge_kutta.h</a></li>
 </ul>

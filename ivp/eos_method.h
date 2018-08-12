@@ -27,8 +27,22 @@ public:
   template <typename BTab>
   friend class ERK;
 
-  // The exact solution may be specified as an optional argument
-  // for comparison purposes.
+  /*!
+   * \brief OneStepMethod
+   * \param _f Right-hand side of the ODE.
+   * \param _t0 Initial time value.
+   * \param _u0 Initial value, \f$u(t_0) = u_0\f$.
+   * \param _var_eq If true, solve the variational equation.
+   * \param _u Exact solution of the IVP.
+   *
+   * Solving the variational equation is done \e simultaneously with solving the
+   * IVP. In particular, the same step width is used for both problems. See the
+   * \c ERK documentation for further discussion.
+   *
+   * A provided \c exact solution \f$u(t)\f$ may be used to verify the local
+   * error at each time step. The involved constant are specified to the
+   * iteration methods.
+   */
   OneStepMethod(TimeFunctor &_f, FP_Type _t0, VectorD2 _u0,
                 bool _var_eq = false, Curve *_u = nullptr)
     :
@@ -68,7 +82,10 @@ public:
     return Yn;
   }
 
-  // Print approximation at each step in a tabular format
+  /*!
+   * \brief Print the approximate solution at each time step in a tabular format.
+   * \param File stream to print to, for example stdout or an output file.
+   */
   void print(std::ostream &out = std::cout) const
   {
     assert(timepoints.size() == uapprox.size());
@@ -77,14 +94,15 @@ public:
       out << timepoints[i] << "\t" << uapprox[i];
   }
 
+  /*!
+   * \brief Check if an a \dealii::Vector element is NaN (\c std::isnan)
+   */
   bool sol_is_nan(const VectorD2 &y)
   {
     for (size_t i = 0; i < y.size(); i++)
       {
         if (std::isnan(y[i]))
-          {
-            return true;
-          }
+          return true;
       }
     return false;
   }
@@ -148,10 +166,10 @@ public:
         steps++;
 
         if (sol_is_nan(y))
-          throw std::overflow_error("global error too large (NaN)");
+          throw std::overflow_error("local error too large (NaN)");
 
         if (u != nullptr && y.l2_norm() >= C*(*u)(t).l2_norm())
-          throw std::domain_error("global error too large");
+          throw std::range_error("local error too large");
       }
 
     if (timepoints.back() != t_lim)

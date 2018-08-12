@@ -2,8 +2,16 @@
 \label{classERK}\index{E\+R\+K$<$ Butcher\+Tableau $>$@{E\+R\+K$<$ Butcher\+Tableau $>$}}
 
 
-Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
-\nopagebreak
+Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using an explicit Runge-\/\+Kutta method.  
+
+
+
+
+{\ttfamily \#include $<$runge\+\_\+kutta.\+h$>$}
+
+
+
+Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -12,8 +20,7 @@ Inheritance diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
 \end{figure}
 
 
-Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
-\nopagebreak
+Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -23,9 +30,8 @@ Collaboration diagram for E\+RK$<$ Butcher\+Tableau $>$\+:
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classERK_a354218adfe6be3dd211d263524cdda94}\label{classERK_a354218adfe6be3dd211d263524cdda94}} 
-{\bfseries E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, Vector\+D2 u0, bool var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
-\item 
+\hyperlink{classERK_a354218adfe6be3dd211d263524cdda94}{E\+RK} (\hyperlink{classTimeFunctor}{Time\+Functor} \&f, F\+P\+\_\+\+Type t0, Vector\+D2 u0, bool var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$u=nullptr)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classERK}{E\+RK}. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classERK_ab3dcc059386d02ae76f229dba8909ad3}\label{classERK_ab3dcc059386d02ae76f229dba8909ad3}} 
 Vector\+D2 {\bfseries k\+\_\+increment} (F\+P\+\_\+\+Type t, const Vector\+D2 \&y, F\+P\+\_\+\+Type h, const Vector\+D2 \&b)
 \item 
@@ -41,13 +47,65 @@ virtual std\+::pair$<$ Vector\+D2, Matrix\+D2 $>$ {\bfseries increment\+\_\+vari
 \mbox{\Hypertarget{classERK_ae3f71b3f5364ffcab63a715d95adb911}\label{classERK_ae3f71b3f5364ffcab63a715d95adb911}} 
 size\+\_\+t {\bfseries n\+\_\+misfires} () const
 \item 
-\mbox{\Hypertarget{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}\label{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}} 
-void {\bfseries iterate\+\_\+with\+\_\+ssc} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h0, F\+P\+\_\+\+Type T\+OL, F\+P\+\_\+\+Type C=2)
-\item 
+void \hyperlink{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}{iterate\+\_\+with\+\_\+ssc} (F\+P\+\_\+\+Type t\+\_\+lim, F\+P\+\_\+\+Type h0, F\+P\+\_\+\+Type T\+OL, F\+P\+\_\+\+Type C=2)
+\begin{DoxyCompactList}\small\item\em iterate\+\_\+with\+\_\+ssc \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}\label{classERK_a6057b70fbd97bbe2e5b2d0233aef46a4}} 
 void {\bfseries print\+\_\+step\+\_\+size} (std\+::ostream \&out)
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Butcher\+Tableau$>$\newline
+class E\+R\+K$<$ Butcher\+Tableau $>$}
+
+Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using an explicit Runge-\/\+Kutta method. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classERK_a354218adfe6be3dd211d263524cdda94}\label{classERK_a354218adfe6be3dd211d263524cdda94}} 
+\index{E\+RK@{E\+RK}!E\+RK@{E\+RK}}
+\index{E\+RK@{E\+RK}!E\+RK@{E\+RK}}
+\subsubsection{\texorpdfstring{E\+R\+K()}{ERK()}}
+{\footnotesize\ttfamily template$<$typename Butcher\+Tableau $>$ \\
+\hyperlink{classERK}{E\+RK}$<$ Butcher\+Tableau $>$\+::\hyperlink{classERK}{E\+RK} (\begin{DoxyParamCaption}\item[{\hyperlink{classTimeFunctor}{Time\+Functor} \&}]{f,  }\item[{F\+P\+\_\+\+Type}]{t0,  }\item[{Vector\+D2}]{u0,  }\item[{bool}]{var\+\_\+eq = {\ttfamily false},  }\item[{\hyperlink{classCurve}{Curve} $\ast$}]{u = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\hyperlink{classERK}{E\+RK}. 
+
+This constructor follows {\ttfamily \hyperlink{classOneStepMethod}{One\+Step\+Method}}. The used Butcher tableau is specified via a template parameter. Whether a method is embedded (for step-\/size control) is determined by checking if lower-\/order weights are available in the Butcher tableau.
+
+Only fixed order methods or methods of order $p+1, p$ are supported. See {\ttfamily iterate\+\_\+with\+\_\+ssc} for details. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}\label{classERK_a4f4ae1888656dbbf03f3cc9d22177f7e}} 
+\index{E\+RK@{E\+RK}!iterate\+\_\+with\+\_\+ssc@{iterate\+\_\+with\+\_\+ssc}}
+\index{iterate\+\_\+with\+\_\+ssc@{iterate\+\_\+with\+\_\+ssc}!E\+RK@{E\+RK}}
+\subsubsection{\texorpdfstring{iterate\+\_\+with\+\_\+ssc()}{iterate\_with\_ssc()}}
+{\footnotesize\ttfamily template$<$typename Butcher\+Tableau $>$ \\
+void \hyperlink{classERK}{E\+RK}$<$ Butcher\+Tableau $>$\+::iterate\+\_\+with\+\_\+ssc (\begin{DoxyParamCaption}\item[{F\+P\+\_\+\+Type}]{t\+\_\+lim,  }\item[{F\+P\+\_\+\+Type}]{h0,  }\item[{F\+P\+\_\+\+Type}]{T\+OL,  }\item[{F\+P\+\_\+\+Type}]{C = {\ttfamily 2} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+iterate\+\_\+with\+\_\+ssc 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t\+\_\+lim} & \\
+\hline
+{\em h0} & \\
+\hline
+{\em T\+OL} & \\
+\hline
+{\em C} & Iteration function with support for step-\/size control. In each step, two solutions are computed, for order $p+1$ and $p$ respectively. Whether a step is accepted is then decided by computing an \char`\"{}optimal\char`\"{} step width. If the optimal width is smaller than the current value, the step is repeated using the new width.\\
+\hline
+\end{DoxyParams}
+More complex algorithms which choose method order dynamically (for example the \hyperlink{structKARP}{K\+A\+RP} method for orders 1 to 5) are not implemented, but may be more suitable for discontinuous or rapidly changing O\+D\+Es. See the paper by Cash-\/\+Karp for details.
+
+\href{http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf}{\tt http\+://www.\+elegio.\+it/mc2/rk/doc/p201-\/cash-\/karp.\+pdf}
+
+When solving the variational equation, the step width is {\itshape only} determined by the initial-\/value problem. This approach may be improved by first solving the I\+VP with a {\itshape continuous} Runge-\/\+Kutta method. See the paper by L. Rández, 1990.
+
+\href{https://www.sciencedirect.com/science/article/pii/037704279290226N}{\tt https\+://www.\+sciencedirect.\+com/science/article/pii/037704279290226N} 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

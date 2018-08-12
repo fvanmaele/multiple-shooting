@@ -9,13 +9,26 @@
 #include "eos_method.h"
 #include "tableau.h"
 
+/*!
+ * \brief Solve an IVP of shape \f$u'(t) = f(t, u(t)), u(t_0) = u_0\f$
+ * using an explicit Runge-Kutta method.
+ */
 template <typename ButcherTableau>
 class ERK : public OneStepMethod
 {
 public:
-  // Constructor for explicit and embedded methods
-  ERK(TimeFunctor &f, FP_Type t0, VectorD2 u0,
-      bool var_eq = false, Curve *u = nullptr) :
+  /*!
+   * \brief ERK
+   *
+   * This constructor follows \c OneStepMethod. The used Butcher tableau is
+   * specified via a template parameter. Whether a method is embedded (for
+   * step-size control) is determined by checking if lower-order weights
+   * are available in the Butcher tableau.
+   *
+   * Only fixed order methods or methods of order \f$p+1, p\f$ are supported.
+   * See \c iterate_with_ssc for details.
+   */
+  ERK(TimeFunctor &f, FP_Type t0, VectorD2 u0, bool var_eq = false, Curve *u = nullptr) :
     OneStepMethod(f, t0, u0, var_eq, u)
   {
     ButcherTableau BTab;
@@ -126,6 +139,33 @@ public:
     return misfires;
   }
 
+  /*!
+   * \brief iterate_with_ssc
+   * \param t_lim
+   * \param h0
+   * \param TOL
+   * \param C
+   *
+   * Iteration function with support for step-size control. In each step, two
+   * solutions are computed, for order \f$p+1\f$ and \f$p\f$ respectively.
+   * Whether a step is accepted is then decided by computing an "optimal"
+   * step width. If the optimal width is smaller than the current value,
+   * the step is repeated using the new width.
+   *
+   * More complex algorithms which choose method order dynamically (for example
+   * the KARP method for orders 1 to 5) are not implemented, but may be more
+   * suitable for discontinuous or rapidly changing ODEs. See the paper by Cash-Karp
+   * for details.
+   *
+   * http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf
+   *
+   * When solving the variational equation, the step width is \e only determined
+   * by the initial-value problem. This approach may be improved by first solving
+   * the IVP with a \e continuous Runge-Kutta method. See the paper by L. Rández,
+   * 1990.
+   *
+   * https://www.sciencedirect.com/science/article/pii/037704279290226N
+   */
   void iterate_with_ssc(FP_Type t_lim, FP_Type h0, FP_Type TOL, FP_Type C = 2)
   {
     assert(embedded_method);

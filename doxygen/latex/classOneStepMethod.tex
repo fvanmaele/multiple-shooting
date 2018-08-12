@@ -11,7 +11,8 @@ Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using a one-\/step me
 
 
 
-Inheritance diagram for One\+Step\+Method\+:\nopagebreak
+Inheritance diagram for One\+Step\+Method\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -21,9 +22,8 @@ Inheritance diagram for One\+Step\+Method\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}\label{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}} 
-{\bfseries One\+Step\+Method} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, Vector\+D2 \+\_\+u0, bool \+\_\+var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$\+\_\+u=nullptr)
-\item 
+\hyperlink{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}{One\+Step\+Method} (\hyperlink{classTimeFunctor}{Time\+Functor} \&\+\_\+f, F\+P\+\_\+\+Type \+\_\+t0, Vector\+D2 \+\_\+u0, bool \+\_\+var\+\_\+eq=false, \hyperlink{classCurve}{Curve} $\ast$\+\_\+u=nullptr)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classOneStepMethod}{One\+Step\+Method}. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classOneStepMethod_a5f4529edf5aae96d1dd0061b7a798e4f}\label{classOneStepMethod_a5f4529edf5aae96d1dd0061b7a798e4f}} 
 Vector\+D2 {\bfseries approx} () const
 \item 
@@ -36,12 +36,11 @@ size\+\_\+t {\bfseries n\+\_\+steps} () const
 \mbox{\Hypertarget{classOneStepMethod_ad59a0fce9906ba9159da74aea44b3431}\label{classOneStepMethod_ad59a0fce9906ba9159da74aea44b3431}} 
 Matrix\+D2 {\bfseries fund\+\_\+matrix} () const
 \item 
-\mbox{\Hypertarget{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}\label{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}} 
-void {\bfseries print} (std\+::ostream \&out=std\+::cout) const
-\item 
+void \hyperlink{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}{print} (std\+::ostream \&out=std\+::cout) const
+\begin{DoxyCompactList}\small\item\em Print the approximate solution at each time step in a tabular format. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classOneStepMethod_ad5e6154e9cc700056474c1c6128e3e9f}\label{classOneStepMethod_ad5e6154e9cc700056474c1c6128e3e9f}} 
-bool {\bfseries sol\+\_\+is\+\_\+nan} (const Vector\+D2 \&y)
-\item 
+bool \hyperlink{classOneStepMethod_ad5e6154e9cc700056474c1c6128e3e9f}{sol\+\_\+is\+\_\+nan} (const Vector\+D2 \&y)
+\begin{DoxyCompactList}\small\item\em Check if an a \+::\+Vector element is NaN ({\ttfamily std\+::isnan}) \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classOneStepMethod_a4e6743b0343a6c5bb75e423649915b86}\label{classOneStepMethod_a4e6743b0343a6c5bb75e423649915b86}} 
 void {\bfseries reset} ()
 \item 
@@ -78,6 +77,52 @@ class {\bfseries E\+R\+K\+\_\+\+Test\+\_\+04}
 Solve an I\+VP of shape $u'(t) = f(t, u(t)), u(t_0) = u_0$ using a one-\/step method. 
 
 The common wrapped functionality includes collecting of intermediary computation results. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}\label{classOneStepMethod_a513ea3b2bd015bd266f9cb3e69e00327}} 
+\index{One\+Step\+Method@{One\+Step\+Method}!One\+Step\+Method@{One\+Step\+Method}}
+\index{One\+Step\+Method@{One\+Step\+Method}!One\+Step\+Method@{One\+Step\+Method}}
+\subsubsection{\texorpdfstring{One\+Step\+Method()}{OneStepMethod()}}
+{\footnotesize\ttfamily One\+Step\+Method\+::\+One\+Step\+Method (\begin{DoxyParamCaption}\item[{\hyperlink{classTimeFunctor}{Time\+Functor} \&}]{\+\_\+f,  }\item[{F\+P\+\_\+\+Type}]{\+\_\+t0,  }\item[{Vector\+D2}]{\+\_\+u0,  }\item[{bool}]{\+\_\+var\+\_\+eq = {\ttfamily false},  }\item[{\hyperlink{classCurve}{Curve} $\ast$}]{\+\_\+u = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\hyperlink{classOneStepMethod}{One\+Step\+Method}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+f} & Right-\/hand side of the O\+DE. \\
+\hline
+{\em \+\_\+t0} & Initial time value. \\
+\hline
+{\em \+\_\+u0} & Initial value, $u(t_0) = u_0$. \\
+\hline
+{\em \+\_\+var\+\_\+eq} & If true, solve the variational equation. \\
+\hline
+{\em \+\_\+u} & Exact solution of the I\+VP.\\
+\hline
+\end{DoxyParams}
+Solving the variational equation is done {\itshape simultaneously} with solving the I\+VP. In particular, the same step width is used for both problems. See the {\ttfamily \hyperlink{classERK}{E\+RK}} documentation for further discussion.
+
+A provided {\ttfamily exact} solution $u(t)$ may be used to verify the local error at each time step. The involved constant are specified to the iteration methods. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}\label{classOneStepMethod_aa3fc1d095086c736ef23c60e56034474}} 
+\index{One\+Step\+Method@{One\+Step\+Method}!print@{print}}
+\index{print@{print}!One\+Step\+Method@{One\+Step\+Method}}
+\subsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily void One\+Step\+Method\+::print (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out = {\ttfamily std\+:\+:cout} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Print the approximate solution at each time step in a tabular format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em File} & stream to print to, for example stdout or an output file. \\
+\hline
+\end{DoxyParams}
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

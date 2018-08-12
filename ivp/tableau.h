@@ -34,7 +34,7 @@ struct ERK_04
 /*! \struct KARP
  * \brief Butcher Tableau for the Cash-Karp method of order 5(4).
  *
- * Ddetails on this method and its lower order variants are available
+ * Details on this method and its lower order variants are available
  * in the original paper:
  *
  * http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['operator_28_29',['operator()',['../classSingleShooting.html#a6ffb84c5c62c86691154d41f67ff303a',1,'SingleShooting::operator()()'],['../classMultipleShooting.html#a1893112981f4f8e19a394413def8ddde',1,'MultipleShooting::operator()()']]]
+  ['n_5fdim',['n_dim',['../classShootingFunction.html#a39e6d5052e9d73ca3f5d4986752525aa',1,'ShootingFunction']]],
+  ['newton',['Newton',['../classNewton.html#a8271deaf4a7dd62152c126fb506b8d9b',1,'Newton']]]
 ];
