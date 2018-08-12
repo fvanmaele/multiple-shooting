@@ -102,7 +102,9 @@ public:
     for (size_t i = 0; i < y.size(); i++)
       {
         if (std::isnan(y[i]))
-          return true;
+          {
+            return true;
+          }
       }
     return false;
   }

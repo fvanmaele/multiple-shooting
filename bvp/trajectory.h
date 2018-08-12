@@ -40,7 +40,7 @@ trajectory(FP_Type a, FP_Type b, TimeFunctor &rhs, Curve *eta,
         t_i = AdM.endpoint();
         t_i < b ? T.push_back(t_i) : T.push_back(b);
       }
-      catch (std::domain_error &e)
+      catch (std::range_error &e)
       {
         t_i = AdM.endpoint();
         t_i < b ? T.push_back(t_i) : T.push_back(b);
