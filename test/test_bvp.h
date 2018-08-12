@@ -75,11 +75,11 @@ namespace Test
 
   void Stoer_Mult(TimeFunctor &rhs, FP_Type a, FP_Type b)
   {
-    CurveStoer* eta = new CurveStoer(2);
-    assert((*eta)(0)[0] == 4);
-    assert((*eta)(1)[0] == 1);
+    CurveStoer eta(2);
+    assert(eta(0)[0] == 4);
+    assert(eta(1)[0] == 1);
 
-    std::vector<FP_Type> t = trajectory(a, b, rhs, eta, 2, false, 1e-3);
+    std::vector<FP_Type> t = trajectory(a, b, rhs, &eta, 2, false, 1e-3);
     std::cout << "Amount of intervals: " << t.size()-1 << std::endl;
     std::cout << t;
 
@@ -88,7 +88,7 @@ namespace Test
     GnuPlot Dat1("Stoer_trajectory.dat", output_file);
 
     for (auto &c : t)
-      output_file << c << "\t" << (*eta)(c);
+      output_file << c << "\t" << eta(c);
     Dat1.plot_with_lines(2, "linespoints");
   }
 
@@ -163,12 +163,12 @@ namespace Test
   Troesch_MS(TimeFunctor &rhs, size_t dim, FP_Type a, FP_Type b)
   {
     // Approximate to BVP solution
-    CurveTroesch* eta = new CurveTroesch(2);
-    assert((*eta)(0)[0] == 0);
-    assert((*eta)(1)[0] == 1);
+    CurveTroesch eta(2);
+    assert(eta(0)[0] == 0);
+    assert(eta(1)[0] == 1);
 
     // Interval subdivision
-    std::vector<FP_Type> t = trajectory(a, b, rhs, eta, 2, false, 1e-3);
+    std::vector<FP_Type> t = trajectory(a, b, rhs, &eta, 2, false, 1e-3);
 
     if (!(t.front() == a && t.back() == b))
       throw std::domain_error("subdivision does not match interval boundaries");
@@ -181,7 +181,7 @@ namespace Test
     GnuPlot Dat1("Troesch_trajectory.dat", output_file);
 
     for (auto &c : t)
-      output_file << c << "\t" << (*eta)(c);
+      output_file << c << "\t" << eta(c);
     Dat1.plot_with_lines(2, "linespoints");
 
     // Starting values for Newton iteration
@@ -189,7 +189,7 @@ namespace Test
 
     for (size_t i = 0; i < m; i++)
       {
-        VectorD2 s_i = (*eta)(t.at(i));
+        VectorD2 s_i = eta(t.at(i));
 
         for (size_t k = 0; k < dim; k++)
           s0[k + i*dim] = s_i[k];

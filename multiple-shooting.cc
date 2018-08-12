@@ -53,12 +53,12 @@ void Solve_ThomasFermi(int n_int)
   BC_Linear r(A, B, c);
 
   // Approximate solution (starting trajectory)
-  CurveTF* eta = new CurveTF(2);
-  assert((*eta)(0)[0] == c[0]);
-  assert((*eta)(5)[0] == c[1]);
+  CurveTF eta(2);
+  assert(eta(0)[0] == c[0]);
+  assert(eta(5)[0] == c[1]);
 
   // RHS of ODE
-  const size_t dim = eta->n_dim();
+  const size_t dim = eta.n_dim();
   FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
 
 
@@ -67,7 +67,7 @@ void Solve_ThomasFermi(int n_int)
   std::vector<FP_Type> t;
 
   // a) Find initial subdivision based on starting trajectory
-  t = trajectory(a, b, f, eta, 1.1, false, 1e-2);
+  t = trajectory(a, b, f, &eta, 1.1, false, 1e-2);
 
   if (t.size() < (size_t)(n_int+1))
     throw std::invalid_argument("insufficient time points available");
@@ -86,7 +86,7 @@ void Solve_ThomasFermi(int n_int)
   GnuPlot Dat1("TF_trajectory.dat", output_file1);
 
   for (auto &c : t)
-    output_file1 << c << "\t" << (*eta)(c);
+    output_file1 << c << "\t" << eta(c);
   Dat1.plot_with_lines(2, "linespoints");
 
 
@@ -97,7 +97,7 @@ void Solve_ThomasFermi(int n_int)
 
   for (size_t i = 0; i < m; i++)
     { // Extract i-th block of s
-      VectorD2 s_i = (*eta)(t.at(i));
+      VectorD2 s_i = eta(t.at(i));
 
       for (size_t k = 0; k < dim; k++)
         s0[k + i*dim] = s_i[k];
