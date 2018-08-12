@@ -168,10 +168,10 @@ public:
         steps++;
 
         if (sol_is_nan(y))
-          throw std::overflow_error("local error too large (NaN)");
+          throw std::overflow_error("global error too large (NaN)");
 
         if (u != nullptr && y.l2_norm() >= C*(*u)(t).l2_norm())
-          throw std::range_error("local error too large");
+          throw std::range_error("global error too large");
       }
 
     if (timepoints.back() != t_lim)
