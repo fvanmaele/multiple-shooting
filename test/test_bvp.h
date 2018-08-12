@@ -219,7 +219,7 @@ namespace Test
               << std::endl;
 
     std_tWrapper rhs(RHS_Troesch<VectorD2>, 2);
-    SF_External<DOPRI54> M(rhs, true, 1e-3, 1e-7);
+    SF_External<DOPRI54> M(rhs, true, 1e-3, 1e-8);
 
     SingleShooting F(M, a, b, r);
     Newton N(F, 2);
