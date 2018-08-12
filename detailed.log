@@ -1,0 +1,110 @@
+###
+#
+#  deal.II configuration:
+#        CMAKE_BUILD_TYPE:       DebugRelease
+#        BUILD_SHARED_LIBS:      ON
+#        CMAKE_INSTALL_PREFIX:   /usr/local
+#        CMAKE_SOURCE_DIR:       /usr/local/src/dealii-9.0.0
+#                                (version 9.0.0)
+#        CMAKE_BINARY_DIR:       /usr/local/src/dealii-9.0.0/build
+#        CMAKE_CXX_COMPILER:     Clang 6.0.0 on platform Linux x86_64
+#                                /usr/local/bin/clang++
+#        CMAKE_C_COMPILER:       /usr/local/bin/clang
+#        CMAKE_Fortran_COMPILER: /usr/bin/f95
+#        CMAKE_GENERATOR:        Unix Makefiles
+#
+#  Base configuration (prior to feature configuration):
+#        DEAL_II_CXX_FLAGS:            -pedantic -fPIC -Wall -Wextra -Wpointer-arith -Wwrite-strings -Wsynth -Wsign-compare -Wswitch -Woverloaded-virtual -Wno-deprecated-declarations -Qunused-arguments -Wno-unsupported-friend -Wno-undefined-var-template -std=c++17
+#        DEAL_II_CXX_FLAGS_RELEASE:    -O2 -funroll-loops -fstrict-aliasing -Wno-unused-local-typedefs
+#        DEAL_II_CXX_FLAGS_DEBUG:      -Og -ggdb -Wa,--compress-debug-sections
+#        DEAL_II_LINKER_FLAGS:         -Wl,--as-needed -rdynamic -fuse-ld=gold
+#        DEAL_II_LINKER_FLAGS_RELEASE: 
+#        DEAL_II_LINKER_FLAGS_DEBUG:   -ggdb
+#        DEAL_II_DEFINITIONS:          
+#        DEAL_II_DEFINITIONS_RELEASE:  
+#        DEAL_II_DEFINITIONS_DEBUG:    DEBUG
+#        DEAL_II_USER_DEFINITIONS:     
+#        DEAL_II_USER_DEFINITIONS_REL: 
+#        DEAL_II_USER_DEFINITIONS_DEB: DEBUG
+#        DEAL_II_INCLUDE_DIRS          
+#        DEAL_II_USER_INCLUDE_DIRS:    
+#        DEAL_II_BUNDLED_INCLUDE_DIRS: 
+#        DEAL_II_LIBRARIES:            m
+#        DEAL_II_LIBRARIES_RELEASE:    
+#        DEAL_II_LIBRARIES_DEBUG:      
+#        DEAL_II_COMPILER_VECTORIZATION_LEVEL: 1
+#
+#  Configured Features (DEAL_II_ALLOW_BUNDLED = ON, DEAL_II_ALLOW_AUTODETECTION = ON):
+#      ( DEAL_II_WITH_64BIT_INDICES = OFF )
+#      ( DEAL_II_WITH_ADOLC = OFF )
+#      ( DEAL_II_WITH_ARPACK = OFF )
+#      ( DEAL_II_WITH_ASSIMP = OFF )
+#        DEAL_II_WITH_BOOST set up with external dependencies
+#            BOOST_VERSION = 1.62.0
+#            BOOST_CXX_FLAGS = -Wno-unused-local-typedefs
+#            BOOST_DEFINITIONS = BOOST_NO_AUTO_PTR
+#            BOOST_USER_DEFINITIONS = BOOST_NO_AUTO_PTR
+#            BOOST_INCLUDE_DIRS = /usr/include
+#            BOOST_USER_INCLUDE_DIRS = /usr/include
+#            BOOST_LIBRARIES = /usr/lib/x86_64-linux-gnu/libboost_iostreams.so;/usr/lib/x86_64-linux-gnu/libboost_serialization.so;/usr/lib/x86_64-linux-gnu/libboost_system.so;/usr/lib/x86_64-linux-gnu/libboost_thread.so;/usr/lib/x86_64-linux-gnu/libboost_regex.so;/usr/lib/x86_64-linux-gnu/libboost_chrono.so;/usr/lib/x86_64-linux-gnu/libboost_date_time.so;/usr/lib/x86_64-linux-gnu/libboost_atomic.so;pthread
+#      ( DEAL_II_WITH_CUDA = OFF )
+#        DEAL_II_WITH_CXX14 = ON
+#        DEAL_II_WITH_CXX17 = ON
+#      ( DEAL_II_WITH_GMSH = OFF )
+#        DEAL_II_WITH_GSL set up with external dependencies
+#            GSL_VERSION = 2.3
+#            GSL_INCLUDE_DIRS = /usr/include
+#            GSL_USER_INCLUDE_DIRS = /usr/include
+#            GSL_LIBRARIES = /usr/lib/x86_64-linux-gnu/libgsl.so;/usr/lib/x86_64-linux-gnu/libgslcblas.so
+#      ( DEAL_II_WITH_HDF5 = OFF )
+#        DEAL_II_WITH_LAPACK set up with external dependencies
+#            LAPACK_WITH_64BIT_BLAS_INDICES = OFF
+#            LAPACK_LINKER_FLAGS = 
+#            LAPACK_LIBRARIES = /usr/lib/liblapack.so;/usr/lib/libblas.so;gfortran;quadmath;m;c
+#      ( DEAL_II_WITH_METIS = OFF )
+#        DEAL_II_WITH_MPI set up with external dependencies
+#            MPI_VERSION = 3.1
+#            MPI_C_COMPILER = /usr/bin/mpicc
+#            MPI_CXX_COMPILER = /usr/bin/mpicxx
+#            MPI_Fortran_COMPILER = /usr/bin/mpif90
+#            MPI_CXX_FLAGS = 
+#            MPI_LINKER_FLAGS = 
+#            MPI_INCLUDE_DIRS = /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi;/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent;/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include;/usr/lib/x86_64-linux-gnu/openmpi/include
+#            MPI_USER_INCLUDE_DIRS = /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi;/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent;/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/opal/mca/event/libevent2022/libevent/include;/usr/lib/x86_64-linux-gnu/openmpi/include
+#            MPI_LIBRARIES = /usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_usempif08.so;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_usempi_ignore_tkr.so;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_mpifh.so;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so
+#        DEAL_II_WITH_MUPARSER set up with bundled packages
+#            MUPARSER_BUNDLED_INCLUDE_DIRS = /usr/local/src/dealii-9.0.0/bundled/muparser_v2_2_4//include
+#      ( DEAL_II_WITH_NANOFLANN = OFF )
+#      ( DEAL_II_WITH_NETCDF = OFF )
+#      ( DEAL_II_WITH_OPENCASCADE = OFF )
+#      ( DEAL_II_WITH_P4EST = OFF )
+#      ( DEAL_II_WITH_PETSC = OFF )
+#      ( DEAL_II_WITH_SCALAPACK = OFF )
+#      ( DEAL_II_WITH_SLEPC = OFF )
+#      ( DEAL_II_WITH_SUNDIALS = OFF )
+#        DEAL_II_WITH_THREADS set up with external dependencies
+#            TBB_VERSION = 4.3
+#            THREADS_LINKER_FLAGS = -pthread
+#            THREADS_INCLUDE_DIRS = /usr/include
+#            THREADS_USER_INCLUDE_DIRS = /usr/include
+#            THREADS_LIBRARIES = /usr/lib/x86_64-linux-gnu/libtbb.so
+#        DEAL_II_WITH_TRILINOS set up with external dependencies
+#            TRILINOS_VERSION = 12.10.1
+#            TRILINOS_DIR = <system location>
+#            TRILINOS_INCLUDE_DIRS = /usr/include/trilinos;/usr/include/hdf5/openmpi;/usr/include
+#            TRILINOS_USER_INCLUDE_DIRS = /usr/include/trilinos;/usr/include/hdf5/openmpi;/usr/include
+#            TRILINOS_LIBRARIES = /usr/lib/x86_64-linux-gnu/libtrilinos_pike-blackbox.so;/usr/lib/x86_64-linux-gnu/libtrilinos_trilinoscouplings.so;/usr/lib/x86_64-linux-gnu/libtrilinos_piro.so;/usr/lib/x86_64-linux-gnu/libtrilinos_rol.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos_muelu.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos_ifpack2.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos_amesos2.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos_tpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos_sacado.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stokhos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_rythmos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_muelu-adapters.so;/usr/lib/x86_64-linux-gnu/libtrilinos_muelu-interface.so;/usr/lib/x86_64-linux-gnu/libtrilinos_muelu.so;/usr/lib/x86_64-linux-gnu/libtrilinos_moertel.so;/usr/lib/x86_64-linux-gnu/libtrilinos_locathyra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_locaepetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_localapack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_loca.so;/usr/lib/x86_64-linux-gnu/libtrilinos_noxepetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_noxlapack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_nox.so;/usr/lib/x86_64-linux-gnu/libtrilinos_phalanx.so;/usr/lib/x86_64-linux-gnu/libtrilinos_intrepid.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teko.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikosbelos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikosaztecoo.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikosamesos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikosml.so;/usr/lib/x86_64-linux-gnu/libtrilinos_stratimikosifpack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_ifpack2-adapters.so;/usr/lib/x86_64-linux-gnu/libtrilinos_ifpack2.so;/usr/lib/x86_64-linux-gnu/libtrilinos_anasazitpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_ModeLaplace.so;/usr/lib/x86_64-linux-gnu/libtrilinos_anasaziepetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_anasazi.so;/usr/lib/x86_64-linux-gnu/libtrilinos_komplex.so;/usr/lib/x86_64-linux-gnu/libtrilinos_amesos2.so;/usr/lib/x86_64-linux-gnu/libtrilinos_shylu.so;/usr/lib/x86_64-linux-gnu/libtrilinos_belostpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_belosepetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_belos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_ml.so;/usr/lib/x86_64-linux-gnu/libtrilinos_ifpack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_zoltan2.so;/usr/lib/x86_64-linux-gnu/libtrilinos_pamgen_extras.so;/usr/lib/x86_64-linux-gnu/libtrilinos_pamgen.so;/usr/lib/x86_64-linux-gnu/libtrilinos_amesos.so;/usr/lib/x86_64-linux-gnu/libtrilinos_galeri-xpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_galeri-epetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_aztecoo.so;/usr/lib/x86_64-linux-gnu/libtrilinos_dpliris.so;/usr/lib/x86_64-linux-gnu/libtrilinos_isorropia.so;/usr/lib/x86_64-linux-gnu/libtrilinos_optipack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_xpetra-sup.so;/usr/lib/x86_64-linux-gnu/libtrilinos_xpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_thyratpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_thyraepetraext.so;/usr/lib/x86_64-linux-gnu/libtrilinos_thyraepetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_thyracore.so;/usr/lib/x86_64-linux-gnu/libtrilinos_epetraext.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetraext.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetrainout.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_kokkostsqr.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetrakernels.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetraclassiclinalg.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetraclassicnodeapi.so;/usr/lib/x86_64-linux-gnu/libtrilinos_tpetraclassic.so;/usr/lib/x86_64-linux-gnu/libtrilinos_triutils.so;/usr/lib/x86_64-linux-gnu/libtrilinos_globipack.so;/usr/lib/x86_64-linux-gnu/libtrilinos_shards.so;/usr/lib/x86_64-linux-gnu/libtrilinos_zoltan.so;/usr/lib/x86_64-linux-gnu/libtrilinos_epetra.so;/usr/lib/x86_64-linux-gnu/libtrilinos_sacado.so;/usr/lib/x86_64-linux-gnu/libtrilinos_rtop.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchoskokkoscomm.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchoskokkoscompat.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchosremainder.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchosnumerics.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchoscomm.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchosparameterlist.so;/usr/lib/x86_64-linux-gnu/libtrilinos_teuchoscore.so;/usr/lib/x86_64-linux-gnu/libtrilinos_kokkosalgorithms.so;/usr/lib/x86_64-linux-gnu/libtrilinos_kokkoscontainers.so;/usr/lib/x86_64-linux-gnu/libtrilinos_kokkoscore.so;/usr/lib/libsmumps.so;/usr/lib/libdmumps.so;/usr/lib/libcmumps.so;/usr/lib/libzmumps.so;/usr/lib/libpord.so;/usr/lib/libmumps_common.so;/usr/lib/x86_64-linux-gnu/hdf5/openmpi/libhdf5.so;/usr/lib/x86_64-linux-gnu/libtbb.so;/usr/lib/x86_64-linux-gnu/libz.so;/usr/lib/liblapack.so;/usr/lib/libblas.so;dl;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi_cxx.so;/usr/lib/x86_64-linux-gnu/openmpi/lib/libmpi.so
+#        DEAL_II_WITH_UMFPACK set up with bundled packages
+#            UMFPACK_BUNDLED_INCLUDE_DIRS = /usr/local/src/dealii-9.0.0/bundled/umfpack/UMFPACK/Include;/usr/local/src/dealii-9.0.0/bundled/umfpack/AMD/Include
+#        DEAL_II_WITH_ZLIB set up with external dependencies
+#            ZLIB_VERSION = 1.2.8
+#            ZLIB_INCLUDE_DIRS = /usr/include
+#            ZLIB_LIBRARIES = /usr/lib/x86_64-linux-gnu/libz.so
+#
+#  Component configuration:
+#        DEAL_II_COMPONENT_DOCUMENTATION
+#        DEAL_II_COMPONENT_EXAMPLES
+#      ( DEAL_II_COMPONENT_PACKAGE = OFF )
+#      ( DEAL_II_COMPONENT_PYTHON_BINDINGS = OFF )
+#
+###
