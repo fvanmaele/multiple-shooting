@@ -68,7 +68,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using an explicit Runge-Kutta method.  
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_50.png"/> using an explicit Runge-Kutta method.  
  <a href="classERK.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="runge__kutta_8h_source.html">runge_kutta.h</a>&gt;</code></p>
@@ -152,7 +152,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>iterate_up_to</b> (FP
 <div class="textblock"><h3>template&lt;typename ButcherTableau&gt;<br />
 class ERK&lt; ButcherTableau &gt;</h3>
 
-<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using an explicit Runge-Kutta method. </p>
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_50.png"/> using an explicit Runge-Kutta method. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a354218adfe6be3dd211d263524cdda94"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a354218adfe6be3dd211d263524cdda94">&#9670;&nbsp;</a></span>ERK()</h2>
@@ -210,7 +210,7 @@ template&lt;typename ButcherTableau &gt; </div>
 
 <p><a class="el" href="classERK.html" title="Solve an IVP of shape  using an explicit Runge-Kutta method. ">ERK</a>. </p>
 <p>This constructor follows <code><a class="el" href="classOneStepMethod.html" title="Solve an IVP of shape  using a one-step method. ">OneStepMethod</a></code>. The used Butcher tableau is specified via a template parameter. Whether a method is embedded (for step-size control) is determined by checking if lower-order weights are available in the Butcher tableau.</p>
-<p>Only fixed order methods or methods of order <img class="formulaInl" alt="$p+1, p$" src="form_60.png"/> are supported. See <code>iterate_with_ssc</code> for details. </p>
+<p>Only fixed order methods or methods of order <img class="formulaInl" alt="$p+1, p$" src="form_53.png"/> are supported. See <code>iterate_with_ssc</code> for details. </p>
 
 </div>
 </div>
@@ -273,7 +273,7 @@ template&lt;typename ButcherTableau &gt; </div>
   </table>
   </dd>
 </dl>
-<p>Iteration function with support for step-size control. In each step, two solutions are computed, for order <img class="formulaInl" alt="$p+1$" src="form_61.png"/> and <img class="formulaInl" alt="$p$" src="form_62.png"/> respectively. Whether a step is accepted is then decided by computing an "optimal" step width. If the optimal width is smaller than the current value, the step is repeated using the new width.</p>
+<p>Iteration function with support for step-size control. In each step, two solutions are computed, for order <img class="formulaInl" alt="$p+1$" src="form_54.png"/> and <img class="formulaInl" alt="$p$" src="form_55.png"/> respectively. Whether a step is accepted is then decided by computing an "optimal" step width. If the optimal width is smaller than the current value, the step is repeated using the new width.</p>
 <p>More complex algorithms which choose method order dynamically (for example the <a class="el" href="structKARP.html" title="Butcher Tableau for the Cash-Karp method of order 5(4). ">KARP</a> method for orders 1 to 5) are not implemented, but may be more suitable for discontinuous or rapidly changing ODEs. See the paper by Cash-Karp for details.</p>
 <p><a href="http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf">http://www.elegio.it/mc2/rk/doc/p201-cash-karp.pdf</a></p>
 <p>When solving the variational equation, the step width is <em>only</em> determined by the initial-value problem. This approach may be improved by first solving the IVP with a <em>continuous</em> Runge-Kutta method. See the paper by L. Rández, 1990.</p>

@@ -69,7 +69,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using a one-step method.  
+<p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_50.png"/> using a one-step method.  
  <a href="classOneStepMethod.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="eos__method_8h_source.html">eos_method.h</a>&gt;</code></p>
@@ -142,7 +142,7 @@ template&lt;typename BTab &gt; </td></tr>
 <tr class="separator:a55adbdc4c0fea0e770e4d18b0379d490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_57.png"/> using a one-step method. </p>
+<div class="textblock"><p>Solve an IVP of shape <img class="formulaInl" alt="$u'(t) = f(t, u(t)), u(t_0) = u_0$" src="form_50.png"/> using a one-step method. </p>
 <p>The common wrapped functionality includes collecting of intermediary computation results. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a513ea3b2bd015bd266f9cb3e69e00327"></a>
@@ -202,14 +202,14 @@ template&lt;typename BTab &gt; </td></tr>
   <table class="params">
     <tr><td class="paramname">_f</td><td>Right-hand side of the ODE. </td></tr>
     <tr><td class="paramname">_t0</td><td>Initial time value. </td></tr>
-    <tr><td class="paramname">_u0</td><td>Initial value, <img class="formulaInl" alt="$u(t_0) = u_0$" src="form_58.png"/>. </td></tr>
+    <tr><td class="paramname">_u0</td><td>Initial value, <img class="formulaInl" alt="$u(t_0) = u_0$" src="form_51.png"/>. </td></tr>
     <tr><td class="paramname">_var_eq</td><td>If true, solve the variational equation. </td></tr>
     <tr><td class="paramname">_u</td><td>Exact solution of the IVP.</td></tr>
   </table>
   </dd>
 </dl>
 <p>Solving the variational equation is done <em>simultaneously</em> with solving the IVP. In particular, the same step width is used for both problems. See the <code><a class="el" href="classERK.html" title="Solve an IVP of shape  using an explicit Runge-Kutta method. ">ERK</a></code> documentation for further discussion.</p>
-<p>A provided <code>exact</code> solution <img class="formulaInl" alt="$u(t)$" src="form_59.png"/> may be used to verify the local error at each time step. The involved constant are specified to the iteration methods. </p>
+<p>A provided <code>exact</code> solution <img class="formulaInl" alt="$u(t)$" src="form_52.png"/> may be used to verify the local error at each time step. The involved constant are specified to the iteration methods. </p>
 
 </div>
 </div>

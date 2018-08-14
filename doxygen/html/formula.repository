@@ -5,59 +5,52 @@
 \form#4:$\|f(s)\| < TOL$
 \form#5:$f$
 \form#6:$J^{-1}$
-\form#7:$f:I\times\mathbb{R}^d \rightarrow \mathbb{R}^d$
-\form#8:$(t, u)$
-\form#9:$u_1,\cdots,u_d$
-\form#10:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_n}$
-\form#11:$n$
-\form#12:$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$
-\form#13:$u_1,\cdots,u_m$
-\form#14:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$
-\form#15:$r(u,v)$
-\form#16:$u$
-\form#17:$v$
-\form#18:$u' = f(t, u)$
-\form#19:$r(u,v) = Au + Bv - c$
-\form#20:$A$
-\form#21:$B$
-\form#22:$n^2$
-\form#23:$I = [a,b]$
-\form#24:$r(u(a), u(b)) = 0$
-\form#25:$n = 2$
-\form#26:$A_{1}y(a) = c_1$
-\form#27:$B_{2}y(b) = c_2$
-\form#28:$F_1(s_1, s_2),\cdots, F_{m-1}(s_{m-1},s_m), F_m(s_1,s_m)$
-\form#29:$s = (s_1,\cdots,s_m)$
-\form#30:$DF(s)$
-\form#31:$F: \mathbb{R}^d \rightarrow \mathbb{R}^d$
-\form#32:$r$
-\form#33:$[a, b]$
-\form#34:$F(s)$
-\form#35:$DF$
-\form#36:$y(b; s)$
-\form#37:$[t_0, t_1]$
-\form#38:$s = u(t_0)$
-\form#39:$f(t, u(t; s))$
-\form#40:$y(t; t_0, s)$
-\form#41:$\frac{\partial f}{\partial s}$
-\form#42:$Y' = \nabla_u f(t, u(t)) Y$
-\form#43:$h_0$
-\form#44:$1e-3$
-\form#45:$TOL$
-\form#46:$F$
-\form#47:$t = t1$
-\form#48:$D_s f(t, u(t; s))$
-\form#49:$D_s$
-\form#50:$D_s f$
-\form#51:$eps$
-\form#52:$D_f s$
-\form#53:$D_s f = \frac{\partial f}{\partial s}$
-\form#54:$t = t_1$
-\form#55:$D_s y(t; t_0, s)$
-\form#56:$N$
-\form#57:$u'(t) = f(t, u(t)), u(t_0) = u_0$
-\form#58:$u(t_0) = u_0$
-\form#59:$u(t)$
-\form#60:$p+1, p$
-\form#61:$p+1$
-\form#62:$p$
+\form#7:$n$
+\form#8:$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$
+\form#9:$f:I\times\mathbb{R}^d \rightarrow \mathbb{R}^d$
+\form#10:$(t, u)$
+\form#11:$u_1,\cdots,u_m$
+\form#12:$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$
+\form#13:$r(u,v)$
+\form#14:$u$
+\form#15:$v$
+\form#16:$u' = f(t, u)$
+\form#17:$r(u,v) = Au + Bv - c$
+\form#18:$A$
+\form#19:$B$
+\form#20:$n^2$
+\form#21:$I = [a,b]$
+\form#22:$r(u(a), u(b)) = 0$
+\form#23:$n = 2$
+\form#24:$A_{1}y(a) = c_1$
+\form#25:$B_{2}y(b) = c_2$
+\form#26:$F: \mathbb{R}^d \rightarrow \mathbb{R}^d$
+\form#27:$r$
+\form#28:$[a, b]$
+\form#29:$F(s)$
+\form#30:$y(b; s)$
+\form#31:$DF(s)$
+\form#32:$DF$
+\form#33:$F_1(s_1, s_2),\cdots, F_{m-1}(s_{m-1},s_m), F_m(s_1,s_m)$
+\form#34:$s = (s_1,\cdots,s_m)$
+\form#35:$[t_0, t_1]$
+\form#36:$s = u(t_0)$
+\form#37:$f(t, u(t; s))$
+\form#38:$y(t; t_0, s)$
+\form#39:$D_s f = \frac{\partial f}{\partial s}$
+\form#40:$Y' = \nabla_u f(t, u(t)) Y$
+\form#41:$h_0$
+\form#42:$1e-3$
+\form#43:$TOL$
+\form#44:$F$
+\form#45:$t = t_1$
+\form#46:$D_s y(t; t_0, s)$
+\form#47:$D_s$
+\form#48:$eps$
+\form#49:$N$
+\form#50:$u'(t) = f(t, u(t)), u(t_0) = u_0$
+\form#51:$u(t_0) = u_0$
+\form#52:$u(t)$
+\form#53:$p+1, p$
+\form#54:$p+1$
+\form#55:$p$

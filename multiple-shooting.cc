@@ -1,7 +1,6 @@
+#include <chrono>
 #include <iostream>
 #include <string>
-#include <getopt.h>
-#include <thread>
 
 #include "base/types.h"
 #include "bvp/boundary.h"
@@ -13,6 +12,7 @@
 
 static int n_intervals = 20;
 static bool run_tests = false;
+static bool use_broyden_method = false;
 
 class CurveTF : public Curve
 {
@@ -41,6 +41,7 @@ Vector RHS_ThomasFermi(typename Vector::value_type t, const Vector &u)
 
 void Solve_ThomasFermi(int n_int)
 {
+  auto start0 = std::chrono::system_clock::now();
   // -------------------------------------------
   // 0) Linear separated BVP
   const FP_Type a = 0;
@@ -62,6 +63,10 @@ void Solve_ThomasFermi(int n_int)
   FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
 
 
+  auto start1 = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds01 = start1 - start0;
+  std::cout << "STEP 0: elapsed time: " << elapsed_seconds01.count() << "s" << std::endl;
+  
   // -------------------------------------------
   // 1) Subdivide interval a = t0 < ... < t1 = b
   std::vector<FP_Type> t;
@@ -90,6 +95,10 @@ void Solve_ThomasFermi(int n_int)
   Dat1.plot_with_lines(2, "linespoints");
 
 
+  auto start2 = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds12 = start2 - start1;
+  std::cout << "STEP 1: elapsed time: " << elapsed_seconds12.count() << "s" << std::endl;
+  
   // -------------------------------------------
   // 2) Starting values s(0)_1 ... s(0)_n
   const size_t m = t.size();
@@ -103,15 +112,28 @@ void Solve_ThomasFermi(int n_int)
         s0[k + i*dim] = s_i[k];
     }
 
-
+  
+  auto start3 = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds23 = start3 - start2;
+  std::cout << "STEP 2: elapsed time: " << elapsed_seconds23.count() << "s" << std::endl;
+  
   // -------------------------------------------
   // 3) Begin multiple shooting method
   SF_Automatic<KARP> M(f, true, 1e-2, 1e-4);
   MultipleShooting F(M, t, r);
   Newton N(F, m * dim);
-  VectorD2 sol = N.iterate(s0);
+
+  VectorD2 sol;
+  if (use_broyden_method)
+    sol = N.iterate_broyden(s0);
+  else
+    sol = N.iterate(s0);
 
 
+  auto start4 = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds34 = start4 - start3;
+  std::cout << "STEP 3: elapsed time: " << elapsed_seconds34.count() << "s" << std::endl;
+  
   // -------------------------------------------
   // 4) Plot graph of solution
   std::ofstream output_file2;
@@ -132,11 +154,19 @@ void Solve_ThomasFermi(int n_int)
 
   Dat2.plot_with_lines(2, "linespoints");
   Dat2.plot_with_lines(2, "lines", true);
+
+
+  auto end = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds_end = end - start4;
+  std::cout << "STEP 4: elapsed time: " << elapsed_seconds_end.count() << "s" << std::endl;
+
+  std::chrono::duration<FP_Type> elapsed_seconds_total = end - start0;
+  std::cout << "Total elapsed time: " << elapsed_seconds_total.count() << "s" << std::endl;
 }
 
 void usage()
 {
-  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>]"
+  std::cerr << "usage: multiple-shooting [--run-tests] [--intervals <n>] [--broyden]"
             << std::endl;
   std::exit(1);
 }
@@ -167,6 +197,10 @@ int main(int argc, char* argv[])
         {
           waiting_for_int = true;
         }
+      else if (option == "--broyden")
+	{
+	  use_broyden_method = true;
+	}
       else
         {
           std::cerr << "unknown option" << std::endl;

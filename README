@@ -1,0 +1,41 @@
+REQUIREMENTS
+
+The deal.ii 9.0.0 library is used with the following dependencies:
+
+* Trilinos (-DDEAL_II_WITH_LAPACK=ON)
+* GSL (-DDEAL_II_WITH_GSL=ON)
+* LAPACK (-DDEAL_II_WITH_LAPACK=ON)
+* zlib (-DDEAL_II_WITH_ZLIB=ON)
+* C++17 support (-DDEAL_II_WITH_CXX17=ON)
+
+See the attached "summary.log" file for details and upstream documentation:
+
+https://www.dealii.org/9.0.0/users/cmake.html
+
+
+BUILD
+
+Release version:
+
+ mkdir build
+ cmake -DCMAKE_BUILD_TYPE=Release ..
+ make
+
+Debug version:
+
+ mkdir build
+ cmake -DCMAKE_BUILD_TYPE=Debug ..
+ make
+
+For use of "clang-tidy", add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON.
+
+
+USAGE
+
+Command-line flags:
+
+ --intervals <n>: Set the amount of intervals used for multiple shooting
+ --broyden:  	  Use Broyden's method to periodically update the Jacobian
+ --run-tests: 	  Run all self-tests
+
+The maximum amount of intervals for the Thomas-Fermi problem is 48.

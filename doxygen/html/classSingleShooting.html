@@ -92,14 +92,14 @@ Collaboration diagram for SingleShooting:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9dc199aea00e22bcbeb4e92a256ad4f"><td class="memItemLeft" align="right" valign="top"><a id="ad9dc199aea00e22bcbeb4e92a256ad4f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleShooting.html#ad9dc199aea00e22bcbeb4e92a256ad4f">SingleShooting</a> (<a class="el" href="classShootingFunction.html">ShootingFunction</a> &amp;_M, FP_Type _a, FP_Type _b, <a class="el" href="classBoundaryCondition.html">BoundaryCondition</a> &amp;_r)</td></tr>
-<tr class="memdesc:ad9dc199aea00e22bcbeb4e92a256ad4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the single shooting method. Accepts any valid boundary condition <img class="formulaInl" alt="$r$" src="form_32.png"/> on a time interval <img class="formulaInl" alt="$[a, b]$" src="form_33.png"/>. <br /></td></tr>
+<tr class="memdesc:ad9dc199aea00e22bcbeb4e92a256ad4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the single shooting method. Accepts any valid boundary condition <img class="formulaInl" alt="$r$" src="form_27.png"/> on a time interval <img class="formulaInl" alt="$[a, b]$" src="form_28.png"/>. <br /></td></tr>
 <tr class="separator:ad9dc199aea00e22bcbeb4e92a256ad4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ffb84c5c62c86691154d41f67ff303a"><td class="memItemLeft" align="right" valign="top"><a id="a6ffb84c5c62c86691154d41f67ff303a"></a>
 virtual VectorD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleShooting.html#a6ffb84c5c62c86691154d41f67ff303a">operator()</a> (const VectorD2 &amp;s) override</td></tr>
-<tr class="memdesc:a6ffb84c5c62c86691154d41f67ff303a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve <img class="formulaInl" alt="$F(s)$" src="form_34.png"/> by solving the IVP <img class="formulaInl" alt="$y(b; s)$" src="form_36.png"/>. <br /></td></tr>
+<tr class="memdesc:a6ffb84c5c62c86691154d41f67ff303a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve <img class="formulaInl" alt="$F(s)$" src="form_29.png"/> by solving the IVP <img class="formulaInl" alt="$y(b; s)$" src="form_30.png"/>. <br /></td></tr>
 <tr class="separator:a6ffb84c5c62c86691154d41f67ff303a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29ada16c267ba2658c991092b59ce49d"><td class="memItemLeft" align="right" valign="top">virtual MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSingleShooting.html#a29ada16c267ba2658c991092b59ce49d">diff</a> (const VectorD2 &amp;s) override</td></tr>
-<tr class="memdesc:a29ada16c267ba2658c991092b59ce49d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve <img class="formulaInl" alt="$DF(s)$" src="form_30.png"/>.  <a href="#a29ada16c267ba2658c991092b59ce49d">More...</a><br /></td></tr>
+<tr class="memdesc:a29ada16c267ba2658c991092b59ce49d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve <img class="formulaInl" alt="$DF(s)$" src="form_31.png"/>.  <a href="#a29ada16c267ba2658c991092b59ce49d">More...</a><br /></td></tr>
 <tr class="separator:a29ada16c267ba2658c991092b59ce49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFunctor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFunctor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFunctor.html">Functor</a></td></tr>
 <tr class="memitem:ad1809c2a1db2ab1cd607af4b1c8aaeb0 inherit pub_methods_classFunctor"><td class="memItemLeft" align="right" valign="top"><a id="ad1809c2a1db2ab1cd607af4b1c8aaeb0"></a>
@@ -110,7 +110,7 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_dim</b> () const<
 <tr class="separator:a840b2921ae2622a4939098f530582ebc inherit pub_methods_classFunctor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Single shooting method for boundary value problems. Represented as a differentiable function <img class="formulaInl" alt="$F: \mathbb{R}^d \rightarrow \mathbb{R}^d$" src="form_31.png"/>.</p>
+<div class="textblock"><p>Single shooting method for boundary value problems. Represented as a differentiable function <img class="formulaInl" alt="$F: \mathbb{R}^d \rightarrow \mathbb{R}^d$" src="form_26.png"/>.</p>
 <p>See Stoer, Num. Math. 2, pp. 195. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a29ada16c267ba2658c991092b59ce49d"></a>
@@ -137,8 +137,8 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_dim</b> () const<
 </table>
 </div><div class="memdoc">
 
-<p>Retrieve <img class="formulaInl" alt="$DF(s)$" src="form_30.png"/>. </p>
-<p><img class="formulaInl" alt="$DF$" src="form_35.png"/> may be derived in several ways:</p><ul>
+<p>Retrieve <img class="formulaInl" alt="$DF(s)$" src="form_31.png"/>. </p>
+<p><img class="formulaInl" alt="$DF$" src="form_32.png"/> may be derived in several ways:</p><ul>
 <li>Automatic differentation</li>
 <li>Internal differentation</li>
 <li>External differentation</li>

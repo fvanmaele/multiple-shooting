@@ -68,7 +68,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_11.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_12.png"/>.  
+<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_7.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_8.png"/>.  
  <a href="classFAD__Setup.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="forward__ad_8h_source.html">forward_ad.h</a>&gt;</code></p>
@@ -82,22 +82,22 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>FAD_Setup</b> (Callable _f, size_t _d)</td></tr>
 <tr class="separator:a22e72ff87bdaee5d3d00a5f8a93628d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac373589f0ea65f0d7f53e9770926e836"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#ac373589f0ea65f0d7f53e9770926e836">init</a> (FP_Type t, const VectorD2 &amp;u)</td></tr>
-<tr class="memdesc:ac373589f0ea65f0d7f53e9770926e836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods.  <a href="#ac373589f0ea65f0d7f53e9770926e836">More...</a><br /></td></tr>
+<tr class="memdesc:ac373589f0ea65f0d7f53e9770926e836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_10.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods.  <a href="#ac373589f0ea65f0d7f53e9770926e836">More...</a><br /></td></tr>
 <tr class="separator:ac373589f0ea65f0d7f53e9770926e836"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="memItemLeft" align="right" valign="top"><a id="a0aab26eb92ab9fc32e6dd642b2d70a5e"></a>
 VectorD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e">value</a> () const</td></tr>
-<tr class="memdesc:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the value <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> as a <code>dealii</code> vector. <br /></td></tr>
+<tr class="memdesc:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the value <img class="formulaInl" alt="$(t, u)$" src="form_10.png"/> as a <code>dealii</code> vector. <br /></td></tr>
 <tr class="separator:a0aab26eb92ab9fc32e6dd642b2d70a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8e45825152e0ea2465e1ff17cab7d34"><td class="memItemLeft" align="right" valign="top"><a id="ae8e45825152e0ea2465e1ff17cab7d34"></a>
 MatrixD2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34">diff</a> () const</td></tr>
-<tr class="memdesc:ae8e45825152e0ea2465e1ff17cab7d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the partial derivatives <img class="formulaInl" alt="$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$" src="form_14.png"/> as a <code>dealii</code> matrix. <br /></td></tr>
+<tr class="memdesc:ae8e45825152e0ea2465e1ff17cab7d34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the partial derivatives <img class="formulaInl" alt="$\frac{\partial f}{\partial u_1},\cdots,\frac{\partial f}{\partial u_m}$" src="form_12.png"/> as a <code>dealii</code> matrix. <br /></td></tr>
 <tr class="separator:ae8e45825152e0ea2465e1ff17cab7d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Callable&gt;<br />
 class FAD_Setup&lt; Callable &gt;</h3>
 
-<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_11.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_12.png"/>. </p>
+<p>Class representing the time-dependent function with <img class="formulaInl" alt="$n$" src="form_7.png"/> components <img class="formulaInl" alt="$f:I\times\mathbb{R}^m \rightarrow \mathbb{R}^n$" src="form_8.png"/>. </p>
 <p>Both evaluation and automatic differentation (using the Sacado package from the Trilinos library) are supported.</p>
 <p>For general information, see SESS 2007, E. Phipps:</p>
 <p><a href="https://software.sandia.gov/SESS/past_seminars/111307_Phipps.html">https://software.sandia.gov/SESS/past_seminars/111307_Phipps.html</a> </p>
@@ -138,8 +138,8 @@ template&lt;typename Callable &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_8.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods. </p>
-<p><img class="formulaInl" alt="$u_1,\cdots,u_m$" src="form_13.png"/> are set as independent variables. </p>
+<p>Evaluate function <img class="formulaInl" alt="$(t, u)$" src="form_10.png"/> on AD variables. Results may be retrieved using the <code><a class="el" href="classFAD__Setup.html#a0aab26eb92ab9fc32e6dd642b2d70a5e" title="Return the value  as a dealii vector. ">value()</a></code> and <code><a class="el" href="classFAD__Setup.html#ae8e45825152e0ea2465e1ff17cab7d34" title="Return the partial derivatives  as a dealii matrix. ">diff()</a></code> methods. </p>
+<p><img class="formulaInl" alt="$u_1,\cdots,u_m$" src="form_11.png"/> are set as independent variables. </p>
 
 </div>
 </div>
