@@ -147,34 +147,46 @@ public:
   {
     VectorD2 x = x0;
     MatrixD2 J = f.diff(x);
+    MatrixD2 J_inv(J);
+    J_inv.gauss_jordan();
+
     steps = 1;
     ssc_steps = 0;
 
-    MatrixD2 J_prev(J);
-    VectorD2 x_prev(x);
-    step(J, x);
+    // Set new value of x, preserve J_inv
+    VectorD2 x_prev = x; //copy
+    step(J_inv, x);
 
     for (size_t k = 1; k < step_limit; k++)
       {
         if (k % skips == 0)
           {
+	    // Compute exact Jacobian
             J = f.diff(x);
-            J.gauss_jordan();
-            step(J, x);
+	    J_inv = J;
+            J_inv.gauss_jordan();
+
+	    x_prev = x; //copy
+            step(J_inv, x);
           }
         else
           {
-            // Rank-1 updates
             VectorD2 p = x - x_prev;
             VectorD2 q = f(x) - f(x_prev);
-            MatrixD2 V(p.size(), p.size());
+            // MatrixD2 V(p.size(), p.size());
+	    MatrixD2 S(p.size(), p.size());
 
-            V.outer_product(q - J_prev * p, p);
-            J = J_prev + 1. / p.norm_sqr() * V;
+	    // Rank-1 updates: update J_n from J_{n-1}
+            // V.outer_product(q - J * p, p);
+            // J = J + 1. / p.norm_sqr() * V;
 
-            // large J: use Sherman-Morrison formula to update J^{-1} directly
-            J.gauss_jordan();
-            step(J, x);
+	    // Sherman-Morrison formula: update J_inv_n from J_inv_{n-1}
+	    S.outer_product((p - J_inv*q) / J_inv.matrix_scalar_product(p, q), p);
+            J_inv = J_inv + S * J_inv;
+
+	    // Perform quasi-Newton step
+	    x_prev = x; //copy
+            step(J_inv, x);
           }
 
         if (y_norm < TOL)
