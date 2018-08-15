@@ -62,11 +62,11 @@ void Solve_ThomasFermi(int n_int)
   const size_t dim = eta.n_dim();
   FAD_tWrapper f(RHS_ThomasFermi<VectorAD>, dim);
 
-
+  
   auto start1 = std::chrono::system_clock::now();
   std::chrono::duration<FP_Type> elapsed_seconds01 = start1 - start0;
   std::cout << "STEP 0: elapsed time: " << elapsed_seconds01.count() << "s" << std::endl;
-  
+
   // -------------------------------------------
   // 1) Subdivide interval a = t0 < ... < t1 = b
   std::vector<FP_Type> t;
@@ -198,9 +198,9 @@ int main(int argc, char* argv[])
           waiting_for_int = true;
         }
       else if (option == "--broyden")
-	{
-	  use_broyden_method = true;
-	}
+        {
+          use_broyden_method = true;
+        }
       else
         {
           std::cerr << "unknown option" << std::endl;

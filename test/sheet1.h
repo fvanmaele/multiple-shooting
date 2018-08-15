@@ -33,23 +33,37 @@ namespace Test
     VectorD2 u(1);
     u[0] = std::exp(2);
 
-    Blackbox Method(f, t0, u0);
-    FP_Type EOC = eoc_1step(Method, t1, h);
-    FP_Type OOC = ooc_1step(Method, t1, h, u);
+    Blackbox M1(f, t0, u0);
+    ConvergenceTester T1(M1, 3, 1e-1);
 
     std::cout << "EOC: (Blackbox, h = " << h << ") "
-              << EOC << std::endl
+              << T1.eoc(t1, h) << std::endl
               << "OOC: (Blackbox, h = " << h << ") "
-              << OOC << std::endl;
+              << T1.ooc(t1, h, u) << std::endl;
 
-    ERK<DOPRI54> Method2(f, t0, u0);
-    FP_Type EOC2 = eoc_1step(Method2, t1, h);
-    FP_Type OOC2 = ooc_1step(Method2, t1, h, u);
-
+    ERK<DOPRI54> M2(f, t0, u0);
+    ConvergenceTester T2(M2, 3, 1e-1);
+    
     std::cout << "EOC: (DOPRI54, h = " << h << ") "
-              << EOC2 << std::endl
+              << T2.eoc(t1, h) << std::endl
               << "OOC: (DOPRI54, h = " << h << ") "
-              << OOC2 << std::endl;
+              << T2.ooc(t1, h, u) << std::endl;
+
+    ERK<KARP> M3(f, t0, u0);
+    ConvergenceTester T3(M3, 3, 1e-1);
+
+    std::cout << "EOC: (KARP, h = " << h << ") "
+              << T3.eoc(t1, h) << std::endl
+              << "OOC: (KARP, h = " << h << ") "
+              << T3.ooc(t1, h, u) << std::endl;
+
+    ERK<ERK_04> M4(f, t0, u0);
+    ConvergenceTester T4(M4, 3, 1e-1);
+
+    std::cout << "EOC: (RK04, h = " << h << ") "
+              << T4.eoc(t1, h) << std::endl
+              << "OOC: (RK04, h = " << h << ") "
+              << T4.ooc(t1, h, u) << std::endl;
   }
 
   void Problem_P13(FP_Type h)
