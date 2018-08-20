@@ -161,31 +161,31 @@ public:
       {
         if (k % skips == 0)
           {
-	    // Compute exact Jacobian
+            // Compute exact Jacobian
             J = f.diff(x);
-	    J_inv = J;
+            J_inv = J;
             J_inv.gauss_jordan();
 
-	    x_prev = x; //copy
+            x_prev = x; //copy
             step(J_inv, x);
           }
         else
           {
             VectorD2 p = x - x_prev;
             VectorD2 q = f(x) - f(x_prev);
-	    MatrixD2 S(p.size(), p.size());
+            MatrixD2 S(p.size(), p.size());
 
-	    // Rank-1 updates: update J_n from J_{n-1}
-	    // MatrixD2 V(p.size(), p.size());
+            // Rank-1 updates: update J_n from J_{n-1}
+            // MatrixD2 V(p.size(), p.size());
             // V.outer_product(q - J * p, p);
             // J = J + 1. / p.norm_sqr() * V;
 
-	    // Sherman-Morrison formula: update J_inv_n from J_inv_{n-1}
-	    S.outer_product((p - J_inv*q) / J_inv.matrix_scalar_product(p, q), p);
+            // Sherman-Morrison formula: update J_inv_n from J_inv_{n-1}
+            S.outer_product((p - J_inv*q) / J_inv.matrix_scalar_product(p, q), p);
             J_inv = J_inv + S * J_inv;
 
-	    // Perform quasi-Newton step
-	    x_prev = x; //copy
+            // Perform quasi-Newton step
+            x_prev = x; //copy
             step(J_inv, x);
           }
 

@@ -92,7 +92,6 @@ void Solve_ThomasFermi(int n_int)
 
   for (auto &c : t)
     output_file1 << c << "\t" << eta(c);
-  Dat1.plot_with_lines(2, "linespoints");
 
 
   auto start2 = std::chrono::system_clock::now();
@@ -152,13 +151,20 @@ void Solve_ThomasFermi(int n_int)
       M_i.print(output_file2);
     }
 
+
+  auto start5 = std::chrono::system_clock::now();
+  std::chrono::duration<FP_Type> elapsed_seconds45 = start5 - start4;
+  std::cout << "STEP 4: elapsed time: " << elapsed_seconds45.count() << "s" << std::endl;
+
+  // -------------------------------------------
+  // 5) Plot graphs
+  Dat1.plot_with_lines(2, "linespoints");
   Dat2.plot_with_lines(2, "linespoints");
   Dat2.plot_with_lines(2, "lines", true);
 
-
   auto end = std::chrono::system_clock::now();
-  std::chrono::duration<FP_Type> elapsed_seconds_end = end - start4;
-  std::cout << "STEP 4: elapsed time: " << elapsed_seconds_end.count() << "s" << std::endl;
+  std::chrono::duration<FP_Type> elapsed_seconds_end = end - start5;
+  std::cout << "GNUPLOT: elapsed time: " << elapsed_seconds_end.count() << "s" << std::endl;
 
   std::chrono::duration<FP_Type> elapsed_seconds_total = end - start0;
   std::cout << "Total elapsed time: " << elapsed_seconds_total.count() << "s" << std::endl;
