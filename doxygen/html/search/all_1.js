@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['convergencetester',['ConvergenceTester',['../classConvergenceTester.html',1,'']]],
   ['curve',['Curve',['../classCurve.html',1,'']]],
   ['curvestoer',['CurveStoer',['../classTest_1_1CurveStoer.html',1,'Test']]],
   ['curvetf',['CurveTF',['../classCurveTF.html',1,'']]],

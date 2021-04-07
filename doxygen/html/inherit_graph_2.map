@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structDOPRI54.html" title="Butcher Tableau for the Dormand&#45;Prince method of order 5(4). " alt="" coords="5,5,84,32"/>
+<area shape="rect" id="node1" href="$classCurve.html" title="Curve" alt="" coords="5,56,63,83"/>
+<area shape="rect" id="node2" href="$classCurveTF.html" title="CurveTF" alt="" coords="143,5,217,32"/>
+<area shape="rect" id="node3" href="$classTest_1_1CurveStoer.html" title="Test::CurveStoer" alt="" coords="119,56,241,83"/>
+<area shape="rect" id="node4" href="$classTest_1_1CurveTroesch.html" title="Test::CurveTroesch" alt="" coords="111,107,249,133"/>
 </map>
